@@ -1,0 +1,38 @@
+.navBar-header {
+  width: 100%;
+  /* background-color: rgb(46, 157, 104); */
+  background: -webkit-gradient(linear, left top, right top, from(#012f94), to(#A3E8C8));
+  background: linear-gradient(90deg, #012f94 0%, #A3E8C8 100%);
+  /* background: #F2C438; */
+}
+
+.navBar-header .container .row {
+  background-color: transparent;
+}
+
+.navBar-header .container .row .navBar-items {
+  padding: 6px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100%;
+}
+
+.navBar-header .container .row .navBar-items a {
+  color: white !important;
+  padding: 10px 20px;
+}
+
+.navBar-header .container .row .col-logo a {
+  padding: 0;
+}
+
+.navBar-header .container .row .col-logo .logo {
+  height: 100%;
+  max-height: 50px;
+  vertical-align: center;
+}
+/*# sourceMappingURL=Navigation.css.map */

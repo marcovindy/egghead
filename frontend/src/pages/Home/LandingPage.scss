@@ -1,0 +1,20 @@
+img {
+    width: 100%;
+}
+.landing-page-background {
+    background-image: url(../../assets/images/blob.svg), url(../../assets/images/right-bubble2.svg);
+    background-repeat: no-repeat;
+    background-repeat: no-repeat;
+    background-size: 167px, 68%;
+    background-position: left, right bottom;
+    .container {
+  
+      
+        .row {
+            background: transparent;
+            .landing-page-description {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}

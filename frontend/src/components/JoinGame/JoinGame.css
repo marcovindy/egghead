@@ -1,0 +1,26 @@
+.container {
+    padding: 4rem 2rem;
+}
+
+.form-control {
+    margin: 10px 0px;
+}
+
+.row {
+    flex-wrap: none!important;
+    margin-right: 0!important;
+    margin-left: 0!important;
+    margin-bottom: 40px;
+    background: rgba(255, 255, 255, 0.975);
+    padding: 50px;
+    border-radius: 5px;
+}
+
+h1 {
+    font-size: 30px!important;
+}
+
+.input {
+    outline: none;
+}
+

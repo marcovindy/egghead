@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Form, Container, Row, Col, Button, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-
-import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 
 import JoinGame from './components/JoinGame/JoinGame';
 import GameMaster from './components/GameMaster/GameMaster';
@@ -82,15 +79,15 @@ function App() {
           </header>
           {/* To Component End */}
           <main>
-            <Switch>
-            <Route path="/login" component={Login} />
-              <Route path="/registration" component={Registration} />
-              <Route path="/lobby" exact component={JoinGame} />
-              <Route path="/gamemaster" component={GameMaster} />
-              <Route path="/gameplayer" component={GamePlayer} />
-              <Route path="/leaderboard" component={Leaderboard} />
-              <Route path="/" component={LandingPage} />
-            </Switch>
+            <Routes>
+              <Route path="/login" component={<Login/>} />
+              <Route path="/registration" component={<Registration/>} />
+              <Route path="/lobby" exact component={<JoinGame/>} />
+              <Route path="/gamemaster" component={<GameMaster/>} />
+              <Route path="/gameplayer" component={<GamePlayer/>} />
+              <Route path="/leaderboard" component={<Leaderboard/>} />
+              <Route path="/" component={<LandingPage/>} />
+            </Routes>
           </main>
         </BrowserRouter>
       </div >

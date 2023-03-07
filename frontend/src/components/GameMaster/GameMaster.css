@@ -1,0 +1,43 @@
+.players-container {
+    background: #f7f7f7;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.serverRes {
+    background-color: rgba(31, 127, 244, 0.872);
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+[type=button] {
+    margin-right: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.messages-container {
+    background: #f7f7f7;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.p-players {
+    border-bottom: 1px dotted grey;
+}
+
+.errorMsg{
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.wrapper {
+    background-color: white;
+    padding: 27px;
+    border-radius: 10px;
+}

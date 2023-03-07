@@ -1,0 +1,7 @@
+.score-container, .save-score-container {
+    background: #f7f7f7b4;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
