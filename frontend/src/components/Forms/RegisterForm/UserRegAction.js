@@ -5,13 +5,13 @@ import {
 } from "./UserRegSlice"; // Importování definic akcí pro registraci
 
 // Importování funkce pro registraci uživatele z API
-import { userRegistration } from "../../../api/UserApi";
+import { UserRegistration } from "../../../api/UserApi";
 
 export const newUserRegistration = (frmDt) => async (dispatch) => {
     try {
         dispatch(registrationPending()); // Dispatch akce signalizující probíhající registraci
 
-        const result = await userRegistration(frmDt);  // Volání funkce pro registraci uživatele z API
+        const result = await UserRegistration(frmDt);  // Volání funkce pro registraci uživatele z API
         result.status === "success" // Pokud registrace proběhla úspěšně
             ? dispatch(registrationSuccess(result.message)) // Dispatch akce signalizující úspěšnou registraci
             : dispatch(registrationError(result.message));  // Dispatch akce signalizující chybu při registraci
