@@ -2,6 +2,10 @@
   "name": "triviaapp",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "19.7.0",
+    "npm": "9.5.0"
+  },
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
