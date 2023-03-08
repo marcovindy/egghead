@@ -13,6 +13,7 @@ let socket; // let can be declared without a value, const can not
 
 
 const GameMaster = ({ location }) => {
+    console.log(location);
     const server = 'localhost:5000';
     const [roomName, setRoomName] = useState('');
     const [masterName, setMasterName] = useState('');
@@ -36,6 +37,7 @@ const GameMaster = ({ location }) => {
 
     useEffect(() => {
         const { roomName, masterName } = queryString.parse(location.search);
+        console.log(roomName, masterName)
         socket = io.connect(server);
         setRoomName(roomName);
         setMasterName(masterName);

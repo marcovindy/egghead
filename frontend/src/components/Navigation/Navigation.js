@@ -37,10 +37,10 @@ export default function Navigation(props) {
                     <Col>
                         <Col className='navBar-items justify-content-end align-middle'>
                             Not translated part. {t('hello')}
-                            <NavLink to='/'><span class="align-middle">Home</span></NavLink>
-                            <NavLink to='/'><span class="align-middle">Lorem</span></NavLink>
-                            <NavLink to='/'><span class="align-middle">Home</span></NavLink>
-                            <NavLink to='/lobby'><span class="align-middle">Play</span></NavLink>
+                            <NavLink to='/'><span className="align-middle">Home</span></NavLink>
+                            <NavLink to='/'><span className="align-middle">Lorem</span></NavLink>
+                            <NavLink to='/'><span className="align-middle">Home</span></NavLink>
+                            <NavLink to='/lobby'><span className="align-middle">Play</span></NavLink>
 
                         </Col>
                     </Col>

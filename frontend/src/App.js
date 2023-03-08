@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, Router } from 'react-router-dom';
 import { Form, Container, Row, Col, Button, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ import JoinGame from './components/JoinGame/JoinGame';
 import GameMaster from './components/GameMaster/GameMaster';
 import GamePlayer from './components/GamePlayer/GamePlayer';
 import Leaderboard from './components/Leaderboard/Leaderboard';
-import Navigation from './components/Navigation/Navigation';
+// import Navigation from './components/Navigation/Navigation';
 import LandingPage from './pages/Home/LandingPage';
 import Registration from './pages/Register/Register';
 
@@ -15,10 +15,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 // Translation imports
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import { I18nPropvider, LOCALES } from './i18nProvider';
 import t from "./i18nProvider/translate";
-import Input from './input';
+// import Input from './input';
 
 /* To Component Start */
 import './components/Navigation/Navigation.css';
@@ -39,8 +39,12 @@ function App() {
   };
 
 
+
+
+
   return (
     <I18nPropvider locale={locale}>
+       
       <div className="App">
         <BrowserRouter>
           {/* To Component Start */}
@@ -54,10 +58,10 @@ function App() {
                 </Col>
                 <Col>
                   <Col className='navBar-items justify-content-end align-middle'>
-                    <NavLink to='/'><span class="align-middle">{t('Home')}</span></NavLink>
-                    <NavLink to='/lobby'><span class="align-middle">{t('Play')}</span></NavLink>
-                    <NavLink to='/registration'><span class="align-middle">{t('Sign up')}</span></NavLink>
-                    <NavLink to='/'><span class="align-middle">{t('Log in')}</span></NavLink>
+                    <NavLink to='/'><span className="align-middle">{t('Home')}</span></NavLink>
+                    <NavLink to='/lobby'><span className="align-middle">{t('Play')}</span></NavLink>
+                    <NavLink to='/registration'><span className="align-middle">{t('Sign up')}</span></NavLink>
+                    <NavLink to='/'><span className="align-middle">{t('Log in')}</span></NavLink>
                     <select onChange={handleChange} value={locale}>
                       <option value="cs">Čeština</option>
                       <option value="en">English</option>
@@ -79,15 +83,17 @@ function App() {
           </header>
           {/* To Component End */}
           <main>
+       
             <Routes>
-              <Route path="/login" component={<Login/>} />
-              <Route path="/registration" component={<Registration/>} />
-              <Route path="/lobby" exact component={<JoinGame/>} />
-              <Route path="/gamemaster" component={<GameMaster/>} />
-              <Route path="/gameplayer" component={<GamePlayer/>} />
-              <Route path="/leaderboard" component={<Leaderboard/>} />
-              <Route path="/" component={<LandingPage/>} />
-            </Routes>
+              <Route path="/login" element={<Login/>} />
+              <Route path="/registration" element={<Registration/>} />
+              <Route path="/lobby" element={<JoinGame/>} />
+              <Route path="/gamemaster" element={<GameMaster />} />
+              <Route path="/gameplayer" element={<GamePlayer/>} />
+              <Route path="/leaderboard" element={<Leaderboard/>} />
+              <Route path="/" exact element={<LandingPage/>} />
+            </Routes>  
+          
           </main>
         </BrowserRouter>
       </div >
