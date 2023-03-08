@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useHistory  } from "react-router-dom";
 import { Form, Container, Button, Table } from 'react-bootstrap';
 import './PlayerBoard.css';
 

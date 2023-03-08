@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes, useLocation, Router } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Form, Container, Row, Col, Button, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
@@ -39,12 +39,8 @@ function App() {
   };
 
 
-
-
-
   return (
     <I18nPropvider locale={locale}>
-       
       <div className="App">
         <BrowserRouter>
           {/* To Component Start */}
@@ -83,17 +79,15 @@ function App() {
           </header>
           {/* To Component End */}
           <main>
-       
-            <Routes>
-              <Route path="/login" element={<Login/>} />
-              <Route path="/registration" element={<Registration/>} />
-              <Route path="/lobby" element={<JoinGame/>} />
-              <Route path="/gamemaster" element={<GameMaster />} />
-              <Route path="/gameplayer" element={<GamePlayer/>} />
-              <Route path="/leaderboard" element={<Leaderboard/>} />
-              <Route path="/" exact element={<LandingPage/>} />
-            </Routes>  
-          
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/registration" component={Registration} />
+              <Route path="/lobby" exact component={JoinGame} />
+              <Route path="/gamemaster" component={GameMaster} />
+              <Route path="/gameplayer" component={GamePlayer} />
+              <Route path="/leaderboard" component={Leaderboard} />
+              <Route path="/" component={LandingPage} />
+            </Switch>
           </main>
         </BrowserRouter>
       </div >

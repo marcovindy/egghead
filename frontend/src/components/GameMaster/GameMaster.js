@@ -3,17 +3,14 @@ import queryString from 'query-string';
 import { Button, Container } from 'react-bootstrap';
 import io from 'socket.io-client';
 import Messages from '../Messages/Messages';
-
+import './GameMaster.css';
 import GameQuestion from '../GameQuestion/GameQuestion';
 import EndGame from '../EndGame/EndGame';
-
-import './GameMaster.css';
 
 let socket; // let can be declared without a value, const can not
 
 
 const GameMaster = ({ location }) => {
-    console.log(location);
     const server = 'localhost:5000';
     const [roomName, setRoomName] = useState('');
     const [masterName, setMasterName] = useState('');
@@ -37,7 +34,6 @@ const GameMaster = ({ location }) => {
 
     useEffect(() => {
         const { roomName, masterName } = queryString.parse(location.search);
-        console.log(roomName, masterName)
         socket = io.connect(server);
         setRoomName(roomName);
         setMasterName(masterName);

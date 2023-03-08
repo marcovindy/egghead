@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useHistory  } from "react-router-dom";
 import { Form, Container, Button, Table } from 'react-bootstrap';
 import './EndGame.css';
 
 const EndGame = ({ players, player }) => {
-    let history = useNavigate();
+    let history = useHistory ();
 
     const handleSubmit = e => {
         e.preventDefault();

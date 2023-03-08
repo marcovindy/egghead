@@ -10,7 +10,7 @@ import {
 	Alert,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useHistory , useLocation } from "react-router-dom";
 
 import { loginPending, loginSuccess, loginFail } from "./userLoginSlice";
 import { userLogin } from "../../../api/UserApi";
@@ -18,7 +18,7 @@ import { getUserProfile } from "../../../pages/User/UserAction";
 
 export const LoginForm = ({ formSwitcher }) => {
 	const dispatch = useDispatch();
-	const history = useNavigate();
+	const history = useHistory ();
 	let location = useLocation();
 
 	const { isLoading, isAuth, error } = useSelector(state => state.login);
