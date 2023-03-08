@@ -2,7 +2,7 @@ import {
     registrationPending, // Akce pro signalizaci probíhající registrace
     registrationSuccess, // Akce pro signalizaci úspěšné registrace
     registrationError, // Akce pro signalizaci chyby při registraci
-} from "./userRegSlice"; // Importování definic akcí pro registraci
+} from "./UserRegSlice"; // Importování definic akcí pro registraci
 
 // Importování funkce pro registraci uživatele z API
 import { userRegistration } from "../../../api/UserApi";

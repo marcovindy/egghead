@@ -8,7 +8,7 @@ import {
   Spinner,
   Alert,
 } from "react-bootstrap";
-import { newUserRegistration } from "./userRegAction";
+import { newUserRegistration } from "./UserRegAction";
 import { useDispatch, useSelector } from "react-redux";
 
 // Počáteční stav registračního formuláře

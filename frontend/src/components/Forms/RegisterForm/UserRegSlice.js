@@ -6,8 +6,8 @@ const initialState = {
   message: "",
 };
 
-const userRegSlice = createSlice({
-  name: "userRegistration",
+const UserRegSlice = createSlice({
+  name: "UserRegistration",
   initialState,
   reducers: {
     registrationPending: (state) => {
@@ -26,7 +26,7 @@ const userRegSlice = createSlice({
   },
 });
 
-const { reducer, actions } = userRegSlice;
+const { reducer, actions } = UserRegSlice;
 
 export const {
   registrationPending,

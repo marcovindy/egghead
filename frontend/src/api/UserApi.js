@@ -7,7 +7,7 @@ const logoutUrl = rootUrl + "user/logout";
 const newAccessJWT = rootUrl + "tokens";
 const userVerificationUrl = userProfileUrl + "/verify";
 
-export const userRegistration = (frmData) => {
+export const UserRegistration = (frmData) => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await axios.post(userProfileUrl, frmData);
@@ -22,7 +22,7 @@ export const userRegistration = (frmData) => {
     }
   });
 };
-export const userRegistrationVerification = (frmData) => {
+export const UserRegistrationVerification = (frmData) => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await axios.patch(userVerificationUrl, frmData);
