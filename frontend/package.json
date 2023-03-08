@@ -1,6 +1,10 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "egghead-frontend",
+  "version": "1.0.0",  
+  "engines": {
+    "node": "19.7.0",
+    "npm": "9.5.0"
+  },
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
