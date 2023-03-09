@@ -14,7 +14,7 @@ const io = socketio(server, {
     cors: {
         origin: process.env.ORIGIN,
         credentials: true,
-      },
+    },
 });
 
 // MIDDLEWARE
@@ -47,14 +47,14 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .catch((err) => {
-        console.log(err);
-    });
+// const mongoose = require('mongoose');
+// mongoose.connect(process.env.MONGO_URL, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 
 // SOCKET
 const uuidv1 = require('uuid/v1');
@@ -160,7 +160,7 @@ io.on('connect', (socket) => {
         };
     });
 
-    socket.on('playerBoard', () => { 
+    socket.on('playerBoard', () => {
         const room = rooms[socket.roomName];
         res = Object.values(room.players); // send array with keys that has objects as values
 
@@ -198,7 +198,7 @@ io.on('connect', (socket) => {
     });
 });
 
-server.listen(process.env.PORT, () => {
+server.listen(process.env.PORT || PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 });
 

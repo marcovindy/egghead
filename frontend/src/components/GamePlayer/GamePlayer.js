@@ -12,7 +12,7 @@ import PlayerBoard from '../PlayerBoard/PlayerBoard';
 let socket;
 
 const GamePlayer = ({ location }) => {
-    const server = 'localhost:5000';
+    const server = 'http://localhost:5000/';
     const [joinRoomName, setJoinRoomName] = useState('');
     const [playerName, setPlayerName] = useState('');
     // const [room, setPlayerName] = useState('');
