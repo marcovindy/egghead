@@ -4,10 +4,13 @@
   "description": "## Lessons",
   "main": "index.js",
   "scripts": {
-    "build": "cd server && npm install  && cd ../frontend && npm install && npm run build",
-    "start": "node server/app.js",
+    "build": "cd frontend && npm install && npm run build && cd ../server && npm install",
+    "start": "concurrently \"cd frontend && npm start\" \"cd server && node app.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^6.4.0"
+  }
 }
