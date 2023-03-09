@@ -10,7 +10,11 @@ const server = http.createServer(app);
 const io = socketio(server, {
     pingInterval: 10000, // check how often
     pingTimeout: 60000, // until close connection
-    cookie: false
+    cookie: false,
+    cors: {
+        origin: process.env.ORIGIN,
+        credentials: true,
+      },
 });
 
 // MIDDLEWARE
@@ -194,8 +198,8 @@ io.on('connect', (socket) => {
     });
 });
 
-server.listen(process.env.PORT || PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+server.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
 });
 
 
