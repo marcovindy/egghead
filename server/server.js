@@ -23,7 +23,7 @@ app.use(express.json());
 const scores = require('./routes/scores');
 app.use('/scores', scores);
 
-const whitelist = ['https://egghead-quiz.herokuapp.com/', 'http://localhost:3000', 'http://localhost:5000']
+const whitelist = ['https://egghead-quiz.herokuapp.com/', 'https://testing-egg.herokuapp.com/', 'http://localhost:3000', 'http://localhost:5000']
 const corsOptions = {
     origin: function (origin, callback) {
         console.log("** Origin of request " + origin)
