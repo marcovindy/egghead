@@ -1,9 +1,5 @@
-const socketio = require('socket.io'),
-    socket = require('socket.io'),
-    mysql = require('mysql'),
-    cookieParser = require('cookie-parser'),
-    session = require('express-session'),
-    express = require('express');
+const express = require('express');
+const socketio = require('socket.io');
 const http = require('http');
 const PORT = 5000;
 const cors = require('cors');
@@ -14,7 +10,7 @@ const server = http.createServer(app);
 const io = socketio(server, {
     pingInterval: 10000, // check how often
     pingTimeout: 60000, // until close connection
-    cookie: true,
+    cookie: false,
     cors: {
         origin: process.env.ORIGIN,
         credentials: true,
@@ -26,47 +22,6 @@ const io = socketio(server, {
 app.use(express.json());
 const scores = require('./routes/scores');
 app.use('/scores', scores);
-
-
-/* START MySQL implementing */
-
-
-let sessionMiddleware = session({
-    secret: "keyboard cat"
-});
-
-
-io.use(function (socket, next) {
-    sessionMiddleware(socket.request, socket.request.res, next);
-});
-app.use(sessionMiddleware);
-app.use(cookieParser());
-
-const config = {
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "base": "db_egghead"
-  };
-
-  let db = mysql.createConnection({
-    host: config.host,
-    user: config.user,
-    password: config.password,
-    database: config.base
-  });
-
-  db.connect(function (error) {
-    if (!!error)
-    throw error;
-  
-    console.log('mysql connected to ' + config.host + ", user " + config.user + ", database " + config.base);
-  });
-  
-  app.use(express.static('./'));
-  
-
-  /* END MySQL implementing */
 
 const whitelist = ['https://egghead-quiz.herokuapp.com/', 'https://testing-egg.herokuapp.com/', 'http://localhost:3000', 'http://localhost:5000']
 const corsOptions = {
