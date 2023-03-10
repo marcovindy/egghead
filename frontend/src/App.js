@@ -63,7 +63,6 @@ function App() {
                       <option value="en">English</option>
                       <option value="fr">French</option>
                     </select>
-
                   </Col>
                 </Col>
                 <Col>
