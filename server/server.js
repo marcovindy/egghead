@@ -57,11 +57,11 @@ db.connect(function (err) {
     //     console.log("1 record inserted");
     // });
 
-    // if (err) throw err;
-    // db.query("SELECT * FROM user", function (err, result, fields) {
-    //     if (err) throw err;
-    //     console.log(result);
-    // });
+    if (err) throw err;
+    db.query("SELECT * FROM user", function (err, result, fields) {
+        if (err) throw err;
+        console.log(result);
+    });
 
 });
 
@@ -227,12 +227,42 @@ server.listen(process.env.PORT || PORT, () => {
 
 // API
 
-// Route to get all posts
+// Route to get all users
 app.get("/api/get", (req, res) => {
-    db.query("SELECT * FROM posts", (err, result) => {
+    db.query("SELECT * FROM users", (err, result) => {
         if (err) {
             console.log(err)
         }
         res.send(result)
     });
 });
+
+// Route to get one user
+app.get("/api/getFromId/:id", (req, res) => {
+
+    const id = req.params.id;
+    db.query("SELECT * FROM user WHERE id = ?", id,
+        (err, result) => {
+            if (err) {
+                console.log(err)
+            }
+            res.send(result)
+        });
+});
+
+// Route for creating the user
+app.post('/api/create', (req, res) => {
+
+    const username = req.body.userName;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    db.query("INSERT INTO user (username, email, password) VALUES (?,?,?)", [username, email, password], (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        console.log(result)
+    });
+})
+
+

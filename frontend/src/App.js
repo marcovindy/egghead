@@ -10,6 +10,7 @@ import Leaderboard from './components/Leaderboard/Leaderboard';
 // import Navigation from './components/Navigation/Navigation';
 import LandingPage from './pages/Home/LandingPage';
 import Registration from './pages/Register/Register';
+import CreateUser from './pages/CreateUser/CreateUser';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -83,6 +84,7 @@ function App() {
               <Route path="/registration" component={Registration} />
               <Route path="/lobby" exact component={JoinGame} />
               <Route path="/gamemaster" component={GameMaster} />
+              <Route path="/createuser" component={CreateUser} />
               <Route path="/gameplayer" component={GamePlayer} />
               <Route path="/leaderboard" component={Leaderboard} />
               <Route path="/" component={LandingPage} />
