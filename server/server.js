@@ -207,13 +207,30 @@ server.listen(process.env.PORT || PORT, () => {
 
 
 // DB
-const db_config = {
-    host: "us-cdbr-east-06.cleardb.net",
-    user: "b88095e6f76c5d",
-    password: "b95f0a62",
-    database: "heroku_6c2d5eee42a52cf"
-};
-const db = mysql.createConnection(db_config); 
+
+const db = require("./models");
+const usersRouter = require("./routes/Users");
+app.use("/auth", usersRouter);
+
+// db.sequelize.sync().then(() => {
+//   app.listen(process.env.PORT || PORT, () => {
+//     console.log("Server running on port 3001");
+//   });
+// });
+
+
+
+
+
+
+
+// const db_config = {
+//     host: "us-cdbr-east-06.cleardb.net",
+//     user: "b88095e6f76c5d",
+//     password: "b95f0a62",
+//     database: "heroku_6c2d5eee42a52cf"
+// };
+// const db = mysql.createConnection(db_config); 
 
 
 // function handleDisconnect() {
@@ -240,63 +257,63 @@ const db = mysql.createConnection(db_config);
 // handleDisconnect();
 
 
-db.connect(function (err) {
-    // if (err) throw err;
-    // console.log("Connected!");
-    // var sql = "INSERT INTO user (username, email, password) VALUES ('test', 'test@test.test', 'password')";
-    // db.query(sql, function (err, result) {
-    //     if (err) throw err;
-    //     console.log("1 record inserted");
-    // });
+// db.connect(function (err) {
+//     // if (err) throw err;
+//     // console.log("Connected!");
+//     // var sql = "INSERT INTO user (username, email, password) VALUES ('test', 'test@test.test', 'password')";
+//     // db.query(sql, function (err, result) {
+//     //     if (err) throw err;
+//     //     console.log("1 record inserted");
+//     // });
 
-    if (err) throw err;
-    db.query("SELECT * FROM user", function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-    });
+//     if (err) throw err;
+//     db.query("SELECT * FROM user", function (err, result, fields) {
+//         if (err) throw err;
+//         console.log(result);
+//     });
 
-});
+// });
 
 
-// API
+// // API
 
-// Route to get all users
-app.get("/api/get", (req, res) => {
-    db.query("SELECT * FROM users", (err, result) => {
-        if (err) {
-            console.log(err)
-        }
-        res.send(result)
-    });
-});
+// // Route to get all users
+// app.get("/api/get", (req, res) => {
+//     db.query("SELECT * FROM users", (err, result) => {
+//         if (err) {
+//             console.log(err)
+//         }
+//         res.send(result)
+//     });
+// });
 
-// Route to get one user
-app.get("/api/getFromId/:id", (req, res) => {
+// // Route to get one user
+// app.get("/api/getFromId/:id", (req, res) => {
 
-    const id = req.params.id;
-    db.query("SELECT * FROM user WHERE id = ?", id,
-        (err, result) => {
-            if (err) {
-                console.log(err)
-            }
-            res.send(result)
-        });
-});
+//     const id = req.params.id;
+//     db.query("SELECT * FROM user WHERE id = ?", id,
+//         (err, result) => {
+//             if (err) {
+//                 console.log(err)
+//             }
+//             res.send(result)
+//         });
+// });
 
-// Route for creating the user
-app.post('/api/create', (req, res) => {
+// // Route for creating the user
+// app.post('/api/create', (req, res) => {
 
-    const username = req.body.userName;
-    const email = req.body.email;
-    const password = req.body.password;
+//     const username = req.body.userName;
+//     const email = req.body.email;
+//     const password = req.body.password;
 
-    db.query("INSERT INTO user (username, email, password) VALUES (?,?,?)", [username, email, password], (err, result) => {
-        if (err) {
-            console.log(err)
-        }
-        console.log(result)
-    });
-})
+//     db.query("INSERT INTO user (username, email, password) VALUES (?,?,?)", [username, email, password], (err, result) => {
+//         if (err) {
+//             console.log(err)
+//         }
+//         console.log(result)
+//     });
+// })
 
 
 

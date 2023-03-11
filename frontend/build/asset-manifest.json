@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.ec6c16bc.css",
-    "main.js": "/static/js/main.d4faaeab.js",
+    "main.js": "/static/js/main.0261cea1.js",
     "static/media/MainImage.png": "/static/media/MainImage.5de2b5806e31105a0db2.png",
     "static/media/trivia.png": "/static/media/trivia.7c1ad1faade442e71fdc.png",
     "static/media/right-bubble2.svg": "/static/media/right-bubble2.2047c94a4e1710a97c37.svg",
     "index.html": "/index.html",
     "static/media/blob.svg": "/static/media/blob.4fc42d925470841fff96.svg",
     "main.ec6c16bc.css.map": "/static/css/main.ec6c16bc.css.map",
-    "main.d4faaeab.js.map": "/static/js/main.d4faaeab.js.map"
+    "main.0261cea1.js.map": "/static/js/main.0261cea1.js.map"
   },
   "entrypoints": [
     "static/css/main.ec6c16bc.css",
-    "static/js/main.d4faaeab.js"
+    "static/js/main.0261cea1.js"
   ]
 }
