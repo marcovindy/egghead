@@ -17,9 +17,16 @@ function CreateUser() {
 
     const onSubmit = (data) => {
         try {
-            axios.post(process.env.REACT_APP_API_URL + '/auth', data).then(() => {
-                console.log(data);
-            });
+            if (process.env.NODE_ENV === "development"){
+                axios.post(`http://localhost:5000/auth`, data).then(() => {
+                    console.log(data);
+                });
+            } else {
+                axios.post(`https://testing-egg.herokuapp.com/auth`, data).then(() => {
+                    console.log(data);
+                });
+            }
+          
         } catch (error) {
             console.log(error.response.data);
         }
