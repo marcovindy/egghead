@@ -4,7 +4,9 @@ const http = require('http');
 const PORT = 5000;
 const cors = require('cors');
 const path = require('path');
-const db = require('./config/db')
+const mysql = require('mysql')
+// const db = require('./config/db')
+
 
 
 
@@ -26,7 +28,7 @@ app.use(express.json());
 const scores = require('./routes/scores');
 app.use('/scores', scores);
 
-const whitelist = ['https://egghead-quiz.herokuapp.com/', 'https://testing-egg.herokuapp.com/', 'http://localhost:3000', 'http://localhost:5000']
+const whitelist = ['https://testing-egg.herokuapp.com/', 'http://localhost:3000', 'http://localhost:5000']
 const corsOptions = {
     origin: function (origin, callback) {
         console.log("** Origin of request " + origin)
@@ -47,23 +49,6 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });
 
-// DB
-db.connect(function (err) {
-    // if (err) throw err;
-    // console.log("Connected!");
-    // var sql = "INSERT INTO user (username, email, password) VALUES ('test', 'test@test.test', 'password')";
-    // db.query(sql, function (err, result) {
-    //     if (err) throw err;
-    //     console.log("1 record inserted");
-    // });
-
-    if (err) throw err;
-    db.query("SELECT * FROM user", function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-    });
-
-});
 
 
 // SOCKET
@@ -221,8 +206,56 @@ server.listen(process.env.PORT || PORT, () => {
 
 
 
+// DB
+const db_config = {
+    host: "us-cdbr-east-06.cleardb.net",
+    user: "b88095e6f76c5d",
+    password: "b95f0a62",
+    database: "heroku_6c2d5eee42a52cf"
+};
+const db = mysql.createConnection(db_config); 
 
 
+// function handleDisconnect() {
+//     const db = mysql.createConnection(db_config); // Recreate the connection, since
+//     // the old one cannot be reused.
+
+//     db.connect(function (err) {              // The server is either down
+//         if (err) {                                     // or restarting (takes a while sometimes).
+//             console.log('error when connecting to db:', err);
+//             setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+//         }                                     // to avoid a hot loop, and to allow our node script to
+//     });                                     // process asynchronous requests in the meantime.
+//     // If you're also serving http, display a 503 error.
+//     db.on('error', function (err) {
+//         console.log('db error', err);
+//         if (err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+//             handleDisconnect();                         // lost due to either server restart, or a
+//         } else {                                      // connnection idle timeout (the wait_timeout
+//             throw err;                                  // server variable configures this)
+//         }
+//     });
+// }
+
+// handleDisconnect();
+
+
+db.connect(function (err) {
+    // if (err) throw err;
+    // console.log("Connected!");
+    // var sql = "INSERT INTO user (username, email, password) VALUES ('test', 'test@test.test', 'password')";
+    // db.query(sql, function (err, result) {
+    //     if (err) throw err;
+    //     console.log("1 record inserted");
+    // });
+
+    if (err) throw err;
+    db.query("SELECT * FROM user", function (err, result, fields) {
+        if (err) throw err;
+        console.log(result);
+    });
+
+});
 
 
 // API
@@ -264,5 +297,10 @@ app.post('/api/create', (req, res) => {
         console.log(result)
     });
 })
+
+
+
+
+
 
 
