@@ -6,6 +6,8 @@ const cors = require('cors');
 const path = require('path');
 const db = require('./config/db')
 
+
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server, {
@@ -46,16 +48,23 @@ app.get("*", (req, res) => {
 });
 
 // DB
+db.connect(function (err) {
+    // if (err) throw err;
+    // console.log("Connected!");
+    // var sql = "INSERT INTO user (username, email, password) VALUES ('test', 'test@test.test', 'password')";
+    // db.query(sql, function (err, result) {
+    //     if (err) throw err;
+    //     console.log("1 record inserted");
+    // });
 
+    // if (err) throw err;
+    // db.query("SELECT * FROM user", function (err, result, fields) {
+    //     if (err) throw err;
+    //     console.log(result);
+    // });
 
-// const mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGO_URL, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-// })
-//     .catch((err) => {
-//         console.log(err);
-//     });
+});
+
 
 // SOCKET
 const uuidv1 = require('uuid/v1');
@@ -204,3 +213,26 @@ server.listen(process.env.PORT || PORT, () => {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// API
+
+// Route to get all posts
+app.get("/api/get", (req, res) => {
+    db.query("SELECT * FROM posts", (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        res.send(result)
+    });
+});
