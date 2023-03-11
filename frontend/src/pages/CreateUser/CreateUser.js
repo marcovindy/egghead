@@ -77,6 +77,15 @@ function CreateUser() {
                         placeholder="(Ex. John123...)"
                     />
 
+                    <label>Email: </label>
+                    <ErrorMessage name="email" component="span" />
+                    <Field
+                        autocomplete="off"
+                        id="inputCreatePost"
+                        name="email"
+                        placeholder="Your Email..."
+                    />
+
                     <label>Password: </label>
                     <ErrorMessage name="password" component="span" />
                     <Field
@@ -87,14 +96,7 @@ function CreateUser() {
                         placeholder="Your Password..."
                     />
 
-                    <label>Password: </label>
-                    <ErrorMessage name="email" component="span" />
-                    <Field
-                        autocomplete="off"
-                        id="inputCreatePost"
-                        name="email"
-                        placeholder="Your Email..."
-                    />
+
 
                     <button type="submit"> Register</button>
                 </Form>
