@@ -17,7 +17,7 @@ function CreateUser() {
 
     const onSubmit = (data) => {
         try {
-            axios.post(process.env.REACT_APP_API_URL, data).then(() => {
+            axios.post(process.env.REACT_APP_API_URL + '/auth', data).then(() => {
                 console.log(data);
             });
         } catch (error) {
