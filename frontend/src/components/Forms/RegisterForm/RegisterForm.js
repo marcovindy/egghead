@@ -135,17 +135,7 @@ const RegisterForm = () => {
               />
             </Form.Group>
 
-            <Form.Group>
-              <Form.Label>Phone</Form.Label>
-              <Form.Control
-                type="number"
-                name="phone"
-                value={newUser.phone}
-                onChange={handleOnChange}
-                placeholder="Phone"
-                required
-              />
-            </Form.Group>
+        
 
             <Form.Group>
               <Form.Label>Email address</Form.Label>
@@ -159,30 +149,7 @@ const RegisterForm = () => {
               />
             </Form.Group>
 
-            <Form.Group>
-              <Form.Label>Company name</Form.Label>
-              <Form.Control
-                type="text"
-                name="company"
-                value={newUser.company}
-                onChange={handleOnChange}
-                placeholder="Company name"
-                required
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                type="text"
-                name="address"
-                value={newUser.address}
-                onChange={handleOnChange}
-                placeholder="Full address"
-                required
-              />
-            </Form.Group>
-
+       
             <Form.Group>
               <Form.Label>Password</Form.Label>
               <Form.Control

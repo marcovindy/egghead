@@ -7,17 +7,17 @@
         "dialect": "mysql"
     },
     "test": {
-      "username": "root",
-      "password": null,
-      "database": "database_test",
-      "host": "127.0.0.1",
-      "dialect": "mysql"
+        "host": "us-cdbr-east-06.cleardb.net",
+        "username": "b88095e6f76c5d",
+        "password": "b95f0a62",
+        "database": "heroku_6c2d5eee42a52cf",
+        "dialect": "mysql"
     },
     "production": {
-      "username": "root",
-      "password": null,
-      "database": "database_production",
-      "host": "127.0.0.1",
-      "dialect": "mysql"
+        "host": "us-cdbr-east-06.cleardb.net",
+        "username": "b88095e6f76c5d",
+        "password": "b95f0a62",
+        "database": "heroku_6c2d5eee42a52cf",
+        "dialect": "mysql"
     }
   }

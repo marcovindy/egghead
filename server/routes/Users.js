@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
             email: email,
         });
         res.json("SUCCESS");
-        console.log("Success")
+        console.log("Success add user", username);
     });
 });
 

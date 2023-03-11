@@ -56,7 +56,7 @@ function CreateUser() {
 
     const onSubmit = (data) => {
         try {
-            axios.post(`https://testing-egg.herokuapp.com/auth`, data).then(() => {
+            axios.post(`http://localhost:5000/auth`, data).then(() => {
                 console.log(data);
             });
         } catch (error) {
