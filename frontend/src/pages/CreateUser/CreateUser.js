@@ -55,9 +55,13 @@ function CreateUser() {
     });
 
     const onSubmit = (data) => {
-        axios.post(`https://testing-egg.herokuapp.com/auth`, data).then(() => {
-            console.log(data);
-        });
+        try {
+            axios.post(`https://testing-egg.herokuapp.com/auth`, data).then(() => {
+                console.log(data);
+            });
+        } catch (error) {
+            console.log(error.response.data);
+        }
     };
 
     return (
