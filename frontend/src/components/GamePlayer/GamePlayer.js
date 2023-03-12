@@ -112,7 +112,6 @@ const GamePlayer = ({ location }) => {
             setPlayersInfo(ps);
             console.log(JSON.stringify(ps));
             
-            
         });
 
         socket.on('finalPlayerInfo', (client) => {
@@ -140,7 +139,7 @@ const GamePlayer = ({ location }) => {
                                     <hr />
                                     <Messages messages={messages} />
                                 </div>
-                                <a href="/">Leave room</a>
+                                <a href="/lobby">Leave room</a>
                             </div>
                         ) : (
                             <div>
@@ -171,10 +170,11 @@ const GamePlayer = ({ location }) => {
                 <div className="players-container">
                     <h3>Players in room: {playerCount}</h3>
                     <hr />
-                    {playersInRoom.map((playerInfo, index) =>
+                    {playersInfo.map((playerInfo, index) =>
                         <p className="p-players" key={index}>
                             {/* {console.log(playerInfo)} */}
                             Playername: {playerInfo.username}
+                        
                             <br />
                             Score: {playerInfo.score}
                         </p>

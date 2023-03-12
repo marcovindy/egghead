@@ -2,34 +2,20 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Form, Container, Button, Table } from 'react-bootstrap';
 
-const ListOfPlayers = (players, player) => {
-
-
-
-    return (
-        <Container>
-            <div className="wrapper">
-                <h1>HRacu</h1>
-                <h3>xxx</h3>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Player name</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {players.map((player, index) =>
-                            <tr key={index}>
-                                <td>{player.username}</td>
-                                <td>{player.score}</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </Table>
-            </div>
-        </Container>
-    );
+const ListOfPlayers = ({ players, player }) => {
+  return (
+    <div className="players-list">
+      <h3>Players in room: {players.length}</h3>
+      <ul>
+        {players.map((playerInfo, index) => (
+          <li key={index}>
+            {playerInfo.name}: {playerInfo.score}
+            {player.id === playerInfo.id && <span> (you)</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default ListOfPlayers;

@@ -85,7 +85,7 @@ const GameMaster = ({ location }) => {
                     setQuestions(res.results);
                     sendQuestion(res.results);
                     console.log("Created");
-           
+
                 });
         });
     }, []);
@@ -127,7 +127,7 @@ const GameMaster = ({ location }) => {
                 if (playerChoice === decodeURIComponent(correctAnswer)) {
                     // console.log(playersInRoom[playerName]);
                     // console.log(playersInRoom[playerName].score);
-                    
+
                     console.log(playerName, 'has answered CORRECTLY:', playerChoice);
                     socket.emit('updateScore', playerName);
                     // playersInRoom[playerName].score += 1;
@@ -197,7 +197,7 @@ const GameMaster = ({ location }) => {
                                 </div>
                             ) : (
                                 <div>
-                                    
+
                                     {/* {gameEnd === false ? (
                                         <GameQuestion
                                             currentQuestion={currentQuestion}

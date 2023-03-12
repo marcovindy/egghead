@@ -135,7 +135,6 @@ io.on('connect', (socket) => {
         room.players[playerName].score += 1;
         socket.to(room.players[playerName].id).emit('getRoomPlayers', Object.values(room.players), room.players[playerName].username, room.players[playerName].score);
         console.log("Points", room.players[playerName].score, " Name: ", room.players[playerName].username);
-
         // Jen tady se zachytává počet bodů
     });
 
