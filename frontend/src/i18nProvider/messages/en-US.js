@@ -13,5 +13,6 @@ export default {
     'Log in': 'Log in',
     'Create Game Room': 'Create Game Room',
     'Join Game': 'Join Game',
+    'Create Account': 'Create Account',
   },
 };

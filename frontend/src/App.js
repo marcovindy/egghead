@@ -11,6 +11,7 @@ import Leaderboard from './components/Leaderboard/Leaderboard';
 import LandingPage from './pages/Home/LandingPage';
 import Registration from './pages/Register/Register';
 import CreateUser from './pages/CreateUser/CreateUser';
+import CreateUser2 from './pages/CreateUser/CrateUser2';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -81,7 +82,7 @@ function App() {
           <main>
             <Switch>
               <Route path="/login" component={Login} />
-              <Route path="/registration" component={Registration} />
+              <Route path="/registration" component={CreateUser2} />
               <Route path="/lobby" exact component={JoinGame} />
               <Route path="/gamemaster" component={GameMaster} />
               <Route path="/createuser" component={CreateUser} />

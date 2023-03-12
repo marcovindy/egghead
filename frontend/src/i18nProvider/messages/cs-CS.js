@@ -13,5 +13,6 @@ export default {
     'Play': 'Hraj',
     'Sign up': 'Registrovat',
     'Log in': 'Přihlásit',
+    'Create Account': 'Vytvoř účet',
   },
 };
