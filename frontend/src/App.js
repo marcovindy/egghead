@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Form, Container, Row, Col, Button, Nav } from 'react-bootstrap';
+import { Form, Container, Row, Col, Button, Nav, Navbar } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Select from "react-select";
 
@@ -57,38 +57,24 @@ function App() {
         <BrowserRouter>
           {/* To Component Start */}
           <header className="navBar-header">
-            <Container className='p-0'>
-              <Row className='p-0 m-0'>
-                <Col>
-                  <Col className='navBar-items col-logo justify-content-start'>
-                    <NavLink to='/'><img className='logo' src={Logo} alt='logo' /></NavLink>
-                  </Col>
-                </Col>
-                <Col>
-                  <Col className='navBar-items justify-content-end align-middle'>
-                    <NavLink to='/'><span className="align-middle">{t('Home')}</span></NavLink>
-                    <NavLink to='/lobby'><span className="align-middle">{t('Play')}</span></NavLink>
-                    <NavLink to='/registration'><span className="align-middle">{t('Sign up')}</span></NavLink>
-                    <NavLink to='/'><span className="align-middle">{t('Log in')}</span></NavLink>
-                    {/* <select onChange={handleChange} value={locale}>
-                      <option value="cs">Čeština</option>
-                      <option value="en">English</option>
-                      <option value="fr">French</option>
-                      <option value="de">German</option>
-                    </select> */}
+
+            <Navbar collapseOnSelect expand="sm" className='p-0 m-0'>
+              <Container className='p-0'>
+                <Navbar.Toggle aria-controls='navbarScroll' data-bs-formTarget='#navbarScroll' />
+                <Navbar.Collapse id='navbarScroll' className='justify-content-between'>
+                  <Nav className='justify-start'>
+                    <NavLink className='navlink-logo' to='/'><img className='logo h-100' src={Logo} alt='logo' /></NavLink>
+                  </Nav>
+                  <Nav className='justify-end'>
+                    <NavLink to='/'><span className="p-3 align-middle">{t('Home')}</span></NavLink>
+                    <NavLink to='/lobby'><span className="p-3 align-middle">{t('Play')}</span></NavLink>
+                    <NavLink to='/registration'><span className="p-3 align-middle">{t('Sign up')}</span></NavLink>
+                    <NavLink to='/'><span className="p-3 align-middle">{t('Log in')}</span></NavLink>
                     <Select placeholder="EN" options={options} onChange={handleChange} />
-                  </Col>
-                </Col>
-                {/* <Col>
-                  <button onClick={() => setLocale(LOCALES.CZECH)}>Čeština</button>
-                  <button onClick={() => setLocale(LOCALES.ENGLISH)}>English</button>
-                  <button onClick={() => setLocale(LOCALES.FRENCH)}>French</button>
-                  <button onClick={() => setLocale(LOCALES.GERMAN)}>German</button>
-                </Col> */}
-
-
-              </Row>
-            </Container>
+                  </Nav>
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
           </header>
           {/* To Component End */}
           <main>
@@ -105,7 +91,7 @@ function App() {
           </main>
         </BrowserRouter>
       </div >
-    </I18nPropvider>
+    </I18nPropvider >
   );
 };
 
