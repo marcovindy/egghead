@@ -11,12 +11,9 @@ let socket; // let can be declared without a value, const can not
 
 
 const GameMaster = ({ location }) => {
-    const server = '';
-    if (process.env.NODE_ENV === "development") {
-        server = 'http://localhost:5000/';
-    } else {
-        server = `https://testing-egg.herokuapp.com`;
-    }
+    const IS_PROD = process.env.NODE_ENV === "production";
+    const URL = IS_PROD ? "yoursite.herokuapp.com" : "http://localhost:5000";
+    const socket = io(URL);
     const [roomName, setRoomName] = useState('');
     const [masterName, setMasterName] = useState('');
 
@@ -39,7 +36,6 @@ const GameMaster = ({ location }) => {
 
     useEffect(() => {
         const { roomName, masterName } = queryString.parse(location.search);
-        socket = io.connect(server);
         setRoomName(roomName);
         setMasterName(masterName);
 
@@ -60,7 +56,7 @@ const GameMaster = ({ location }) => {
             socket.emit('disconnect');
             socket.disconnect();
         };
-    }, [server, location.search]);
+    }, [URL, location.search]);
 
     useEffect(() => {
         socket.on('message', (text) => {
