@@ -14,7 +14,7 @@ const GameMaster = ({ location }) => {
 
     const IS_PROD = process.env.NODE_ENV === "development";
     const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
-    const server = {URL};
+    const server = URL;
     const [roomName, setRoomName] = useState('');
     const [masterName, setMasterName] = useState('');
 
