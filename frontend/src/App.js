@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Form, Container, Row, Col, Button, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import Select from "react-select";
 
 import JoinGame from './components/JoinGame/JoinGame';
 import GameMaster from './components/GameMaster/GameMaster';
@@ -30,13 +31,22 @@ import Login from './pages/Login/Login';
 
 function App() {
 
+  const options = [
+    { value: "en", label: "ENGLISH" },
+    { value: "cs", label: "ČEŠTINA" },
+    { value: "fr", label: "FRENCH" }
+  ];
+
   const [locale, setLocale] = useState(LOCALES.ENGLISH);
 
-  function handleChange(e) {
-    console.log(e.target.value);
-    if (e.target.value == "cs") {
+  function handleChange(selectedOption) {
+    console.log(selectedOption.value);
+    if (selectedOption.value === "cs") {
       setLocale(LOCALES.CZECH);
-      console.log("cs")
+    } else if (selectedOption.value === "en") {
+      setLocale(LOCALES.ENGLISH);
+    } else if (selectedOption.value === "fr") {
+      setLocale(LOCALES.FRENCH);
     }
   };
 
@@ -60,19 +70,21 @@ function App() {
                     <NavLink to='/lobby'><span className="align-middle">{t('Play')}</span></NavLink>
                     <NavLink to='/registration'><span className="align-middle">{t('Sign up')}</span></NavLink>
                     <NavLink to='/'><span className="align-middle">{t('Log in')}</span></NavLink>
-                    <select onChange={handleChange} value={locale}>
+                    {/* <select onChange={handleChange} value={locale}>
                       <option value="cs">Čeština</option>
                       <option value="en">English</option>
                       <option value="fr">French</option>
-                    </select>
+                      <option value="de">German</option>
+                    </select> */}
+                    <Select placeholder="EN" options={options} onChange={handleChange} />
                   </Col>
                 </Col>
-                <Col>
+                {/* <Col>
                   <button onClick={() => setLocale(LOCALES.CZECH)}>Čeština</button>
                   <button onClick={() => setLocale(LOCALES.ENGLISH)}>English</button>
                   <button onClick={() => setLocale(LOCALES.FRENCH)}>French</button>
                   <button onClick={() => setLocale(LOCALES.GERMAN)}>German</button>
-                </Col>
+                </Col> */}
 
 
               </Row>

@@ -12,7 +12,7 @@ const LandingPage = () => {
         <div className="landing-page-background">
             <Container className='p-0'>
                 <Row className="justify-content-md-center mt-5">
-                    <Col>
+                    <Col md={6} xs={12}>
                         <h1>{t("landingpage-title")}</h1>
                         <p className='landing-page-description'>{t("landingpage-description")}</p>
                         <Link className="mr-3" to="/">
@@ -26,7 +26,7 @@ const LandingPage = () => {
                             </Button>
                         </Link>
                     </Col>
-                    <Col>
+                    <Col md={6} xs={12}> 
                         <img src={mainImage} alt="MainImage" />
                     </Col>
                 </Row>
