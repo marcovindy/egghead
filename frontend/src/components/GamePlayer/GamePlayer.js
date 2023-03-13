@@ -15,7 +15,7 @@ const GamePlayer = ({ location }) => {
 
     const IS_PROD = process.env.NODE_ENV === "development";
     const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
-    const server = {URL};
+    const server = URL;
     const [joinRoomName, setJoinRoomName] = useState('');
     const [playerName, setPlayerName] = useState('');
     const [roomPlayer, setRoomPlayer] = useState([]);
