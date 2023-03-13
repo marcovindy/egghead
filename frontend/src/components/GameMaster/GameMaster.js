@@ -15,7 +15,7 @@ const GameMaster = ({ location }) => {
     if (process.env.NODE_ENV === "development") {
         server = 'http://localhost:5000/';
     } else {
-        server = `https://testing-egg.herokuapp.com/`;
+        server = `https://testing-egg.herokuapp.com`;
     }
     const [roomName, setRoomName] = useState('');
     const [masterName, setMasterName] = useState('');
