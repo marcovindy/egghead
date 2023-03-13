@@ -11,7 +11,12 @@ let socket; // let can be declared without a value, const can not
 
 
 const GameMaster = ({ location }) => {
-    const server = 'http://localhost:5000/';
+    const server = '';
+    if (process.env.NODE_ENV === "development") {
+        server = 'http://localhost:5000/';
+    } else {
+        server = `https://testing-egg.herokuapp.com/`;
+    }
     const [roomName, setRoomName] = useState('');
     const [masterName, setMasterName] = useState('');
 

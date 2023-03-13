@@ -12,7 +12,12 @@ import PlayerBoard from '../PlayerBoard/PlayerBoard';
 let socket;
 
 const GamePlayer = ({ location }) => {
-    const server = 'http://localhost:5000/';
+    const server = '';
+    if (process.env.NODE_ENV === "development") {
+        server = 'http://localhost:5000/';
+    } else {
+        server = `https://testing-egg.herokuapp.com/`;
+    }
     const [joinRoomName, setJoinRoomName] = useState('');
     const [playerName, setPlayerName] = useState('');
     // const [room, setPlayerName] = useState('');
@@ -40,7 +45,7 @@ const GamePlayer = ({ location }) => {
     const [player, setPlayer] = useState(''); // to get each client final score
 
     const [playersInfo, setPlayersInfo] = useState([]);
- 
+
     useEffect(() => {
         const { joinRoomName, playerName } = queryString.parse(location.search);
         socket = io.connect(server);
@@ -111,7 +116,7 @@ const GamePlayer = ({ location }) => {
             console.log(name, score); // world
             setPlayersInfo(ps);
             console.log(JSON.stringify(ps));
-            
+
         });
 
         socket.on('finalPlayerInfo', (client) => {
@@ -174,7 +179,7 @@ const GamePlayer = ({ location }) => {
                         <p className="p-players" key={index}>
                             {/* {console.log(playerInfo)} */}
                             Playername: {playerInfo.username}
-                        
+
                             <br />
                             Score: {playerInfo.score}
                         </p>
