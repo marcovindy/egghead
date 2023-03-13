@@ -12,9 +12,10 @@ import PlayerBoard from '../PlayerBoard/PlayerBoard';
 let socket;
 
 const GamePlayer = ({ location }) => {
-    const IS_PROD = process.env.NODE_ENV === "production";
-    const URL = IS_PROD ? "yoursite.herokuapp.com" : "http://localhost:5000";
-    const socket = io(URL);
+
+    const IS_PROD = process.env.NODE_ENV === "development";
+    const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
+    const server = {URL};
     const [joinRoomName, setJoinRoomName] = useState('');
     const [playerName, setPlayerName] = useState('');
     const [roomPlayer, setRoomPlayer] = useState([]);
@@ -43,6 +44,7 @@ const GamePlayer = ({ location }) => {
 
     useEffect(() => {
         const { joinRoomName, playerName } = queryString.parse(location.search);
+        socket = io.connect(server);
         setJoinRoomName(joinRoomName);
         setPlayerName(playerName);
 
@@ -63,7 +65,7 @@ const GamePlayer = ({ location }) => {
             socket.emit('disconnect');
             socket.disconnect();
         };
-    }, [URL]);
+    }, [server]);
 
     useEffect(() => {
         socket.on('message', (text) => {
