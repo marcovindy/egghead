@@ -41,6 +41,54 @@
   min-width: 100px;
 }
 
+/* .navlink-logo, .nav-container, .navbar-collapse, .navbar-nav{
+  max-height: 100%;
+}
+
+
 .navlink-logo {
   max-height: 50px;
+} */
+
+@media only screen and (min-width: 992px) {
+  .navBar-header {
+    max-height: 70px;
+  }
+}
+.hm-50px {
+  height: 50px;
+}
+
+.navbar-collapse {
+  justify-content: space-between;
+}
+
+
+
+.navBar-header>nav>.container , .navBar-header>nav {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navBar-header a {
+  color: white;
+}
+
+.navBar-header .navlink {
+  padding: 3px;
+}
+
+
+
+
+@media only screen and (max-width: 991px) {
+  
+.navBar-header .navlink {
+  padding: 20px;
+}
+
+.navbar-collapse {
+  padding-bottom: 20px;
+}
+
 }

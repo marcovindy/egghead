@@ -57,24 +57,23 @@ function App() {
         <BrowserRouter>
           {/* To Component Start */}
           <header className="navBar-header">
-
-            <Navbar collapseOnSelect expand="sm" className='p-0 m-0'>
-              <Container className='p-0'>
-                <Navbar.Toggle aria-controls='navbarScroll' data-bs-formTarget='#navbarScroll' />
-                <Navbar.Collapse id='navbarScroll' className='justify-content-between'>
-                  <Nav className='justify-start'>
-                    <NavLink className='navlink-logo' to='/'><img className='logo h-100' src={Logo} alt='logo' /></NavLink>
-                  </Nav>
-                  <Nav className='justify-end'>
-                    <NavLink to='/'><span className="p-3 align-middle">{t('Home')}</span></NavLink>
-                    <NavLink to='/lobby'><span className="p-3 align-middle">{t('Play')}</span></NavLink>
-                    <NavLink to='/registration'><span className="p-3 align-middle">{t('Sign up')}</span></NavLink>
-                    <NavLink to='/'><span className="p-3 align-middle">{t('Log in')}</span></NavLink>
-                    <Select placeholder="EN" options={options} onChange={handleChange} />
+            <Navbar collapseOnSelect expand="lg" variant="dark">
+              <Container className='justify-content-between'>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav justify-content-end">
+                 
+                <Navbar.Brand className=' d-none d-lg-block' href="#home"><img className='hm-50px' src={Logo}/></Navbar.Brand>
+                  <Nav className='justify-content-end'>
+                  <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Home')}</span></NavLink>
+                    <NavLink className='px-3 navlink' to='/lobby'><span className="align-middle">{t('Play')}</span></NavLink>
+                    <NavLink className='px-3 navlink' to='/registration'><span className="align-middle">{t('Sign up')}</span></NavLink>
+                    <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Log in')}</span></NavLink>
+                    <Select className='lang-select' placeholder="EN" options={options} onChange={handleChange} />
                   </Nav>
                 </Navbar.Collapse>
               </Container>
             </Navbar>
+           
           </header>
           {/* To Component End */}
           <main>
