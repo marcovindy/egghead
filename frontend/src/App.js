@@ -8,7 +8,6 @@ import JoinGame from './components/JoinGame/JoinGame';
 import GameMaster from './components/GameMaster/GameMaster';
 import GamePlayer from './components/GamePlayer/GamePlayer';
 import Leaderboard from './components/Leaderboard/Leaderboard';
-// import Navigation from './components/Navigation/Navigation';
 import LandingPage from './pages/Home/LandingPage';
 import Registration from './pages/Register/Register';
 import CreateUser from './pages/CreateUser/CreateUser';
@@ -61,10 +60,14 @@ function App() {
               <Container className='justify-content-between'>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav justify-content-end">
-                 
-                <Navbar.Brand className=' d-none d-lg-block' href="#home"><img className='hm-50px' src={Logo}/></Navbar.Brand>
+
+                  <Navbar.Brand className=' d-none d-lg-block'>
+                    <NavLink className='px-3 navlink' to='/'>
+                      <img className='hm-50px' src={Logo} />
+                    </NavLink>
+                  </Navbar.Brand>
                   <Nav className='justify-content-end'>
-                  <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Home')}</span></NavLink>
+                    <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Home')}</span></NavLink>
                     <NavLink className='px-3 navlink' to='/lobby'><span className="align-middle">{t('Play')}</span></NavLink>
                     <NavLink className='px-3 navlink' to='/registration'><span className="align-middle">{t('Sign up')}</span></NavLink>
                     <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Log in')}</span></NavLink>
@@ -73,7 +76,7 @@ function App() {
                 </Navbar.Collapse>
               </Container>
             </Navbar>
-           
+
           </header>
           {/* To Component End */}
           <main>

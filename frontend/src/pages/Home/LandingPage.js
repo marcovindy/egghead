@@ -15,12 +15,12 @@ const LandingPage = () => {
                     <Col md={6} xs={12}>
                         <h1>{t("landingpage-title")}</h1>
                         <p className='landing-page-description'>{t("landingpage-description")}</p>
-                        <Link className="mr-3" to="/">
+                        <Link className="mr-3" to="/lobby">
                             <Button variant='dark' size="lg">
                                 {t("Play")}
                             </Button>
                         </Link>
-                        <Link to="/">
+                        <Link to="/registration">
                             <Button variant='dark' size="lg">
                                 {t("Sign up")}
                             </Button>
