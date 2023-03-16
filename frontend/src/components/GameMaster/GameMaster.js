@@ -7,7 +7,8 @@ import './GameMaster.css';
 import GameQuestion from '../GameQuestion/GameQuestion';
 import EndGame from '../EndGame/EndGame';
 
-let socket; // let can be declared without a value, const can not
+let socket;     // Proměnná pro ukládání instance soketu pro komunikaci s ostatními hráči
+
 
 
 const GameMaster = ({ location }) => {
@@ -70,6 +71,8 @@ const GameMaster = ({ location }) => {
         });
     }, [messages]);
 
+    // Funkce pro spuštění hry a odeslání signálu všem hráčům
+
     const InitGame = () => {
         socket.emit('ready', (res) => {
             setServerResMsg(res);
@@ -93,7 +96,7 @@ const GameMaster = ({ location }) => {
         });
     }, []);
 
-
+    // Funkce pro odeslání otázky všem hráčům a uložení správné odpovědi
 
     const sendQuestion = (questionObj) => {
         const gameQuestion = questionObj[round].question;
@@ -112,6 +115,8 @@ const GameMaster = ({ location }) => {
         socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound });
     };
 
+    // Funkce pro přechod na další otázku a odeslání informace o všech hráčích na server
+
     const NextQuestion = () => {
         if (round !== questions.length) {
             sendQuestion(questions);
@@ -128,13 +133,8 @@ const GameMaster = ({ location }) => {
         socket.on('playerChoice', (playerName, playerChoice, gameRound) => {
             if (gameRound === round) {
                 if (playerChoice === decodeURIComponent(correctAnswer)) {
-                    // console.log(playersInRoom[playerName]);
-                    // console.log(playersInRoom[playerName].score);
-
                     console.log(playerName, 'has answered CORRECTLY:', playerChoice);
                     socket.emit('updateScore', playerName);
-                    // playersInRoom[playerName].score += 1;
-                    // console.log(playersInRoom[playerName].score); 
                 };
                 socket.emit('correctAnswer', correctAnswer, playerName);
             };
@@ -191,38 +191,6 @@ const GameMaster = ({ location }) => {
                             }
 
                         </div>
-                        {/* --- */}
-                        <div>
-
-                            {gameStarted === false ? (
-                                <div>
-                                    Test
-                                </div>
-                            ) : (
-                                <div>
-
-                                    {/* {gameEnd === false ? (
-                                        <GameQuestion
-                                            currentQuestion={currentQuestion}
-                                            currentOptions={currentOptions}
-                                            currentRound={currentRound}
-                                            masterName={masterName}
-                                            socket={socket}
-                                            clickStatus={clickActivated}
-                                            onClickChange={handleClickChange}
-                                            correctAnswer={correctAnswer}
-                                        />
-                                    ) : (
-                                        <EndGame players={players} player={player} />
-                                    )
-                                    } */}
-
-                                </div>
-                            )
-                            }
-
-                        </div>
-                        {/* --- */}
                         <div className="players-container">
                             <h3>Players in room: {playerCount}</h3>
                             <hr />
