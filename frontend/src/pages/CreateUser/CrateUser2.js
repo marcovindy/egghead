@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
 
@@ -16,6 +17,9 @@ import './CreateUser.css';
 import t from "../../i18nProvider/translate";
 
 function CreateUser2() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    let history = useHistory();
 
     const [isActive, setActive] = useState("false");
 
@@ -55,7 +59,35 @@ function CreateUser2() {
 
     // LOGIN
 
-
+    const login = (data) => {
+        try {
+            console.log(data);
+            if (process.env.NODE_ENV === "development") {
+                axios.post("http://localhost:5000/auth/login", data).then((response) => {
+                    console.log(data);
+                    if (response.data.error) {
+                        alert(response.data.error);
+                    } else {
+                        sessionStorage.setItem("accessToken", response.data);
+                        history.push("/");
+                    }
+                });
+            } else {
+                axios.post("https://testing-egg.herokuapp.com/auth/login", data).then((response) => {
+                    console.log(data);
+                    if (response.data.error) {
+                        alert(response.data.error);
+                    } else {
+                        sessionStorage.setItem("accessToken", response.data);
+                        history.push("/");
+                    }
+                });
+            }
+        } catch (error) {
+            console.log(error.response.data);
+            toast.error(error.response.data);
+        }
+    };
 
     // END LOGIN
 
@@ -114,7 +146,7 @@ function CreateUser2() {
             <div className="form-container sign-in-container">
                 <Formik
                     initialValues={initialValues}
-                    onSubmit={onSubmit}
+                    onSubmit={login}
                     validationSchema={validationSchema}
                 >
                     <Form className="formContainer">
@@ -133,6 +165,7 @@ function CreateUser2() {
                             id="inputCreatePost"
                             name="username"
                             placeholder="(Ex. John123...)"
+                            type="text"
                         />
 
                         <label>Password: </label>

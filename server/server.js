@@ -28,7 +28,16 @@ app.use(express.json());
 const scores = require('./routes/scores');
 app.use('/scores', scores);
 
+<<<<<<< HEAD
 const whitelist = ['https://testing-egg.herokuapp.com', 'https://testing-egg.herokuapp.com/auth', 'http://localhost:5000/auth', 'http://localhost:3000', 'http://localhost:5000']
+=======
+app.use((req, res, next) => {
+    res.setHeader("Content-Type", "application/json");
+    next();
+});
+
+const whitelist = ['https://testing-egg.herokuapp.com', 'https://testing-egg.herokuapp.com/auth', 'http://localhost:5000/auth', 'http://localhost:3000', 'http://localhost:5000', 'http://localhost:5000/auth/auth']
+>>>>>>> parent of bc468c9 (Revert "Update server.js")
 const corsOptions = {
     origin: function (origin, callback) {
         console.log("** Origin of request " + origin)
@@ -209,8 +218,6 @@ server.listen(process.env.PORT || PORT, () => {
 
 const db = require("./models");
 const usersRouter = require("./routes/Users");
+// const quizzesRouter = require("./routes/Quizzes");
 app.use("/auth", usersRouter);
-
-
-
-
+// app.use("/quizzes", quizzesRouter);

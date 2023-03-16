@@ -1,18 +1,51 @@
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { AuthContext } from "../../helpers/AuthContext";
 
-import React from "react";
+function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { setAuthState } = useContext(AuthContext);
 
-import { LoginForm } from "../../components/Forms/LoginForm/LoginForm";
+  let history = useHistory();
 
-import "./Login.css";
-
-export const Login = () => {
+  const login = () => {
+    const data = { username: username, password: password };
+    axios.post("http://localhost:5001/auth/login", data).then((response) => {
+      if (response.data.error) {
+        alert(response.data.error);
+      } else {
+        localStorage.setItem("accessToken", response.data.token);
+        setAuthState({
+          username: response.data.username,
+          id: response.data.id,
+          status: true,
+        });
+        history.push("/");
+      }
+    });
+  };
   return (
-    <div className="registration-page bg-info">
-      <div className="mt-5">
-          <LoginForm />
-      </div>
+    <div className="loginContainer">
+      <label>Username:</label>
+      <input
+        type="text"
+        onChange={(event) => {
+          setUsername(event.target.value);
+        }}
+      />
+      <label>Password:</label>
+      <input
+        type="password"
+        onChange={(event) => {
+          setPassword(event.target.value);
+        }}
+      />
+
+      <button onClick={login}> Login </button>
     </div>
   );
-};
+}
 
-export default Login
+export default Login;
