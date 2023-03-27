@@ -1,0 +1,145 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.css-b62m3t-container {
+  min-width: 100px;
+}
+
+/* .navlink-logo, .nav-container, .navbar-collapse, .navbar-nav{
+  max-height: 100%;
+}
+
+
+.navlink-logo {
+  max-height: 50px;
+} */
+
+@media only screen and (min-width: 992px) {
+  .navBar-header {
+    max-height: 70px;
+  }
+}
+.hm-50px {
+  height: 50px;
+}
+
+.navbar-collapse {
+  justify-content: space-between;
+}
+
+
+
+.navBar-header>nav>.container , .navBar-header>nav {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navBar-header a {
+  color: white;
+}
+
+.navBar-header .navlink {
+  padding: 3px;
+}
+
+
+
+
+@media only screen and (max-width: 991px) {
+  
+.navBar-header .navlink {
+  padding: 20px;
+}
+
+.navbar-collapse {
+  padding-bottom: 20px;
+}
+
+}
+
+.dropdown-menu a {
+  color: black !important;;
+}
+
+.dropdown-toggle.btn#dropdown-basic-button {
+  background: transparent;
+  border: none;
+}
+
+
+/* FROM */
+        
+button, .a-button  {
+  border-radius: 20px;
+  border: 1px solid #ff4b2b;
+  background: #ff445c;
+  color: #fff !important;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+}
+
+
+input {
+  background: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+}
+
+

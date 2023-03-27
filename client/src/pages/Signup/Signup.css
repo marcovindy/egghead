@@ -1,0 +1,15 @@
+.container-sign .col-left {
+  border-radius: 50px 20px;
+}
+
+.container-sign .col-right {
+  border-radius: 50px 20px;
+}
+
+.container-sign .background {
+  background: #A3E8C8;
+  background: -webkit-gradient(linear, left top, right top, from(#012f94), to(#A3E8C8)) no-repeat 0 0/cover;
+  background: linear-gradient(to right, #012f94, #A3E8C8) no-repeat 0 0/cover;
+  color: #fff;
+}
+/*# sourceMappingURL=Signup.css.map */

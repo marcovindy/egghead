@@ -1,57 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql');
+const Quiz = require('../models');
 
-// create a connection to the MySQL database
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'your_db_user',
-  password: 'your_db_password',
-  database: 'your_db_name'
-});
+// API endpoint for creating a new quiz
+router.post('/create', (req, res) => {
+  const { title, description, categoryIds } = req.body;
 
-// connect to the database
-connection.connect((error) => {
-  if (error) {
-    console.error('Error connecting to MySQL database:', error);
-    return;
-  }
-  console.log('Connected to MySQL database.');
-});
-
-// define the API routes for quizzes
-router.post('/quizzes', (req, res) => {
-  const quizData = req.body;
-  const { name, description, questions } = quizData;
-
-  // validate the quiz data
-  if (!name || !description || !questions || questions.length === 0) {
-    res.status(400).send({ error: 'Invalid quiz data.' });
-    return;
+  // Validate the data
+  if (!title || !description || categoryIds.length === 0) {
+    return res.status(400).json({ message: 'Invalid data' });
   }
 
-  // save the quiz data to the database
-  const insertQuizQuery = `INSERT INTO quizzes (name, description) VALUES ("${name}", "${description}")`;
-  connection.query(insertQuizQuery, (error, result) => {
-    if (error) {
-      console.error('Error saving quiz data to the database:', error);
-      res.status(500).send({ error: 'Error saving quiz data to the database.' });
-      return;
+  // Create a new quiz object
+  const quiz = new Quiz({
+    title,
+    description,
+    categories: categoryIds,
+  });
+
+  // Save the quiz to the database
+  quiz.save((err, quiz) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to create quiz' });
     }
-
-    const quizId = result.insertId;
-    const insertQuestionQuery = `INSERT INTO questions (quiz_id, question, answer) VALUES ?`;
-    const questionValues = questions.map((question) => [quizId, question.question, question.answer]);
-    connection.query(insertQuestionQuery, [questionValues], (error, result) => {
-      if (error) {
-        console.error('Error saving question data to the database:', error);
-        res.status(500).send({ error: 'Error saving question data to the database.' });
-        return;
-      }
-
-      console.log('Quiz data saved to the database:', quizData);
-      res.status(201).send({ message: 'Quiz data saved successfully.' });
-    });
+    res.status(201).json({ message: 'Quiz created successfully', quiz });
+    console.log(res);
   });
 });
 

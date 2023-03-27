@@ -1,11 +1,11 @@
 {
   "name": "egghead",
   "version": "1.0.0",
-  "description": "## Lessons",
-  "main": "index.js",  
+  "description": "## Trivia Game",
+  "main": "index.js",
   "scripts": {
-    "build": "cd server && npm install  && cd ../frontend && npm install && npm run build",
-    "start": "node server/server.js",
+    "build": "cd server && npm install  && cd ../client && npm install && npm run build",
+    "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
