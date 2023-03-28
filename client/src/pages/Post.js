@@ -4,6 +4,10 @@ import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
 
 function Post() {
+  const IS_PROD = process.env.NODE_ENV === "development";
+  const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
+  
+
   let { id } = useParams();
   const [postObject, setPostObject] = useState({});
   const [comments, setComments] = useState([]);
@@ -13,11 +17,11 @@ function Post() {
   let history = useHistory();
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/posts/byId/${id}`).then((response) => {
+    axios.get(`${URL}/posts/byId/${id}`).then((response) => {
       setPostObject(response.data);
     });
 
-    axios.get(`http://localhost:5000/comments/${id}`).then((response) => {
+    axios.get(`${URL}/comments/${id}`).then((response) => {
       setComments(response.data);
     });
   }, []);
@@ -25,7 +29,7 @@ function Post() {
   const addComment = () => {
     axios
       .post(
-        "http://localhost:5000/comments",
+        "${URL}/comments",
         {
           commentBody: newComment,
           PostId: id,
@@ -52,7 +56,7 @@ function Post() {
 
   const deleteComment = (id) => {
     axios
-      .delete(`http://localhost:5000/comments/${id}`, {
+      .delete(`${URL}/comments/${id}`, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then(() => {
@@ -66,7 +70,7 @@ function Post() {
 
   const deletePost = (id) => {
     axios
-      .delete(`http://localhost:5000/posts/${id}`, {
+      .delete(`${URL}/posts/${id}`, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then(() => {
@@ -78,7 +82,7 @@ function Post() {
     if (option === "title") {
       let newTitle = prompt("Enter New Title:");
       axios.put(
-        "http://localhost:5000/posts/title",
+        "${URL}/posts/title",
         {
           newTitle: newTitle,
           id: id,
@@ -92,7 +96,7 @@ function Post() {
     } else {
       let newPostText = prompt("Enter New Text:");
       axios.put(
-        "http://localhost:5000/posts/postText",
+        "${URL}/posts/postText",
         {
           newText: newPostText,
           id: id,
