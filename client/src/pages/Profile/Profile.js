@@ -4,6 +4,10 @@ import axios from "axios";
 import { AuthContext } from "../../helpers/AuthContext";
 
 function Profile() {
+  const IS_PROD = process.env.NODE_ENV === "development";
+  const URL1 = IS_PROD ? "http://localhost:5000/auth/basicinfo/" : "https://testing-egg.herokuapp.com/auth/basicinfo/";
+  const URL2 = IS_PROD ? "http://localhost:5000/posts/byuserId/" : "https://testing-egg.herokuapp.com/posts/byuserId/";
+
   let { id } = useParams();
   let history = useHistory();
   const [username, setUsername] = useState("");
@@ -11,11 +15,11 @@ function Profile() {
   const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/auth/basicinfo/${id}`).then((response) => {
+    axios.get(`${URL1}${id}`).then((response) => {
       setUsername(response.data.username);
     });
 
-    axios.get(`http://localhost:5000/posts/byuserId/${id}`).then((response) => {
+    axios.get(`${URL2}${id}`).then((response) => {
       setListOfPosts(response.data);
     });
   }, []);
