@@ -7,17 +7,21 @@ import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import { AuthContext } from "../helpers/AuthContext";
 
 const Dashboard = () => {
+  const IS_PROD = process.env.NODE_ENV === "development";
+  const URL = IS_PROD ? "http://localhost:5000/posts" : "https://testing-egg.herokuapp.com/posts";
+
   const [listOfPosts, setListOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const { authState } = useContext(AuthContext);
   let history = useHistory();
+  
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       history.push("/login");
     } else {
       axios
-        .get("http://localhost:5000/posts", {
+        .get(URL, {
           headers: { accessToken: localStorage.getItem("accessToken") },
         })
         .then((response) => {
