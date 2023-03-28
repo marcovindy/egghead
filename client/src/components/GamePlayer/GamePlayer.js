@@ -6,7 +6,6 @@ import Messages from '../Messages/Messages';
 import GameQuestion from '../GameQuestion/GameQuestion';
 import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 import EndGame from '../EndGame/EndGame';
-import PlayerBoard from '../PlayerBoard/PlayerBoard';
 
 
 let socket;
@@ -182,7 +181,7 @@ const GamePlayer = ({ location }) => {
                     )}
 
                 </div>
-                <PlayerBoard players={players} player={player} />
+                {/* <PlayerBoard players={players} player={player} /> */}
             </div>
 
         </Container>

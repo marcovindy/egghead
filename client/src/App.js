@@ -8,7 +8,6 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dashboard from "./pages/Dashboard";
 import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
-import Registration from "./pages/Registration";
 import Login from "./pages/Signin/Login";
 import PageNotFound from "./pages/PageNotFound";
 import Profile from "./pages/Profile/Profile";
@@ -18,6 +17,8 @@ import LandingPage from './pages/Home/LandingPage';
 import JoinGame from './components/JoinGame/JoinGame';
 import CreateQuiz from './components/CreateQuiz/CreateQuiz';
 import Footer from './components/Footer/Footer';
+import GameMaster from './components/GameMaster/GameMaster';
+import GamePlayer from './components/GamePlayer/GamePlayer';
 
 import Logo from "./assets/images/trivia.png";
 
@@ -179,10 +180,11 @@ function App() {
               <Route path="/createpost" exact component={CreatePost} />
               <Route path="/post/:id" exact component={Post} />
               <Route path="/signup" exact component={Signup} />
-              <Route path="/registration" exact component={Registration} />
               <Route path="/login" exact component={Login} />
               <Route path="/profile/:id" exact component={Profile} />
               <Route path="/changepassword" exact component={ChangePassword} />
+              <Route path="/gamemaster" component={GameMaster} />
+              <Route path="/gameplayer" component={GamePlayer} />
               <Route path="*" exact component={PageNotFound} />
             </Switch>
           </Router>
