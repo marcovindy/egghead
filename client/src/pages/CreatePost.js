@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 
 function CreatePost() {
+  const IS_PROD = process.env.NODE_ENV === "development";
+  const URL = IS_PROD ? "http://localhost:5000/posts" : "https://testing-egg.herokuapp.com/posts";
   const { authState } = useContext(AuthContext);
 
   let history = useHistory();
@@ -26,7 +28,7 @@ function CreatePost() {
 
   const onSubmit = (data) => {
     axios
-      .post("http://localhost:5000/posts", data, {
+      .post(URL, data, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then((response) => {
