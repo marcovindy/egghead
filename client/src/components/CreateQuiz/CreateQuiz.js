@@ -7,6 +7,10 @@ import { AuthContext } from "../../helpers/AuthContext";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 
 function CreateQuiz() {
+    
+    const IS_PROD = process.env.NODE_ENV === "development";
+    const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
+    
     const { authState } = useContext(AuthContext);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState("");

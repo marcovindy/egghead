@@ -32,6 +32,7 @@ import './assets/styles/navigation.css';
 import { I18nPropvider, LOCALES } from './i18nProvider';
 import t from "./i18nProvider/translate";
 
+import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -92,6 +93,7 @@ function App() {
   const logout = () => {
     localStorage.removeItem("accessToken");
     setAuthState({ username: "", id: 0, status: false });
+    toast.success(t("logout-success"));
   };
 
 

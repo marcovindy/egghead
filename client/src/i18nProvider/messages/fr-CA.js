@@ -18,6 +18,7 @@ export default {
     'sign-in-text-2': 'Cliquez ici pour vous connecter et continuer à acquérir des connaissances.',
     'login-success': 'Vous êtes maintenant connecté !',
     'signup-success': 'Utilisateur créé avec succès !',
+    'logout-success': 'Vous êtes maintenant déconnecté!',
   
   },
 };

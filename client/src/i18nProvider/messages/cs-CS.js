@@ -23,5 +23,6 @@ export default {
     'sign-in-text-2': 'Klikněte zde pro přihlášení a pokračujte v získávání znalostí.',
     'login-success': 'Přihlášení proběhlo úspěšně!',
     'signup-success': 'Účet byl úspěšně vytvořen!',
+    'logout-success': 'Odhlášení proběhlo úspěšně!',
   },
 };

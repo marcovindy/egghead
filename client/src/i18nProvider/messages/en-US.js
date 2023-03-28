@@ -20,7 +20,7 @@ export default {
     'sign-in-text-2': 'Click here to sign in and continue gaining knowledge.',
     'login-success': 'You are now logged in!',
     'signup-success': 'User created successfully!',
- 
+    'logout-success': 'You are now logged out!',
  
   },
 };
