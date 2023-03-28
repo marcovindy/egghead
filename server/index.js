@@ -59,7 +59,11 @@ app.use("/categories", categoriesRouter);
 const quizzesRouter = require("./routes/Quizzes");
 app.use("/quizzes", quizzesRouter);
 
-
+// Serve any static files
+app.use(express.static(path.join(__dirname, "../client/build")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 // SOCKET
 const uuidv1 = require('uuid/v1');
@@ -215,6 +219,6 @@ io.on('connect', (socket) => {
 
 db.sequelize.sync().then(() => {
   app.listen(process.env.PORT || PORT,  () => {
-    console.log("Server running on port 5000");
+    console.log(`Server running on port ${process.env.PORT}`);
   });
 });
