@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function ChangePassword() {
+  const IS_PROD = process.env.NODE_ENV === "development";
+  const URL = IS_PROD ? "http://localhost:5000/auth/changepassword" : "https://testing-egg.herokuapp.com/auth/changepassword";
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
   const changePassword = () => {
     axios
       .put(
-        "http://localhost:5000/auth/changepassword",
+        URL,
         {
           oldPassword: oldPassword,
           newPassword: newPassword,
