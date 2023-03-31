@@ -42,11 +42,13 @@ const GameMaster = ({ location }) => {
         setRoomName(roomName);
         setMasterName(masterName);
 
+
+
         socket.emit('createRoom', { roomName, masterName }, (error) => {
             if (error) {
                 setError(true);
                 setErrorMsg(error);
-                console.log(error);
+                console.log("Create room error: ", error);
             };
         });
 
