@@ -1,1 +1,54 @@
-/* No CSS *//*# sourceMappingURL=Cards.css.map */
+.card-col.col {
+  padding: 10px;
+}
+
+.card-col.col .card {
+  min-width: 200px !important;
+}
+
+.card-col.col .card ul {
+  margin: 0;
+  padding: 0;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+.card-col.col .card ul li {
+  list-style: none;
+  padding: 3px 6px;
+  color: #fff;
+  background-color: #5b90fa;
+  margin: 3px;
+  border-radius: 5px;
+}
+
+.card-col.col .card .card-buttons {
+  margin-top: -1.33rem;
+}
+
+.card-col.col .card .card-buttons button {
+  margin: 0 5px;
+}
+
+.card-col.col .card .card-title {
+  padding-top: 5px;
+  margin: 0;
+}
+
+.card-col.col .card .card-body {
+  padding: 0;
+}
+
+.card-col.col .card .card-body .body {
+  padding: 5px;
+}
+
+.card-col.col .card .card-body .footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 5px;
+  background-color: #dddddd;
+}
+/*# sourceMappingURL=Cards.css.map */

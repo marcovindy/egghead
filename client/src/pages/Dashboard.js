@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
 import Card from 'react-bootstrap/Card';
-import {Image} from 'react-bootstrap';
+import { Image, Row, Col, Button } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import { AuthContext } from "../helpers/AuthContext";
+import '../assets/styles/Cards/Cards.css';
+
+const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
 const Dashboard = () => {
   const IS_PROD = process.env.NODE_ENV === "development";
@@ -16,6 +19,8 @@ const Dashboard = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const { authState } = useContext(AuthContext);
   let history = useHistory();
+
+
 
 
   useEffect(() => {
@@ -91,7 +96,7 @@ const Dashboard = () => {
     <div>
       {listOfPosts.map((value, key) => {
         return (
-          <div key={key} className="post">
+          <Col key={key} className="post">
             <Card style={{ width: '18rem' }}>
               <Card.Body>
                 <Card.Title>{value.title} </Card.Title>
@@ -122,42 +127,66 @@ const Dashboard = () => {
                 </div>
               </Card.Body>
             </Card>
-          </div>
+          </Col>
         );
       })}
-      <h2>List of Quizzes</h2>
-      <div>
+      <Row>
+        <h2>List of Quizzes</h2>
         {listOfQuizzes.map((value, key) => {
           return (
-            <div key={key} className="post">
-              <Card style={{ width: '18rem' }}>
+            <Col className="card-col" key={key}>
+              <Card>
                 <Card.Body>
-                  <Card.Title>{value.title} </Card.Title>
-                  <div
-                    className="body"
-                    onClick={() => {
-                      history.push(`/post/${value.id}`);
-                    }}
-                  >
-                    {value.description}
+                  <Card.Img variant="top" src={img} />
+                  <div className="card-buttons">
+                    <Button
+                      onClick={() => {
+                        history.push(`/quiz/${value.id}`);
+                      }}
+                    >
+                      View
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        history.push(`/gamemaster?roomName=${value.title}&masterName=${value.User.username}`);
+                      }}
+                    >
+                      Play
+                    </Button>
                   </div>
-                  <div className="footer">
+                  <Card.Title>{value.title} </Card.Title>
+                  <div className="body">
                     <div className="username">
-                      <Link to={`/profile/${value.UserId}`}> {value.User.username} </Link>
+                      <Link to={`/profile/${value.userId}`}> {value.User.username} </Link>
+                    </div>
+                    <div
+                      className="quizDesc"
+                      onClick={() => {
+                        history.push(`/quiz/${value.id}`);
+                      }}
+                    >
+                      {value.description}
                     </div>
                     <ul>
                       {value.Categories.map((category) => (
                         <li key={category.id}>{category.name}</li>
                       ))}
                     </ul>
-
+                  </div>
+                  <div className="footer">
+                    <Col lg={6}>
+                      {value.updatedAt.slice(0, 19).replace('T', ' ')}
+                    </Col>
+                    <Col lg={6}>
+                      Unlocked
+                    </Col>
                   </div>
                 </Card.Body>
               </Card>
-            </div>
+            </Col>
           );
         })}
-      </div>
+      </Row>
     </div>
   );
 }

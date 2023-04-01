@@ -1,0 +1,41 @@
+.card-col.col {
+    padding: 10px;
+    .card {
+        min-width: 200px !important;
+        ul {
+            margin: 0;
+            padding: 0;
+            display: flex !important;
+            li {
+                list-style: none;
+                padding: 3px 6px;
+                color: #fff;
+                background-color: rgb(91, 144, 250);
+                margin: 3px;
+                border-radius: 5px;
+            }
+        }
+        .card-buttons {
+            margin-top: -1.33rem;
+            // margin-bottom: -5rem;
+            button {
+                margin: 0 5px;
+            }
+        }
+        .card-title {
+            padding-top: 5px;
+            margin: 0;
+        }
+        .card-body {
+            padding: 0;
+            .body {
+                padding: 5px;
+            }
+            .footer {
+                display: flex;
+                padding: 5px;
+                background-color: #dddddd;
+            }
+        }
+    }
+}
