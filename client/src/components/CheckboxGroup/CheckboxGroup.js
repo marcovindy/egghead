@@ -6,10 +6,10 @@ const CheckboxGroup = ({ name, options }) => {
     <>
       {options.map((option) => (
         <div key={option}>
-          <label>
-            <Field type="checkbox" name={name} value={option} />
+          <label for={option}>
             {option}
           </label>
+          <Field type="checkbox" id={option} name={name} value={option} />
         </div>
       ))}
     </>

@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Quizzes = sequelize.define("Quizzes", {
-    user_id: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    quiz_name: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
     },

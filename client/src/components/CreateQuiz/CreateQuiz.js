@@ -7,10 +7,10 @@ import { AuthContext } from "../../helpers/AuthContext";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 
 const IS_PROD = process.env.NODE_ENV === "development";
-const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
+const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
 
 function CreateQuiz() {
-    
+
     const { authState } = useContext(AuthContext);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState("");
@@ -75,13 +75,14 @@ function CreateQuiz() {
                         name="title"
                         placeholder="(Ex. Quiz Title...)"
                     />
-                    <label>Categories: </label>
-                    <ErrorMessage name="categories" component="span" />
-                
-                    <CheckboxGroup
-                        name="categories"
-                        options={categories.map((category) => category.category_name)}
-                    />
+                    <div className="categories-group p-5">
+                        <label>Categories: </label>
+                        <ErrorMessage name="categories" component="span" />
+                        <CheckboxGroup
+                            name="categories"
+                            options={categories.map((category) => category.name)}
+                        />
+                    </div>
                     {error && <span className="error">{error}</span>}
                     <label>Description: </label>
                     <ErrorMessage name="description" component="span" />
