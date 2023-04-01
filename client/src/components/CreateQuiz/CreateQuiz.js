@@ -42,6 +42,23 @@ function CreateQuiz() {
         description: Yup.string().required("You must input a description!"),
     });
 
+    // const onSubmit = (data) => {
+    //     const categoryIds = categories
+    //         .filter((category) => data.categories.includes(category.name))
+    //         .map((category) => category.id);
+    //     axios
+    //         .post(`${URL}/quizzes/create`, {
+    //             title: data.title,
+    //             description: data.description,
+    //             categoryIds,
+    //         }, {
+    //             headers: { accessToken: localStorage.getItem("accessToken") },
+    //         })
+    //         .then((response) => {
+    //             history.push("/");
+    //         });
+    // };
+
     const onSubmit = (data) => {
         const categoryIds = categories
             .filter((category) => data.categories.includes(category.name))
@@ -50,14 +67,21 @@ function CreateQuiz() {
             .post(`${URL}/quizzes/create`, {
                 title: data.title,
                 description: data.description,
-                categoryIds,
+                categoryIds
             }, {
                 headers: { accessToken: localStorage.getItem("accessToken") },
             })
             .then((response) => {
-                history.push("/");
+                // history.push(`/quizzes/${response.data.id}/edit`);
+                history.push('/');
+            })
+            .catch((error) => {
+                console.error(error);
+                setError("Failed to create quiz");
             });
     };
+
+
 
     return (
         <div className="createQuizPage">

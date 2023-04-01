@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Quiz = require('../models');
+const { Quizzes, Categories } = require('../models');
 
-// API endpoint for creating a new quiz
-router.post('/create', (req, res) => {
+router.post('/create',validateToken,async (req, res) => {
   const { title, description, categoryIds } = req.body;
 
   // Validate the data
@@ -11,21 +10,24 @@ router.post('/create', (req, res) => {
     return res.status(400).json({ message: 'Invalid data' });
   }
 
-  // Create a new quiz object
-  const quiz = new Quiz({
-    title,
-    description,
-    categories: categoryIds,
-  });
+  try {
+    // Create a new quiz object
+    const quiz = await Quizzes.create({
+      title,
+      description,
+    });
 
-  // Save the quiz to the database
-  quiz.save((err, quiz) => {
-    if (err) {
-      return res.status(500).json({ message: 'Failed to create quiz' });
-    }
+    // Associate the quiz with the selected categories
+    const categories = await Categories.findAll({
+      where: { id: categoryIds },
+    });
+    await quiz.setCategories(categories);
+
     res.status(201).json({ message: 'Quiz created successfully', quiz });
-    console.log(res);
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to create quiz' });
+  }
 });
 
 module.exports = router;

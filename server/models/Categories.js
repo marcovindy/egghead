@@ -6,5 +6,12 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
+    Categories.associate = (models) => {
+        Categories.belongsToMany(models.Quizzes, {
+            through: "quiz_categories",
+            foreignKey: "categoryId",
+        });
+    };
+
     return Categories;
 };

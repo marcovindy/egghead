@@ -8,11 +8,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    exper: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
   });
+
+  Quizzes.associate = (models) => {
+    Quizzes.belongsToMany(models.Categories, {
+      through: "quiz_categories",
+    });
+  };
 
   return Quizzes;
 };
