@@ -6,6 +6,10 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../helpers/AuthContext";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 
+import { toast } from 'react-toastify';
+
+import t from "../../i18nProvider/translate";
+
 const IS_PROD = process.env.NODE_ENV === "development";
 const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
 
@@ -42,22 +46,6 @@ function CreateQuiz() {
         description: Yup.string().required("You must input a description!"),
     });
 
-    // const onSubmit = (data) => {
-    //     const categoryIds = categories
-    //         .filter((category) => data.categories.includes(category.name))
-    //         .map((category) => category.id);
-    //     axios
-    //         .post(`${URL}/quizzes/create`, {
-    //             title: data.title,
-    //             description: data.description,
-    //             categoryIds,
-    //         }, {
-    //             headers: { accessToken: localStorage.getItem("accessToken") },
-    //         })
-    //         .then((response) => {
-    //             history.push("/");
-    //         });
-    // };
 
     const onSubmit = (data) => {
         const categoryIds = categories
@@ -72,12 +60,12 @@ function CreateQuiz() {
                 headers: { accessToken: localStorage.getItem("accessToken") },
             })
             .then((response) => {
-                // history.push(`/quizzes/${response.data.id}/edit`);
+                toast.success(t("createquiz-success"));
                 history.push('/');
             })
             .catch((error) => {
                 console.error(error);
-                setError("Failed to create quiz");
+                toast.error(t("createquiz-error"));
             });
     };
 

@@ -24,5 +24,7 @@ export default {
     'login-success': 'Přihlášení proběhlo úspěšně!',
     'signup-success': 'Účet byl úspěšně vytvořen!',
     'logout-success': 'Odhlášení proběhlo úspěšně!',
+    'createquiz-success': 'Kvíz byl úspěšně vytvořen!',
+    'createquiz-error': 'Kvíz se nepovedlo vytvořit :(',
   },
 };

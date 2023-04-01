@@ -11,8 +11,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Quizzes.associate = (models) => {
+    // Associate with Categories
     Quizzes.belongsToMany(models.Categories, {
       through: "quiz_categories",
+    });
+
+    // Associate with User
+    Quizzes.belongsTo(models.Users, {
+      foreignKey: "userId",
+      onDelete: "CASCADE",
     });
   };
 

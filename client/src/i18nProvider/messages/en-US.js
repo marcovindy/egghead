@@ -21,6 +21,8 @@ export default {
     'login-success': 'You are now logged in!',
     'signup-success': 'User created successfully!',
     'logout-success': 'You are now logged out!',
+    'createquiz-success': 'Kvíz created successfully!',
+    'createquiz-error': 'Kvíz created unsuccessfully :(',
  
   },
 };

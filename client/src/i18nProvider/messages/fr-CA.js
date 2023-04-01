@@ -19,6 +19,8 @@ export default {
     'login-success': 'Vous êtes maintenant connecté !',
     'signup-success': 'Utilisateur créé avec succès !',
     'logout-success': 'Vous êtes maintenant déconnecté!',
+    'createquiz-success': 'Kvíz created successfully!',
+    'createquiz-error': 'Kvíz created unsuccessfully :(',
   
   },
 };
