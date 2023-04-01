@@ -8,7 +8,7 @@ import { AuthContext } from "../helpers/AuthContext";
 
 const Dashboard = () => {
   const IS_PROD = process.env.NODE_ENV === "development";
-  const URL = IS_PROD ? "http://localhost:5000/posts" : "https://testing-egg.herokuapp.com/posts";
+  const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
 
   const [listOfPosts, setListOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
@@ -21,7 +21,7 @@ const Dashboard = () => {
       history.push("/login");
     } else {
       axios
-        .get(URL, {
+        .get(`${URL}/posts`, {
           headers: { accessToken: localStorage.getItem("accessToken") },
         })
         .then((response) => {
@@ -38,7 +38,7 @@ const Dashboard = () => {
   const likeAPost = (postId) => {
     axios
       .post(
-        "http://localhost:5000/likes",
+        `${URL}/likes`,
         { PostId: postId },
         { headers: { accessToken: localStorage.getItem("accessToken") } }
       )

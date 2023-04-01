@@ -96,7 +96,7 @@ function Post() {
     } else {
       let newPostText = prompt("Enter New Text:");
       axios.put(
-        "${URL}/posts/postText",
+        `${URL}/posts/postText`,
         {
           newText: newPostText,
           id: id,

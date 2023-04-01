@@ -6,10 +6,10 @@ import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../helpers/AuthContext";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 
+const IS_PROD = process.env.NODE_ENV === "development";
+const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
+
 function CreateQuiz() {
-    
-    const IS_PROD = process.env.NODE_ENV === "development";
-    const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
     
     const { authState } = useContext(AuthContext);
     const [categories, setCategories] = useState([]);
@@ -25,13 +25,14 @@ function CreateQuiz() {
             history.push("/login");
         }
         axios
-            .get("http://localhost:5000/categories")
+            .get(`${URL}/categories`)
             .then((response) => {
                 setCategories(response.data.listOfCategories);
                 console.log("categories response.data: ", response.data.listOfCategories);
             })
             .catch((error) => {
                 setError("Error fetching categories");
+                console.log("Categories error: ", error);
             });
     }, []);
 
@@ -46,7 +47,7 @@ function CreateQuiz() {
             .filter((category) => data.categories.includes(category.name))
             .map((category) => category.id);
         axios
-            .post("http://localhost:5000/quizzes/create", {
+            .post(`${URL}/quizzes/create`, {
                 title: data.title,
                 description: data.description,
                 categoryIds,
