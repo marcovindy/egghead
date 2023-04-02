@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Quizzes, Categories, Users } = require('../models');
+const { Quizzes, Categories, Users, Answers, Questions } = require('../models');
 
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
@@ -115,6 +115,8 @@ router.put('/title/byquizId/:id', validateToken, async (req, res) => {
     res.status(500).json({ message: 'Failed to update quiz title' });
   }
 });
+
+
 
 
 module.exports = router;
