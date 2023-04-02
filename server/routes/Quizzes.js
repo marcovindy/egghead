@@ -37,14 +37,13 @@ router.post('/create', validateToken, async (req, res) => {
 });
 
 router.get("/", validateToken, async (req, res) => {
-  console.log("GET /quizzes");
   try {
     const quizzes = await Quizzes.findAll({
       include: [
         {
           model: Categories,
           through: "quiz_categories",
-          as: "Categories", // use the same alias as defined in the association
+          as: "Categories", 
         },
         {
           model: Users,
@@ -52,6 +51,31 @@ router.get("/", validateToken, async (req, res) => {
       ],
     });
     res.json({ quizzes });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/byuserId/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("req params id ...:", req.params.id);
+    const quizzes = await Quizzes.findAll({
+      include: [
+        {
+          model: Categories,
+          through: "quiz_categories",
+          as: "Categories", 
+        },
+        {
+          model: Users,
+        },
+      ],
+      where: { UserId: id },
+    });
+    res.json(quizzes);
+    console.log(quizzes);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error" });

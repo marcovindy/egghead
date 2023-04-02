@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import Card from 'react-bootstrap/Card';
 import { Image, Row, Col, Button } from 'react-bootstrap';
+import { PlayCircleFill, HeartFill } from 'react-bootstrap-icons';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
@@ -46,7 +47,6 @@ const Dashboard = () => {
           headers: { accessToken: localStorage.getItem("accessToken") },
         })
         .then((response) => {
-          console.log('Server response:', response);
           setListOfQuizzes(response.data.quizzes);
         })
         .catch((error) => {
@@ -148,10 +148,22 @@ const Dashboard = () => {
                     </Button>
                     <Button
                       onClick={() => {
+                        history.push(`/quiz/${value.id}`);
+                      }}
+                    >
+                        <HeartFill 
+                       size={24}
+                       />
+                    </Button>
+                    <Button
+                    
+                      onClick={() => {
                         history.push(`/gamemaster?roomName=${value.title}&masterName=${value.User.username}`);
                       }}
                     >
-                      Play
+                      <PlayCircleFill 
+                       size={24}
+                       />
                     </Button>
                   </div>
                   <Card.Title>{value.title} </Card.Title>
