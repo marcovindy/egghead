@@ -10,7 +10,7 @@ const EditableTitle = ({ title, onTitleSave }) => {
     const inputRef = useRef();
 
     useEffect(() => {
-        // add a listener to hide the input field when user clicks outside of it
+        // přidat posluchače, aby se skrylo pole vstupu, když uživatel klikne mimo něj
         document.addEventListener("mousedown", handleHideInput);
         return () => {
             document.removeEventListener("mousedown", handleHideInput);

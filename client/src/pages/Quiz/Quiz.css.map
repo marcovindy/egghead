@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "",
+    "mappings": "AAAA,AACI,eADW,CACX,IAAI,CAAC;EACD,cAAc,EAAE,YAAY;EAC5B,WAAW,EAAE,YAAY;CAC5B",
     "sources": [
         "Quiz.scss"
     ],
