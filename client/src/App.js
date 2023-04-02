@@ -1,9 +1,10 @@
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, NavLink } from "react-router-dom";
 import { Navbar, Container, Nav, Row, Col } from "react-bootstrap";
 import Select from "react-select";
-import { NavLink } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Dashboard from "./pages/Dashboard";
 import CreatePost from "./pages/CreatePost";
@@ -34,12 +35,7 @@ import './assets/styles/navigation.css';
 import { I18nPropvider, LOCALES } from './i18nProvider';
 import t from "./i18nProvider/translate";
 
-import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 function App() {
-
 
 
   const [authState, setAuthState] = useState({
@@ -48,50 +44,32 @@ function App() {
     status: false,
   });
 
-
-
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      axios
-        .get("http://localhost:5000/auth/auth", {
+    axios
+      .get(
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:5000/auth/auth"
+          : "https://testing-egg.herokuapp.com/auth/auth",
+        {
           headers: {
             accessToken: localStorage.getItem("accessToken"),
           },
-        })
-        .then((response) => {
-          console.log(response);
-          if (response.data.error) {
-            setAuthState({ ...authState, status: false });
-          } else {
-            setAuthState({
-              username: response.data.username,
-              id: response.data.id,
-              status: true,
-            });
-          }
-        });
-    } else {
-      axios
-        .get("https://testing-egg.herokuapp.com/auth/auth", {
-          headers: {
-            accessToken: localStorage.getItem("accessToken"),
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          if (response.data.error) {
-            setAuthState({ ...authState, status: false });
-          } else {
-            setAuthState({
-              username: response.data.username,
-              id: response.data.id,
-              status: true,
-            });
-          }
-        });
-    }
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data.error) {
+          setAuthState({ ...authState, status: false });
+        } else {
+          setAuthState({
+            username: response.data.username,
+            id: response.data.id,
+            status: true,
+          });
+        }
+      });
   }, []);
-
+  
   const logout = () => {
     localStorage.removeItem("accessToken");
     setAuthState({ username: "", id: 0, status: false });
