@@ -82,7 +82,7 @@ function Post() {
     if (option === "title") {
       let newTitle = prompt("Enter New Title:");
       axios.put(
-        "${URL}/posts/title",
+        `${URL}/posts/title`,
         {
           newTitle: newTitle,
           id: id,

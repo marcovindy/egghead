@@ -43,7 +43,7 @@ router.get("/", validateToken, async (req, res) => {
         {
           model: Categories,
           through: "quiz_categories",
-          as: "Categories", 
+          as: "Categories",
         },
         {
           model: Users,
@@ -65,7 +65,7 @@ router.get("/byuserId/:id", async (req, res) => {
         {
           model: Categories,
           through: "quiz_categories",
-          as: "Categories", 
+          as: "Categories",
         },
         {
           model: Users,
@@ -97,5 +97,24 @@ router.delete("/:quizId", validateToken, async (req, res) => {
 
   res.json("DELETED SUCCESSFULLY");
 });
+
+
+router.put('/title/byquizId/:id', validateToken, async (req, res) => {
+  const { title } = req.body;
+  const quizId = req.params.id;
+
+  try {
+    // Find the quiz by id and update the title
+    const quiz = await Quizzes.findByPk(quizId);
+    quiz.title = title;
+    await quiz.save();
+
+    res.json({ message: 'Quiz title updated successfully', quiz });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to update quiz title' });
+  }
+});
+
 
 module.exports = router;
