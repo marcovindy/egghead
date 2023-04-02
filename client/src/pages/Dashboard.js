@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Card from 'react-bootstrap/Card';
 import { Image, Row, Col, Button } from 'react-bootstrap';
-import { PlayCircleFill, HeartFill } from 'react-bootstrap-icons';
+import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
@@ -144,7 +144,9 @@ const Dashboard = () => {
                         history.push(`/quiz/${value.id}`);
                       }}
                     >
-                      View
+                       <EyeFill 
+                       size={24}
+                       />
                     </Button>
                     <Button
                       onClick={() => {

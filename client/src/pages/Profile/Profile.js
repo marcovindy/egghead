@@ -35,7 +35,6 @@ function Profile() {
 
     axios.get(`${URL3}${id}`).then((response) => {
       setListOfQuizzes(response.data.quizzes);
-      console.log(response.data.quizzes);
     });
   }, []);
 
@@ -65,8 +64,9 @@ function Profile() {
                 </button>
               )}
             </div>
-          </Col> </Row>
-        <Row className="justify-content-center">
+          </Col>
+        </Row>
+        {/* <Row className="justify-content-center">
           <div className="listOfPosts">
             {listOfPosts.map((value, key) => {
               return (
@@ -90,9 +90,10 @@ function Profile() {
               );
             })}
           </div>
-        </Row>
+        </Row>  */}
         <Row>
           <h2>List of Quizzes</h2>
+
           {listOfQuizzes.map((value, key) => {
             return (
               <Col className="card-col" key={key}>
@@ -117,7 +118,7 @@ function Profile() {
                         />
                       </Button>
                       <Button
-
+  
                         onClick={() => {
                           history.push(`/gamemaster?roomName=${value.title}&masterName=${value.User.username}`);
                         }}

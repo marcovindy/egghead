@@ -60,7 +60,6 @@ router.get("/", validateToken, async (req, res) => {
 router.get("/byuserId/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("req params id ...:", req.params.id);
     const quizzes = await Quizzes.findAll({
       include: [
         {
@@ -72,14 +71,31 @@ router.get("/byuserId/:id", async (req, res) => {
           model: Users,
         },
       ],
-      where: { UserId: id },
+      where: { userId: id },
     });
-    res.json(quizzes);
-    console.log(quizzes);
+    res.json({ quizzes });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+router.get("/byquizId/:id", async (req, res) => {
+  const id = req.params.id;
+  const quiz = await Quizzes.findByPk(id);
+  console.log(quiz);
+  res.json(quiz);
+});
+
+router.delete("/:quizId", validateToken, async (req, res) => {
+  const quizId = req.params.quizId;
+  await Quizzes.destroy({
+    where: {
+      id: quizId,
+    },
+  });
+
+  res.json("DELETED SUCCESSFULLY");
 });
 
 module.exports = router;
