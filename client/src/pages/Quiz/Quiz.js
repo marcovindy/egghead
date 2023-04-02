@@ -48,19 +48,22 @@ function Quiz() {
             {
                 question: values.question,
                 answers: [
-                    { text: values.answer1, isCorrect: false },
-                    { text: values.answer2, isCorrect: false },
-                    { text: values.answer3, isCorrect: false },
-                    { text: values.answer4, isCorrect: false },
+                    { text: values.answer1, isCorrect: values.correctAnswer === "answer1" },
+                    { text: values.answer2, isCorrect: values.correctAnswer === "answer2" },
+                    { text: values.answer3, isCorrect: values.correctAnswer === "answer3" },
+                    { text: values.answer4, isCorrect: values.correctAnswer === "answer4" },
                 ],
             },
         ]);
         actions.resetForm();
-        console.log(questions);
+        // console.log(questions);
     };
 
+    useEffect(() => {
+        console.log(questions);
+    }, [questions]);
+    
     return (
-        
         <Container className="quiz-container mb-4">
             <Row>
                 <Col>
@@ -91,7 +94,7 @@ function Quiz() {
                             }}
                             onSubmit={handleFormSubmit}
                         >
-                            {({ isSubmitting }) => (
+                            {({ isSubmitting, values, setFieldValue }) => (
                                 <Form>
                                     <Row className="mb-3">
                                         <Col>
@@ -103,18 +106,50 @@ function Quiz() {
                                         <Col xs={12} lg={6}>
                                             <label htmlFor="answer1">Answer1:</label>
                                             <Field type="text" name="answer1" className="form-control" />
+                                            <Field
+                                                type="radio"
+                                                name="correctAnswer"
+                                                value="answer1"
+                                                onChange={() => setFieldValue("correctAnswer", "answer1")}
+                                                checked={values.correctAnswer === "answer1"}
+                                            />
+                                            <label htmlFor="correctAnswer">Correct Answer</label>
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <label htmlFor="answer2">Answer2:</label>
                                             <Field type="text" name="answer2" className="form-control" />
+                                            <Field
+                                                type="radio"
+                                                name="correctAnswer"
+                                                value="answer2"
+                                                onChange={() => setFieldValue("correctAnswer", "answer2")}
+                                                checked={values.correctAnswer === "answer2"}
+                                            />
+                                            <label htmlFor="correctAnswer">Correct Answer</label>
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <label htmlFor="answer3">Answer3:</label>
                                             <Field type="text" name="answer3" className="form-control" />
+                                            <Field
+                                                type="radio"
+                                                name="correctAnswer"
+                                                value="answer3"
+                                                onChange={() => setFieldValue("correctAnswer", "answer3")}
+                                                checked={values.correctAnswer === "answer3"}
+                                            />
+                                            <label htmlFor="correctAnswer">Correct Answer</label>
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <label htmlFor="answer4">Answer4:</label>
                                             <Field type="text" name="answer4" className="form-control" />
+                                            <Field
+                                                type="radio"
+                                                name="correctAnswer"
+                                                value="answer4"
+                                                onChange={() => setFieldValue("correctAnswer", "answer4")}
+                                                checked={values.correctAnswer === "answer4"}
+                                            />
+                                            <label htmlFor="correctAnswer">Correct Answer</label>
                                         </Col>
                                     </Row>
                                     <Button type="submit" disabled={isSubmitting}>
@@ -126,17 +161,8 @@ function Quiz() {
                     </Col>
                 </Row>
             )}
-            {questions.map((q, index) => (
-                <Row key={index}>
-                    <Col>
-                        <p>{q.question}</p>
-                        <p>{q.answer}</p>
-                    </Col>
-                </Row>
-            ))}
         </Container>
     );
 }
-
 
 export default Quiz;
