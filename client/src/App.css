@@ -133,6 +133,14 @@ button, .a-button  {
   transition: transform 80ms ease-in;
 }
 
+.custom-form input {
+  background: #eee !important;
+  border: none !important;
+  padding: 12px 15px !important;
+  margin: 8px 0 !important;
+  width: 100% !important;
+}
+
 
 input {
   background: #eee;
@@ -142,4 +150,7 @@ input {
   width: 100%;
 }
 
+input[type="radio"] {
+  
+}
 

@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import EditableTitle from "../../components/EditableTitle/EditableTitle";
+import AnimatedRadioCircle from "../../components/AnimatedRadioCircle/AnimatedRadioCircle";
 import "./Quiz.css";
 import * as Yup from "yup";
 import { toast } from 'react-toastify';
@@ -112,9 +113,10 @@ function Quiz() {
                             validationSchema={validationSchema}
                         >
                             {({ isSubmitting, values, setFieldValue }) => (
-                                <Form>
+                                <Form className="custom-form">
                                     <Row className="mb-3">
                                         <Col>
+
                                             <label htmlFor="question">Question:</label>
                                             <Field type="text" name="question" className="form-control" />
                                             <div className="text-danger">
@@ -124,63 +126,91 @@ function Quiz() {
                                     </Row>
                                     <Row className="mb-3">
                                         <Col xs={12} lg={6}>
-                                            <label htmlFor="answer1">Answer1:</label>
-                                            <Field type="text" name="answer1" className="form-control" />
-                                            <div className="text-danger">
-                                                <ErrorMessage name="answer1" />
+                                            <div>
+                                                <label htmlFor="answer1">Answer1:</label>
+                                                <Field type="text" name="answer1" className="form-control" />
+                                                <div className="text-danger">
+                                                    <ErrorMessage name="answer1" />
+                                                </div>
                                             </div>
-                                            <Field
-                                                type="radio"
-                                                name="correctAnswer"
-                                                value="answer1"
-                                                onChange={() => setFieldValue("correctAnswer", "answer1")}
-                                                checked={values.correctAnswer === "answer1"}
-                                            />
-                                            <label htmlFor="correctAnswer">Correct Answer</label>
+                                            {/* background: linear-gradient(135deg, #af4671 0%, #a45cd1 100%); */}
+                                            <label >
+                                                <span>Correct Answer</span>
+                                                <Field
+                                                    type="radio"
+                                                    name="correctAnswer"
+                                                    value="answer1"
+                                                    onChange={() => setFieldValue("correctAnswer", "answer1")}
+                                                    checked={values.correctAnswer === "answer1"}
+                                                />
+                                                <AnimatedRadioCircle />
+                                            </label>
                                         </Col>
                                         <Col xs={12} lg={6}>
-                                            <label htmlFor="answer2">Answer2:</label>
-                                            <Field type="text" name="answer2" className="form-control" />
-                                            <div className="text-danger">
-                                                <ErrorMessage name="answer2" />
+                                            <div>
+                                                <label htmlFor="answer2">Answer2:</label>
+                                                <Field type="text" name="answer2" className="form-control"
+                                                />
+                                                <div className="text-danger">
+                                                    <ErrorMessage name="answer2" />
+                                                </div>
                                             </div>
-                                            <Field
-                                                type="radio"
-                                                name="correctAnswer"
-                                                value="answer2"
-                                                onChange={() => setFieldValue("correctAnswer", "answer2")}
-                                                checked={values.correctAnswer === "answer2"}
-                                            />
-                                            <label htmlFor="correctAnswer">Correct Answer</label>
+
+                                            <label >Correct Answer
+                                                <Field
+                                                    type="radio"
+                                                    name="correctAnswer"
+                                                    value="answer2"
+                                                    onChange={() => setFieldValue("correctAnswer", "answer2")}
+                                                    checked={values.correctAnswer === "answer2"}
+                                                />
+                                                <AnimatedRadioCircle />
+                                            </label>
                                         </Col>
                                         <Col xs={12} lg={6}>
-                                            <label htmlFor="answer3">Answer3:</label>
-                                            <Field type="text" name="answer3" className="form-control" />
-                                            <Field
-                                                type="radio"
-                                                name="correctAnswer"
-                                                value="answer3"
-                                                onChange={() => setFieldValue("correctAnswer", "answer3")}
-                                                checked={values.correctAnswer === "answer3"}
-                                                disabled={!values.answer3}
-                                            />
-                                            <label htmlFor="correctAnswer">Correct Answer</label>
+                                            <div>
+                                                <label htmlFor="answer3">Answer3:</label>
+                                                <Field type="text" name="answer3" className="form-control"
+                                                    disabled={!values.answer1 || !values.answer2}
+                                                />
+                                            </div>
+                                            <label>
+                                                <span>Correct Answer</span>
+                                                <Field
+                                                    type="radio"
+                                                    name="correctAnswer"
+                                                    value="answer3"
+                                                    onChange={() => setFieldValue("correctAnswer", "answer3")}
+                                                    checked={values.correctAnswer === "answer3"}
+                                                    disabled={!values.answer3}
+                                                />
+                                                <AnimatedRadioCircle />
+                                            </label>
                                         </Col>
                                         <Col xs={12} lg={6}>
-                                            <label htmlFor="answer4">Answer4:</label>
-                                            <Field type="text" name="answer4" className="form-control" />
-                                            <Field
-                                                type="radio"
-                                                name="correctAnswer"
-                                                value="answer4"
-                                                onChange={() => setFieldValue("correctAnswer", "answer4")}
-                                                checked={values.correctAnswer === "answer4"}
-                                                disabled={!values.answer4}
-                                            />
-                                            <label htmlFor="correctAnswer">Correct Answer</label>
+                                            <div>
+                                                <label htmlFor="answer4">Answer4:</label>
+                                                <Field type="text" name="answer4" className="form-control"
+                                                    disabled={!values.answer1 || !values.answer2}
+                                                />
+                                            </div>
+                                            <label>
+                                                <span>Correct Answer</span>
+                                                <Field
+                                                    type="radio"
+                                                    name="correctAnswer"
+                                                    value="answer4"
+                                                    onChange={() => setFieldValue("correctAnswer", "answer4")}
+                                                    checked={values.correctAnswer === "answer4"}
+                                                    disabled={!values.answer4}
+                                                />
+                                                <AnimatedRadioCircle />
+                                            </label>
                                         </Col>
                                     </Row>
-                                    <Button type="submit">
+                                    <Button type="submit"
+                                        disabled={!values.correctAnswer || !values.answer1 || !values.answer2 || !values.question}
+                                    >
                                         Submit
                                     </Button>
                                 </Form>
