@@ -15,21 +15,15 @@ const io = socketio(server, {
   cors: {
     origin: process.env.ORIGIN,
     credentials: true,
-    methods: ["GET", "POST"]
   },
 });
 
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//   next();
+// // Serve any static files
+// app.use(express.static(path.join(__dirname, "../frontend/build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 // });
 
-// MIDDLEWARE
-// app.use(cors());
-app.use(express.json());
-const scores = require('./routes/scores');
-app.use('/scores', scores);
 
 
 
@@ -65,11 +59,11 @@ app.use("/categories", categoriesRouter);
 const quizzesRouter = require("./routes/Quizzes");
 app.use("/quizzes", quizzesRouter);
 
-// // Serve any static files
-// app.use(express.static(path.join(__dirname, "../client/build")));
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "../client/build/index.html"));
-// });
+// Serve any static files
+app.use(express.static(path.join(__dirname, "../client/build")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 // SOCKET
 const uuidv1 = require('uuid/v1');
@@ -91,7 +85,7 @@ io.on('connect', (socket) => {
       players: []
     };
     rooms[roomName] = room;
-    console.log('created room', roomName);
+
     joinRoom(socket, room, masterName);
   });
 
@@ -212,12 +206,8 @@ io.on('connect', (socket) => {
   });
 });
 
-server.listen(process.env.PORT || PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+db.sequelize.sync().then(() => {
+  app.listen(process.env.PORT || PORT,  () => {
+    console.log(`Server running on port ${process.env.PORT}`);
+  });
 });
-
-// db.sequelize.sync().then(() => {
-//   app.listen(process.env.PORT || PORT,  () => {
-//     console.log(`Server running on port ${process.env.PORT}`);
-//   });
-// });
