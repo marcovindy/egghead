@@ -52,10 +52,10 @@ const quizzesRouter = require("./routes/Quizzes");
 app.use("/quizzes", quizzesRouter);
 
 // Serve any static files
-// app.use(express.static(path.join(__dirname, "../client/build")));
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "../client/build/index.html"));
-// });
+app.use(express.static(path.join(__dirname, "../client/build")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 // SOCKET
 const uuidv1 = require('uuid/v1');
