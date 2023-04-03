@@ -8,6 +8,7 @@ import AnimatedRadioCircle from "../../components/AnimatedRadioCircle/AnimatedRa
 import "./Quiz.css";
 import * as Yup from "yup";
 import { toast } from 'react-toastify';
+import t from "../../i18nProvider/translate";
 
 function Quiz() {
     const API_URL =
@@ -87,7 +88,6 @@ function Quiz() {
     };
 
     return (
-
         <Container className="quiz-container mb-4">
             <Row>
                 <Col>
@@ -96,12 +96,12 @@ function Quiz() {
             </Row>
             <Row className="mb-4">
                 <Col>
-                    <h4>Category: Category Name</h4>
+                    <h4>{t("category")}</h4>
                 </Col>
             </Row>
             <Row className="mb-4">
                 <Col>
-                    <Button onClick={handleButtonClick}>Add Question</Button>
+                    <Button onClick={handleButtonClick}>{t("addQuestion")}</Button>
                 </Col>
             </Row>
             {showForm && (
@@ -123,8 +123,7 @@ function Quiz() {
                                 <Form className="custom-form">
                                     <Row className="mb-3">
                                         <Col>
-
-                                            <label htmlFor="question">Question:</label>
+                                            <label htmlFor="question">{t("questionLabel")}</label>
                                             <Field type="text" name="question" className="form-control" />
                                             <div className="text-danger">
                                                 <ErrorMessage name="question" />
@@ -134,15 +133,14 @@ function Quiz() {
                                     <Row className="mb-3">
                                         <Col xs={12} lg={6}>
                                             <div>
-                                                <label htmlFor="answer1">Answer1:</label>
+                                                <label htmlFor="answer1">{t("answer1Label")}</label>
                                                 <Field type="text" name="answer1" className="form-control" />
                                                 <div className="text-danger">
                                                     <ErrorMessage name="answer1" />
                                                 </div>
                                             </div>
-                                            {/* background: linear-gradient(135deg, #af4671 0%, #a45cd1 100%); */}
-                                            <label >
-                                                <span>Correct Answer</span>
+                                            <label>
+                                                <span>{t("correctAnswerLabel")}</span>
                                                 <Field
                                                     type="radio"
                                                     name="correctAnswer"
@@ -155,15 +153,14 @@ function Quiz() {
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <div>
-                                                <label htmlFor="answer2">Answer2:</label>
-                                                <Field type="text" name="answer2" className="form-control"
-                                                />
+                                                <label htmlFor="answer2">{t("answer2Label")}</label>
+                                                <Field type="text" name="answer2" className="form-control" />
                                                 <div className="text-danger">
                                                     <ErrorMessage name="answer2" />
                                                 </div>
                                             </div>
-
-                                            <label >Correct Answer
+                                            <label>
+                                                <span>{t("correctAnswerLabel")}</span>
                                                 <Field
                                                     type="radio"
                                                     name="correctAnswer"
@@ -176,18 +173,22 @@ function Quiz() {
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <div>
-                                                <label htmlFor="answer3">Answer3:</label>
-                                                <Field type="text" name="answer3" className="form-control"
+                                                <label htmlFor="answer3">{t("answer3Label")}</label>
+                                                <Field
+                                                    type="text"
+                                                    name="answer3"
+                                                    className="form-control"
                                                     disabled={!values.answer1 || !values.answer2}
                                                 />
                                             </div>
                                             <label className={values.answer3 ? "radio" : "radio disabled"}>
-                                                <span>Correct Answer</span>
+                                                <span>{t("correctAnswerLabel")}</span>
                                                 <Field
                                                     type="radio"
                                                     name="correctAnswer"
                                                     value="answer3"
                                                     onChange={() => setFieldValue("correctAnswer", "answer3")}
+
                                                     checked={values.correctAnswer === "answer3"}
                                                     disabled={!values.answer3}
                                                 />
@@ -196,13 +197,13 @@ function Quiz() {
                                         </Col>
                                         <Col xs={12} lg={6}>
                                             <div>
-                                                <label htmlFor="answer4">Answer4:</label>
+                                                <label htmlFor="answer4">{t("answer4Label")}</label>
                                                 <Field type="text" name="answer4" className="form-control"
                                                     disabled={!values.answer1 || !values.answer2}
                                                 />
                                             </div>
                                             <label className={values.answer4 ? "radio" : "radio disabled"}>
-                                                <span>Correct Answer</span>
+                                                <span>{t("correctAnswerLabel")}</span>
                                                 <Field
                                                     type="radio"
                                                     name="correctAnswer"
@@ -218,7 +219,7 @@ function Quiz() {
                                     <Button type="submit"
                                         disabled={!values.correctAnswer || !values.answer1 || !values.answer2 || !values.question}
                                     >
-                                        Submit
+                                        {t("submitButton")}
                                     </Button>
                                 </Form>
                             )}
@@ -245,7 +246,7 @@ function Quiz() {
                             )
                         ))}
                     </Row>
-                    <Button variant="danger" onClick={() => handleQuestionDelete(index)}>Delete</Button>
+                    <Button variant="danger" onClick={() => handleQuestionDelete(index)}>{t("deleteButton")}</Button>
                     {index !== questions.length - 1 && <hr />}
                 </div>
             ))}
@@ -258,7 +259,7 @@ function Quiz() {
                     toast.warning('This feature is still in development and not yet ready for use. Please check back later.')
                 }}
             >
-                Save Quiz
+                {t("saveButton")}
             </Button>
         </Container>
 

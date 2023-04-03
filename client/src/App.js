@@ -132,12 +132,10 @@ function App() {
                             <>
                               <Col>
                                 <DropdownButton id="dropdown-basic-button" title={`${authState.username}`}>
-                                  <Dropdown.Item href={`/profile/${authState.id}`}>Profile</Dropdown.Item>
-                                  <Dropdown.Item onClick={logout} href="#/action-2">Logout</Dropdown.Item>
-                                  <Dropdown.Item href="#/action-3">Report bug</Dropdown.Item>
+                                  <Dropdown.Item href={`/profile/${authState.id}`}>{t("Profile")}</Dropdown.Item>
+                                  <Dropdown.Item onClick={logout} href="#/action-2">{t("Logout")}</Dropdown.Item>
+                                  <Dropdown.Item href="#/action-3">{t("Report bug")}</Dropdown.Item>
                                 </DropdownButton>
-                                {/* <h1>{authState.username} </h1> */}
-                                <Link to={`/profile/${authState.id}`}>  </Link>
                               </Col>
                             </>
                           )}
