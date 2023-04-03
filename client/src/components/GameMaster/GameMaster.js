@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import queryString from 'query-string';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, ProgressBar, Row, Col } from 'react-bootstrap';
 import io from 'socket.io-client';
 import Messages from '../Messages/Messages';
 import './GameMaster.css';
@@ -33,8 +33,13 @@ const GameMaster = ({ location }) => {
     const [playersInRoom, setPlayersInRoom] = useState([]);
     const [playerCount, setPlayerCount] = useState([]);
 
-    const [gameStarted, setGameStarted] = useState([]);
-    const [gameEnded, setGameEnded] = useState([]);
+    const [gameStarted, setGameStarted] = useState(false);
+    const [gameEnded, setGameEnded] = useState(false);
+
+    const duration = 20;
+    const [timeLeft, setTimeLeft] = useState(duration); // Nastavíme 20 sekund do další otázky
+    const [isGameRunning, setIsGameRunning] = useState(false);
+
 
     useEffect(() => {
         const { roomName, masterName } = queryString.parse(location.search);
@@ -124,6 +129,7 @@ const GameMaster = ({ location }) => {
             sendQuestion(questions);
             socket.emit('playerBoard');
         } else {
+            setIsGameRunning(false);
             socket.emit('endGame');
             socket.emit('playerBoard');
             setServerResMsg({ res: 'The game has ended! You can play again if there are enough players.' });
@@ -144,8 +150,43 @@ const GameMaster = ({ location }) => {
         });
     }, [round]);
 
+    // Funkce pro spuštění Timeru
+    const startTimer = () => {
+        setTimeLeft(duration); // reset the timer
+    };
+    
+    // Efekt pro spuštění Timeru, když hra začíná a když skončí, tak se vypne
+    useEffect(() => {
+        if (gameStarted && !gameEnded) {
+            setIsGameRunning(true);
+            socket.emit('startTimer');
+            const intervalId = setInterval(() => {
+                setTimeLeft(prevTime => prevTime - 1);
+            }, 1000);
+            
+            return () => clearInterval(intervalId);
+        }
+    }, [gameStarted]);
+
+    const progress = 100 - ((duration - timeLeft) / duration) * 100;
+    
+    
+    // Efekt pro získání další otázky, když časovač dosáhne nuly
+    useEffect(() => {
+        if (timeLeft === 0) {
+            startTimer(); // reset the timer
+            NextQuestion(); // get the next question
+            socket.emit('startTimer');
+        }
+    }, [timeLeft]);
+
+
     return (
         <Container>
+            <div>
+                <h3>Time Left: {timeLeft}</h3>
+                <ProgressBar now={progress} label={`${timeLeft} seconds left`} />
+            </div>
             <div className="wrapper">
                 {error === true ? (
                     <div className="errorMsg">
@@ -173,7 +214,7 @@ const GameMaster = ({ location }) => {
                                         </div>
                                     ) : (
                                         <div>
-                                            <Button variant="primary" size="md" onClick={NextQuestion}>Next question</Button>
+                                            {/* <Button variant="primary" size="md" onClick={NextQuestion}>Next question</Button> */}
 
                                         </div>
                                     )

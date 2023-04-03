@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { Container } from 'react-bootstrap';
+import { Container, ProgressBar, Row, Col, Button } from 'react-bootstrap';
 import io from 'socket.io-client';
 import Messages from '../Messages/Messages';
 import GameQuestion from '../GameQuestion/GameQuestion';
@@ -40,6 +40,10 @@ const GamePlayer = ({ location }) => {
     const [player, setPlayer] = useState(''); // to get each client final score
 
     const [playersInfo, setPlayersInfo] = useState([]);
+
+    const [timeLeft, setTimeLeft] = useState(0);
+    const questionDuration = 20;
+    const progress = 100 - ((questionDuration - timeLeft) / questionDuration) * 100;
 
     useEffect(() => {
         const { joinRoomName, playerName } = queryString.parse(location.search);
@@ -119,8 +123,20 @@ const GamePlayer = ({ location }) => {
         });
     }, []);
 
+    
+    useEffect(() => {
+        socket.on('timer', (secs) => {
+          const elapsed = questionDuration - secs;
+          setTimeLeft(questionDuration - elapsed);
+        });
+      }, []);
+
     return (
         <Container>
+             <div>
+                <h3>Time Left: {timeLeft}</h3>
+                <ProgressBar now={progress} label={`${timeLeft} seconds left`} />
+            </div>
             <div className="wrapper">
                 {error === true ? (
                     <div className="errorMsg">

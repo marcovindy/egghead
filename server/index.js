@@ -7,6 +7,8 @@ const http = require('http');
 const PORT = 5000;
 const path = require('path');
 
+const questionDuration = 20;
+
 const server = http.createServer(app);
 const io = socketio(server, {
   pingInterval: 10000, // check how often
@@ -183,6 +185,23 @@ io.on('connect', (socket) => {
       socket.to(client.id).emit('finalPlayerInfo', client);
     };
   });
+
+
+  socket.on('startTimer', () => {
+    let timeLeft = questionDuration;
+    const room = rooms[socket.roomName];
+    res = Object.values(room.players); // send array with keys that has objects as values
+    const timerInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft === 0) {
+        clearInterval(timerInterval);
+      }
+      for (const client of res) {
+        socket.to(client.id).emit('timer', timeLeft, client);
+      };
+    }, 1000)
+  });
+
 
   socket.on('disconnect', () => {
     console.log('User left with socket id', socket.id);
