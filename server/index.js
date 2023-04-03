@@ -29,9 +29,9 @@ const io = socketio(server, {
 
 // MIDDLEWARE
 // app.use(cors());
-app.use(express.json());
-const scores = require('./routes/scores');
-app.use('/scores', scores);
+// app.use(express.json());
+// const scores = require('./routes/scores');
+// app.use('/scores', scores);
 
 
 
@@ -170,7 +170,7 @@ io.on('connect', (socket) => {
   socket.on('endGame', () => {
     const room = rooms[socket.roomName];
     res = Object.values(room.players); // send array with keys that has objects as values
-    io.to(room.id).emit('scores', res);
+    // io.to(room.id).emit('scores', res);
 
     // send individual score to each client
     for (const client of res) {
