@@ -66,31 +66,6 @@ function Profile() {
             </div>
           </Col>
         </Row>
-        {/* <Row className="justify-content-center">
-          <div className="listOfPosts">
-            {listOfPosts.map((value, key) => {
-              return (
-                <div key={key} className="post">
-                  <div className="title"> {value.title} </div>
-                  <div
-                    className="body"
-                    onClick={() => {
-                      history.push(`/post/${value.id}`);
-                    }}
-                  >
-                    {value.postText}
-                  </div>
-                  <div className="footer">
-                    <div className="username">{value.username}</div>
-                    <div className="buttons">
-                      <label> {value.Likes.length}</label>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Row>  */}
         <Row>
           <h2>List of Quizzes</h2>
 
