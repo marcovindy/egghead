@@ -134,7 +134,7 @@ function App() {
                                 <DropdownButton id="dropdown-basic-button" title={`${authState.username}`}>
                                   <Dropdown.Item href={`/profile/${authState.id}`}>Profile</Dropdown.Item>
                                   <Dropdown.Item onClick={logout} href="#/action-2">Logout</Dropdown.Item>
-                                  <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                  <Dropdown.Item href="#/action-3">Report bug</Dropdown.Item>
                                 </DropdownButton>
                                 {/* <h1>{authState.username} </h1> */}
                                 <Link to={`/profile/${authState.id}`}>  </Link>
