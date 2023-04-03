@@ -28,8 +28,8 @@ const io = socketio(server, {
 // MIDDLEWARE
 // app.use(cors());
 app.use(express.json());
-const scores = require('./routes/Scores');
-app.use('/Scores', scores);
+const scores = require('./routes/scores');
+app.use('/scores', scores);
 
 
 
