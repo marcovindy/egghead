@@ -174,7 +174,7 @@ function Quiz() {
                                                     disabled={!values.answer1 || !values.answer2}
                                                 />
                                             </div>
-                                            <label>
+                                            <label className={values.answer3 ? "radio" : "radio disabled"}>
                                                 <span>Correct Answer</span>
                                                 <Field
                                                     type="radio"
@@ -194,7 +194,7 @@ function Quiz() {
                                                     disabled={!values.answer1 || !values.answer2}
                                                 />
                                             </div>
-                                            <label>
+                                            <label className={values.answer4 ? "radio" : "radio disabled"}>
                                                 <span>Correct Answer</span>
                                                 <Field
                                                     type="radio"

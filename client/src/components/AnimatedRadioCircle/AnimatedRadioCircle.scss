@@ -8,7 +8,7 @@ $border-size: 4px;
     }
 }
 
-svg {
+.custom-form svg {
     height: 0;
     width: 0;
 }
@@ -17,10 +17,12 @@ input[type="radio"] {
     display: none;
 }
 
+
 .circle {
 width: $circle-size;
 height: $circle-size;
 margin: auto;
+margin-top: 12px;
 filter: url('#eggFil');
 }
 
@@ -137,3 +139,20 @@ animation-fill-mode: forwards;
 .circle--inner__3 { transform-origin: 60% 130%; }
 .circle--inner__4 { transform-origin: 112% 90%; }
 .circle--inner__5 { transform-origin: 75% -30%; }
+
+
+.radio.disabled {
+    .circle--outer {
+        border: $border-size solid grey;
+        cursor: not-allowed;
+    }
+        
+    .circle--inner {
+        background: grey;
+    }
+}
+
+input[type="text"]:disabled {
+    background: grey !important;
+    cursor: not-allowed;
+}

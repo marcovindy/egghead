@@ -7,7 +7,7 @@
           justify-content: center;
 }
 
-svg {
+.custom-form svg {
   height: 0;
   width: 0;
 }
@@ -20,6 +20,7 @@ input[type="radio"] {
   width: 40px;
   height: 40px;
   margin: auto;
+  margin-top: 12px;
   -webkit-filter: url("#eggFil");
           filter: url("#eggFil");
 }
@@ -238,5 +239,19 @@ input:checked + .circle .circle--inner {
 .circle--inner__5 {
   -webkit-transform-origin: 75% -30%;
           transform-origin: 75% -30%;
+}
+
+.radio.disabled .circle--outer {
+  border: 4px solid grey;
+  cursor: not-allowed;
+}
+
+.radio.disabled .circle--inner {
+  background: grey;
+}
+
+input[type="text"]:disabled {
+  background: grey !important;
+  cursor: not-allowed;
 }
 /*# sourceMappingURL=AnimatedRadioCircle.css.map */
