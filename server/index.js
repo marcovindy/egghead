@@ -7,8 +7,6 @@ const http = require('http');
 const PORT = 5000;
 const path = require('path');
 
-const questionDuration = 20;
-
 const server = http.createServer(app);
 const io = socketio(server, {
   pingInterval: 10000, // check how often
@@ -29,9 +27,9 @@ const io = socketio(server, {
 
 // MIDDLEWARE
 // app.use(cors());
-// app.use(express.json());
-// const scores = require('./routes/scores');
-// app.use('/scores', scores);
+app.use(express.json());
+const scores = require('./routes/scores');
+app.use('/scores', scores);
 
 
 
@@ -152,8 +150,6 @@ io.on('connect', (socket) => {
     room.sockets[0].emit('playerChoice', playerName, choice, gameRound); // first socket is game master
   });
 
-  
- 
   socket.on('updateScore', (playerName) => {
     const room = rooms[socket.roomName];
     room.players[playerName].score += 1;
@@ -170,7 +166,7 @@ io.on('connect', (socket) => {
   socket.on('endGame', () => {
     const room = rooms[socket.roomName];
     res = Object.values(room.players); // send array with keys that has objects as values
-    // io.to(room.id).emit('scores', res);
+    io.to(room.id).emit('scores', res);
 
     // send individual score to each client
     for (const client of res) {
@@ -187,23 +183,6 @@ io.on('connect', (socket) => {
       socket.to(client.id).emit('finalPlayerInfo', client);
     };
   });
-
-
-  socket.on('startTimer', () => {
-    let timeLeft = questionDuration;
-    const room = rooms[socket.roomName];
-    res = Object.values(room.players); // send array with keys that has objects as values
-    const timerInterval = setInterval(() => {
-      timeLeft--;
-      if (timeLeft === 0) {
-        clearInterval(timerInterval);
-      }
-      for (const client of res) {
-        socket.to(client.id).emit('timer', timeLeft, client);
-      };
-    }, 1000)
-  });
-
 
   socket.on('disconnect', () => {
     console.log('User left with socket id', socket.id);
@@ -236,3 +215,9 @@ io.on('connect', (socket) => {
 server.listen(process.env.PORT || PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
+
+// db.sequelize.sync().then(() => {
+//   app.listen(process.env.PORT || PORT,  () => {
+//     console.log(`Server running on port ${process.env.PORT}`);
+//   });
+// });
