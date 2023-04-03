@@ -23,6 +23,7 @@ input[type="radio"] {
   margin-top: 12px;
   -webkit-filter: url("#eggFil");
           filter: url("#eggFil");
+  cursor: pointer;
 }
 
 @-webkit-keyframes circle__in {

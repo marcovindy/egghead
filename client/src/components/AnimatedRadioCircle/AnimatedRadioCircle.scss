@@ -24,6 +24,7 @@ height: $circle-size;
 margin: auto;
 margin-top: 12px;
 filter: url('#eggFil');
+cursor: pointer;
 }
 
 @keyframes circle__in {

@@ -11,9 +11,9 @@ import { toast } from 'react-toastify';
 
 function Quiz() {
     const API_URL =
-        process.env.NODE_ENV === "production"
-            ? "https://testing-egg.herokuapp.com"
-            : "http://localhost:5000";
+        process.env.NODE_ENV === "development"
+            ? "http://localhost:5000"
+            : "https://testing-egg.herokuapp.com";
 
     const { id } = useParams();
     const [quizInfo, setQuizInfo] = useState({});
@@ -68,6 +68,7 @@ function Quiz() {
                 },
             ]);
             actions.resetForm();
+            toast.success("Question has been created successfully.");
         } else {
             // No radio button has been selected
             toast.error("Please select a correct answer");
@@ -78,6 +79,12 @@ function Quiz() {
     useEffect(() => {
         console.log(questions);
     }, [questions]);
+
+    const handleQuestionDelete = (index) => {
+        const newQuestions = [...questions];
+        newQuestions.splice(index, 1);
+        setQuestions(newQuestions);
+    };
 
     return (
 
@@ -219,7 +226,42 @@ function Quiz() {
                     </Col>
                 </Row>
             )}
+            <hr />
+            {questions.map((question, index) => (
+                <div key={index}>
+                    <Row>
+                        <Col>
+                            <h4>Question {index + 1}: {question.question}</h4>
+                        </Col>
+                    </Row>
+                    <Row>
+                        {question.answers.map((answer, index) => (
+                            answer.text !== "" && (
+                                <Col key={index} lg={6} className="mb-3">
+                                    <div className="p-3 text-light w-100" style={{ backgroundColor: answer.isCorrect ? "green" : "#007bff" }}>
+                                        {answer.text}
+                                    </div>
+                                </Col>
+                            )
+                        ))}
+                    </Row>
+                    <Button variant="danger" onClick={() => handleQuestionDelete(index)}>Delete</Button>
+                    {index !== questions.length - 1 && <hr />}
+                </div>
+            ))}
+
+
+
+            <Button
+                style={{ position: "fixed", bottom: 20, right: 20 }}
+                onClick={() => {
+                    toast.warning('This feature is still in development and not yet ready for use. Please check back later.')
+                }}
+            >
+                Save Quiz
+            </Button>
         </Container>
+
     );
 }
 

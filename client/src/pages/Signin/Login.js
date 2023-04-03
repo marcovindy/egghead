@@ -18,44 +18,28 @@ function Login() {
   let history = useHistory();
 
   const login = () => {
-    const data = { username: username, password: password };
-    if (process.env.NODE_ENV === "development") {
-      axios.post("http://localhost:5000/auth/login", data).then((response) => {
-        if (response.data.error) {
-          alert(response.data.error);
-        } else {
-          toast.success(t("login-success"));
-          localStorage.setItem("accessToken", response.data.token);
-          setAuthState({
-            username: response.data.username,
-            id: response.data.id,
-            status: true,
-          });
-
-          history.push("/");
-
-        }
-      });
-    } else {
-      axios.post(`https://testing-egg.herokuapp.com/auth/login`, data).then((response) => {
-        if (response.data.error) {
-          alert(response.data.error);
-        } else {
-          toast.success(t("login-success"));
-          localStorage.setItem("accessToken", response.data.token);
-          setAuthState({
-            username: response.data.username,
-            id: response.data.id,
-            status: true,
-          });
-
-          history.push("/");
-
-        }
-      });
-    }
+    const data = { username, password };
+    const API_URL =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:5000"
+        : "https://testing-egg.herokuapp.com";
+  
+    axios.post(`${API_URL}/auth/login`, data).then((response) => {
+      if (response.data.error) {
+        alert(response.data.error);
+      } else {
+        toast.success(t("login-success"));
+        localStorage.setItem("accessToken", response.data.token);
+        setAuthState({
+          username: response.data.username,
+          id: response.data.id,
+          status: true,
+        });
+        history.push("/");
+      }
+    });
   };
-
+  
   
   return (
     <Container className="container-sign p-0" id="container-sign">
