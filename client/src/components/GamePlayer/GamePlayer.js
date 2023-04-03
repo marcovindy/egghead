@@ -6,6 +6,7 @@ import Messages from '../Messages/Messages';
 import GameQuestion from '../GameQuestion/GameQuestion';
 import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 import EndGame from '../EndGame/EndGame';
+import Scoreboard from '../Scoreboard/Scoreboard';
 
 
 let socket;
@@ -40,6 +41,8 @@ const GamePlayer = ({ location }) => {
     const [player, setPlayer] = useState(''); // to get each client final score
 
     const [playersInfo, setPlayersInfo] = useState([]);
+    const [playersScore, setPlayersScore] = useState([]);
+    const [score, setScore] = useState([]);
 
     const [timeLeft, setTimeLeft] = useState(0);
     const questionDuration = 20;
@@ -115,6 +118,8 @@ const GamePlayer = ({ location }) => {
             console.log(name, score); // world
             setPlayersInfo(ps);
             console.log(JSON.stringify(ps));
+            setPlayersScore(score);
+            console.log(score);
 
         });
 
@@ -123,19 +128,47 @@ const GamePlayer = ({ location }) => {
         });
     }, []);
 
-    
+
     useEffect(() => {
         socket.on('timer', (secs) => {
-          const elapsed = questionDuration - secs;
-          setTimeLeft(questionDuration - elapsed);
+            const elapsed = questionDuration - secs;
+            setTimeLeft(questionDuration - elapsed);
         });
-      }, []);
+    }, []);
+
+    // useEffect(() => {
+    //     socket.on('getRoomPlayers', (players, name, score) => {
+    //         const updatedPlayers = players.map(player => {
+    //             if (player.name === name) {
+    //                 return {
+    //                     ...player,
+    //                     score: score
+    //                 }
+    //             }
+    //             return player;
+    //         });
+    //         setPlayersInRoom(updatedPlayers);
+    //         console.log("Updated players1:", updatedPlayers);
+    //     });
+    // }, []);
+
+
+    // useEffect(() => {
+    //     // ...
+    //     socket.on('updatedPlayers', (response) => { // new line
+    //         setPlayersInfo(response);
+    //         console.log('Updated players2:', response);
+
+    //     });
+    // }, []);
+
+
 
     return (
         <Container>
-             <div>
+            <div>
                 <h3>Time Left: {timeLeft}</h3>
-                <ProgressBar now={progress} label={`${timeLeft} seconds left`} />
+                <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
             </div>
             <div className="wrapper">
                 {error === true ? (
@@ -183,21 +216,29 @@ const GamePlayer = ({ location }) => {
                     </div>
                 )
                 }
+{/* 
+                <Scoreboard scores={scores} /> */}
+
                 <div className="players-container">
-                    <h3>Players in room: {playerCount}</h3>
-                    <hr />
-                    {playersInfo.map((playerInfo, index) =>
-                        <p className="p-players" key={index}>
-                            {/* {console.log(playerInfo)} */}
-                            Playername: {playerInfo.username}
+                    {playersInRoom.length > 0 ? (
+                        playersInRoom.map((playerInfo, index) => (
+                            <div key={index}>
 
-                            <br />
-                            Score: {playerInfo.score}
-                        </p>
+                                <p className="p-players">
+
+                                    Playername: {playerInfo.username}
+
+                                </p>
+                                <p className="p-players">
+                                    Score: {playerInfo.score}
+                                </p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No players in the room yet...</p>
                     )}
-
                 </div>
-                {/* <PlayerBoard players={players} player={player} /> */}
+
             </div>
 
         </Container>

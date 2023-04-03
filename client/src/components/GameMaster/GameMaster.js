@@ -185,7 +185,7 @@ const GameMaster = ({ location }) => {
         <Container>
             <div>
                 <h3>Time Left: {timeLeft}</h3>
-                <ProgressBar now={progress} label={`${timeLeft} seconds left`} />
+                <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
             </div>
             <div className="wrapper">
                 {error === true ? (

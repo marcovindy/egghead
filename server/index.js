@@ -152,6 +152,8 @@ io.on('connect', (socket) => {
     room.sockets[0].emit('playerChoice', playerName, choice, gameRound); // first socket is game master
   });
 
+  
+ 
   socket.on('updateScore', (playerName) => {
     const room = rooms[socket.roomName];
     room.players[playerName].score += 1;
