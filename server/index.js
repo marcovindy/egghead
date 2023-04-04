@@ -54,7 +54,7 @@ app.use("/quizzes", quizzesRouter);
 // Serve any static files
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
 // SOCKET
@@ -169,6 +169,25 @@ io.on('connect', (socket) => {
       socket.to(client.id).emit('finalPlayerInfo', client);
     };
   });
+
+  socket.on('startTimer', () => {
+    const room = rooms[socket.roomName];
+    const players = Object.values(room.players);
+    let timeLeft = questionDuration;
+
+    const timerInterval = setInterval(() => {
+      timeLeft--;
+
+      if (timeLeft === 0) {
+        clearInterval(timerInterval);
+      }
+
+      for (const player of players) {
+        socket.to(player.id).emit('timer', timeLeft, player);
+      }
+    }, 1000);
+  });
+
 
   socket.on('disconnect', () => {
     console.log('User left with socket id', socket.id);
