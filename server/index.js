@@ -7,6 +7,8 @@ const http = require('http');
 const PORT = 5000;
 const path = require('path');
 
+questionDuration = 20;
+
 const server = http.createServer(app);
 const io = socketio(server, {
   pingInterval: 10000, // check how often
