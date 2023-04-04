@@ -20,6 +20,7 @@ const GameMaster = ({ location }) => {
     const [masterName, setMasterName] = useState('');
 
     const [serverResMsg, setServerResMsg] = useState({ res: 'When at least 2 players are in the room, click Start Game' });
+    const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
 
     const [questions, setQuestions] = useState([]);
