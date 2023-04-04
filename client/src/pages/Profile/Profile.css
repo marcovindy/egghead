@@ -3,4 +3,8 @@
   display: -ms-flexbox;
   display: flex;
 }
+
+.btn-add-quiz {
+  width: 50px;
+}
 /*# sourceMappingURL=Profile.css.map */

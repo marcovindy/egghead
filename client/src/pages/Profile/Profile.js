@@ -67,7 +67,18 @@ function Profile() {
           </Col>
         </Row>
         <Row>
+    
+          
+       
           <h2>List of Quizzes</h2>
+          <button className="btn-add-quiz"
+                  onClick={() => {
+                    history.push("/createquiz");
+                  }}
+                >
+                  {" "}
+                  Add Quiz
+                </button>
 
           {listOfQuizzes.map((value, key) => {
             return (

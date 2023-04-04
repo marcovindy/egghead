@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "AAAA,AACI,qBADiB,CACjB,UAAU,CAAC;EACP,OAAO,EAAE,IAAI;CAChB",
+    "mappings": "AAAA,AACI,qBADiB,CACjB,UAAU,CAAC;EACP,OAAO,EAAE,IAAI;CAChB;;AAGL,AAAA,aAAa,CAAC;EACV,KAAK,EAAE,IAAI;CACd",
     "sources": [
         "Profile.scss"
     ],
