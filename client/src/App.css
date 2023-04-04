@@ -159,7 +159,12 @@ input[type="radio"] {
 
 
 /* BLOBs */
-
+.blob-container {
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  max-height: 0;
+}
 
 .shape-blob {
 	background:#A3E8C8 ;
@@ -174,26 +179,30 @@ input[type="radio"] {
 	position: absolute;
 	left: 70%;
 	top: 50%;
- 
+  max-width: 100%;
 }
 .shape-blob.one{
 	height: 500px;
 	width: 500px;
-	left: -200px;
-	top: -150px;
+	left: -10%;
+  max-width: 100%;
+	top: -20%;
 	transform: rotate(-180deg);
 	animation: transform 30s ease-in-out infinite both alternate, movement_two 60s ease-in-out infinite both;
   /* background-color: #538CAE; */
+  max-width: 100%;
 }
 
 .shape-blob.two{
 	height: 350px;
 	width: 350px;
-	left: 500px;
-	top: -150px;
+  max-width: 100%;
+	left: 50%;
+	top: -20%;
 	transform: rotate(-180deg);
 	animation: transform 30s ease-in-out infinite both alternate, movement_two 60s ease-in-out infinite both;
   /* background-color: #012F94; */
+  max-width: 100%;
 }
 
 @keyframes transform

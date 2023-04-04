@@ -36,7 +36,7 @@ const LandingPage = () => {
                         <img src={mainImage} alt="MainImage" />
                     </Col>
                 </Row>
-                <div>
+                <div className='blob-container'>
                     <div class="shape-blob"></div>
                     <div class="shape-blob one"></div>
                     <div class="shape-blob two"></div>

@@ -35,4 +35,10 @@
   max-height: 50px;
   vertical-align: center;
 }
+
+@media (max-width: 988px) {
+  .navBar-header {
+    padding: 10px;
+  }
+}
 /*# sourceMappingURL=navigation.css.map */
