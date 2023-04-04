@@ -36,8 +36,8 @@ const GameMaster = ({ location }) => {
     const [gameStarted, setGameStarted] = useState(false);
     const [gameEnded, setGameEnded] = useState(false);
 
-    const duration = 20;
-    const [timeLeft, setTimeLeft] = useState(duration); // Nastavíme 20 sekund do další otázky
+    const questionDuration = 20;
+    const [timeLeft, setTimeLeft] = useState(questionDuration); // Nastavíme 20 sekund do další otázky
     const [isGameRunning, setIsGameRunning] = useState(false);
 
 
@@ -152,9 +152,9 @@ const GameMaster = ({ location }) => {
 
     // Funkce pro spuštění Timeru
     const startTimer = () => {
-        setTimeLeft(duration); // reset the timer
+        setTimeLeft(questionDuration); // reset the timer
     };
-    
+
     // Efekt pro spuštění Timeru, když hra začíná a když skončí, tak se vypne
     useEffect(() => {
         if (gameStarted && !gameEnded) {
@@ -163,30 +163,49 @@ const GameMaster = ({ location }) => {
             const intervalId = setInterval(() => {
                 setTimeLeft(prevTime => prevTime - 1);
             }, 1000);
-            
+
             return () => clearInterval(intervalId);
         }
     }, [gameStarted]);
 
-    const progress = 100 - ((duration - timeLeft) / duration) * 100;
-    
-    
+    const progress = 100 - ((questionDuration - timeLeft) / questionDuration) * 100;
+
+
     // Efekt pro získání další otázky, když časovač dosáhne nuly
     useEffect(() => {
         if (timeLeft === 0) {
-            startTimer(); // reset the timer
-            NextQuestion(); // get the next question
-            socket.emit('startTimer');
+            if (!gameEnded) {
+                startTimer(); // reset the timer
+                NextQuestion(); // get the next question
+                socket.emit('startTimer');
+                console.log(timeLeft);
+            }
         }
     }, [timeLeft]);
 
 
+    // useEffect(() => {
+    //     socket.on('timer', (secs) => {
+    //         const elapsed = questionDuration - secs;
+    //         setTimeLeft(questionDuration - elapsed);
+    //         console.log(timeLeft);
+    //     });
+    // }, []);
+
+
     return (
         <Container>
-            <div>
-                <h3>Time Left: {timeLeft}</h3>
-                <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
-            </div>
+            {gameStarted === true && gameEnded === false ? (
+                <div>
+                    <h3>Time Left: {timeLeft}</h3>
+                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                </div>
+            ) : (
+                <div>
+                </div>
+            )
+            }
+
             <div className="wrapper">
                 {error === true ? (
                     <div className="errorMsg">

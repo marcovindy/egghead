@@ -1,15 +1,28 @@
 import React from 'react';
 
-const Scoreboard = (scores) => {
-    return (
-      <div>
-        {scores.map(player => (
-          <div key={player.name}>
-            <span>{player.name}: {player.score}</span>
+const Scoreboard = (playersInRoom) => {
+  return (
+
+    <div className="players-container">
+      {playersInRoom.length > 0 ? (
+        playersInRoom.map((playerInfo, index) => (
+          <div key={index}>
+
+            <p className="p-players">
+
+              Playername: {playerInfo.username}
+
+            </p>
+            <p className="p-players">
+              Score: {playerInfo.score}
+            </p>
           </div>
-        ))}
-      </div>
-    );
-  };
+        ))
+      ) : (
+        <p>No players in the room yet...</p>
+      )}
+    </div>
+  );
+};
 
 export default Scoreboard;

@@ -131,6 +131,12 @@ io.on('connect', (socket) => {
 
   socket.on('showQuestion', ({ gameQuestion, gameOptionsArray, gameRound }) => {
     socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound);
+    const room = rooms[socket.roomName];
+    res = Object.values(room.players);
+
+    for (const client of res) {
+      socket.to(client.id).emit('getRoomPlayers', Object.values(room.players));
+    };
   });
 
   socket.on('playerChoice', ({ playerName, choice, gameRound }) => {
@@ -141,7 +147,7 @@ io.on('connect', (socket) => {
   socket.on('updateScore', (playerName) => {
     const room = rooms[socket.roomName];
     room.players[playerName].score += 1;
-    socket.to(room.players[playerName].id).emit('getRoomPlayers', Object.values(room.players), room.players[playerName].username, room.players[playerName].score);
+    socket.to(room.players[playerName].id).emit('getRoomPlayers', Object.values(room.players));
     console.log("Points", room.players[playerName].score, " Name: ", room.players[playerName].username);
     // Jen tady se zachytává počet bodů
   });
@@ -174,11 +180,12 @@ io.on('connect', (socket) => {
 
   socket.on('startTimer', () => {
     const room = rooms[socket.roomName];
-    const players = Object.values(room.players);
+    const players = Object.values(room.players);  
     let timeLeft = questionDuration;
-
+    console.log('Start timer', timeLeft);
     const timerInterval = setInterval(() => {
       timeLeft--;
+      console.log('Start timer', timeLeft);
 
       if (timeLeft === 0) {
         clearInterval(timerInterval);

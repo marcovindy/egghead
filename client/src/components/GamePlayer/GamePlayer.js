@@ -114,13 +114,8 @@ const GamePlayer = ({ location }) => {
             console.log('score na konci')
         });
 
-        socket.on("getRoomPlayers", (ps, name, score) => {
-            console.log(name, score); // world
-            setPlayersInfo(ps);
-            console.log(JSON.stringify(ps));
-            setPlayersScore(score);
-            console.log(score);
-
+        socket.on("getRoomPlayers", (ps) => {
+            setPlayersInRoom(ps);
         });
 
         socket.on('finalPlayerInfo', (client) => {
@@ -136,39 +131,11 @@ const GamePlayer = ({ location }) => {
         });
     }, []);
 
-    // useEffect(() => {
-    //     socket.on('getRoomPlayers', (players, name, score) => {
-    //         const updatedPlayers = players.map(player => {
-    //             if (player.name === name) {
-    //                 return {
-    //                     ...player,
-    //                     score: score
-    //                 }
-    //             }
-    //             return player;
-    //         });
-    //         setPlayersInRoom(updatedPlayers);
-    //         console.log("Updated players1:", updatedPlayers);
-    //     });
-    // }, []);
-
-
-    // useEffect(() => {
-    //     // ...
-    //     socket.on('updatedPlayers', (response) => { // new line
-    //         setPlayersInfo(response);
-    //         console.log('Updated players2:', response);
-
-    //     });
-    // }, []);
-
-
 
     return (
         <Container>
             <div>
-                <h3>Time Left: {timeLeft}</h3>
-                <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+
             </div>
             <div className="wrapper">
                 {error === true ? (
@@ -194,6 +161,8 @@ const GamePlayer = ({ location }) => {
                             <div>
                                 {gameEnd === false ? (
                                     <div>
+                                        <h3>Time Left: {timeLeft}</h3>
+                                        <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
                                         <GameQuestion
                                             currentQuestion={currentQuestion}
                                             currentOptions={currentOptions}
@@ -204,7 +173,7 @@ const GamePlayer = ({ location }) => {
                                             onClickChange={handleClickChange}
                                             correctAnswer={correctAnswer}
                                         />
-                                        {/* <ListOfPlayers players={players} player={player} /> */}
+                                        <Scoreboard playersInRoom={playersInRoom} />
                                     </div>
                                 ) : (
                                     <EndGame players={players} player={player} />
@@ -216,8 +185,8 @@ const GamePlayer = ({ location }) => {
                     </div>
                 )
                 }
-{/* 
-                <Scoreboard scores={scores} /> */}
+
+
 
                 <div className="players-container">
                     {playersInRoom.length > 0 ? (
