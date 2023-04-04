@@ -13,9 +13,10 @@ const LandingPage = () => {
 
     return (
         <div className="landing-page-background">
+
             <Container className='p-0'>
                 <Row className="justify-content-md-center mt-5">
-                    <Col md={6} xs={12}>
+                    <Col md={6} xs={12} className="d-flex flex-column justify-content-center">
                         <h1>{t("landingpage-title")}</h1>
                         <p className='landing-page-description'>{t("landingpage-description")}</p>
                         <Link className="mr-3" to="/lobby">
@@ -35,6 +36,7 @@ const LandingPage = () => {
                         <img src={mainImage} alt="MainImage" />
                     </Col>
                 </Row>
+            
             </Container>
         </div>
     );

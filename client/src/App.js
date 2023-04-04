@@ -169,7 +169,11 @@ function App() {
           </Router>
           <ToastContainer />
           <Footer />
-
+          <div>
+                    <div class="shape-blob"></div>
+                    <div class="shape-blob one"></div>
+                    <div class="shape-blob two"></div>
+                </div>
         </AuthContext.Provider>
       </I18nPropvider>
     </div>
