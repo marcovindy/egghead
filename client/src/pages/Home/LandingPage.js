@@ -15,7 +15,13 @@ const LandingPage = () => {
         <div className="landing-page-background">
 
             <Container className='p-0'>
+            <div className='blob-container'>
+                    <div className="shape-blob"></div>
+                    <div className="shape-blob one"></div>
+                    <div className="shape-blob two"></div>
+                </div>
                 <Row className="justify-content-md-center mt-5">
+               
                     <Col md={6} xs={12} className="d-flex flex-column justify-content-center">
                         <h1>{t("landingpage-title")}</h1>
                         <p className='landing-page-description'>{t("landingpage-description")}</p>
@@ -36,11 +42,7 @@ const LandingPage = () => {
                         <img src={mainImage} alt="MainImage" />
                     </Col>
                 </Row>
-                <div className='blob-container'>
-                    <div class="shape-blob"></div>
-                    <div class="shape-blob one"></div>
-                    <div class="shape-blob two"></div>
-                </div>
+               
             </Container>
         </div>
     );
