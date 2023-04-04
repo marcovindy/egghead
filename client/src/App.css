@@ -174,6 +174,7 @@ input[type="radio"] {
 	position: absolute;
 	left: 70%;
 	top: 50%;
+ 
 }
 .shape-blob.one{
 	height: 500px;
@@ -182,6 +183,7 @@ input[type="radio"] {
 	top: -150px;
 	transform: rotate(-180deg);
 	animation: transform 30s ease-in-out infinite both alternate, movement_two 60s ease-in-out infinite both;
+  /* background-color: #538CAE; */
 }
 
 .shape-blob.two{
@@ -191,6 +193,7 @@ input[type="radio"] {
 	top: -150px;
 	transform: rotate(-180deg);
 	animation: transform 30s ease-in-out infinite both alternate, movement_two 60s ease-in-out infinite both;
+  /* background-color: #012F94; */
 }
 
 @keyframes transform
@@ -218,3 +221,9 @@ input[type="radio"] {
    50% { transform: translate(50%, 20%) rotate(-200deg) scale(1.2);}
 }
 
+
+
+.btn-primary {
+  /* background-color: #4D6DB4;
+  border-color: #4D6DB4; */
+}
