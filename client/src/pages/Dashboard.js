@@ -21,9 +21,9 @@ const Dashboard = () => {
   const { authState } = useContext(AuthContext);
   let history = useHistory();
 
-
-
-
+  
+  
+  
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       history.push("/login");
@@ -41,10 +41,13 @@ const Dashboard = () => {
         });
 
 
-      const socket = io(URL);
+        const socket = io(URL);
+      
       socket.on("activeRooms", (rooms) => {
         setActiveRooms(rooms);
       });
+
+      socket.emit("showActiveRooms");
 
     }
   }, []);
@@ -56,7 +59,26 @@ const Dashboard = () => {
         <Col span={8}>
           <Card title="Active Rooms">
             {activeRooms.map((room) => (
-              <p key={room.id}>{room.name}</p>
+              <div className="d-flex">
+                <Button className="m-2"
+                  onClick={() => {
+                    const roomName = room.name;
+                    const playerName = authState.username;
+                    // socket.emit('joinRoom', { roomName, playerName }, (error) => {
+                    //   if (error) {
+                    //     console.log(error);
+                    //   } else {
+                    //     console.log('Joined room successfully!');
+                    //   }
+                    // });
+                    history.push(`/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`);
+                  }}
+                >
+                  <PlayCircleFill size={24} />
+                </Button>
+                <h3 className="m-2" key={room.id}>{room.name}</h3>
+
+              </div>
             ))}
           </Card>
         </Col>

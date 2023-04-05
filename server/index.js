@@ -77,6 +77,8 @@ io.on('connect', (socket) => {
     io.emit('activeRooms', activeRooms);
   }
 
+  socket.on('showActiveRooms', (sendActiveRooms));
+
   socket.on('createRoom', ({ roomName, masterName }, callback) => {
     if (rooms[roomName]) {
       return callback({ error: "Room already exists with that name, try another!" });
