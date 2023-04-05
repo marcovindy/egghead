@@ -16,6 +16,7 @@ import ChangePassword from "./pages/ChangePassword";
 import Signup from "./pages/Signup/Signup";
 import LandingPage from './pages/Home/LandingPage';
 import Quiz from './pages/Quiz/Quiz';
+import Play from './pages/Play/Play';
 import JoinGame from './components/JoinGame/JoinGame';
 import CreateQuiz from './components/CreateQuiz/CreateQuiz';
 import Footer from './components/Footer/Footer';
@@ -118,6 +119,7 @@ function App() {
                     <Nav className='justify-content-end'>
                       <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Home')}</span></NavLink>
                       <NavLink className='px-3 navlink' to='/lobby'><span className="align-middle">{t('Play')}</span></NavLink>
+                      <NavLink className='px-3 navlink' to='/play'><span className="align-middle">{t('Play')}Test</span></NavLink>
                       <NavLink className='px-3 navlink' to='/dashboard'><span className="align-middle">{t('Dashboard')}</span></NavLink>
 
                       {!authState.status && (
@@ -164,6 +166,7 @@ function App() {
               <Route path="/changepassword" exact component={ChangePassword} />
               <Route path="/gamemaster" component={GameMaster} />
               <Route path="/gameplayer" component={GamePlayer} />
+              <Route path="/play" component={Play} />
               <Route path="*" exact component={PageNotFound} />
             </Switch>
           </Router>
