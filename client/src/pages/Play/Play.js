@@ -1,8 +1,11 @@
 import React, { useContext, useEffect } from "react";
-import { AuthContext } from "../../helpers/AuthContext";
+import { Container, Row, Col, Button } from 'react-bootstrap';
+
 import PlayModeChooser from "../../components/PlayModeChooser/PlayModeChooser";
 import PlayerBox from "../../components/PlayerBox/PlayerBox";
-import { Container, Row, Col, Button } from 'react-bootstrap';
+
+import { AuthContext } from "../../helpers/AuthContext";
+
 
 function Play() {
   const { authState } = useContext(AuthContext);
