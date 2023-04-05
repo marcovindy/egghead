@@ -94,7 +94,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      {listOfPosts.map((value, key) => {
+      {/* {listOfPosts.map((value, key) => {
         return (
           <Col key={key} className="post">
             <Card style={{ width: '18rem' }}>
@@ -129,7 +129,7 @@ const Dashboard = () => {
             </Card>
           </Col>
         );
-      })}
+      })} */}
       <Row>
         <h2>List of Quizzes</h2>
         {listOfQuizzes.map((value, key) => {

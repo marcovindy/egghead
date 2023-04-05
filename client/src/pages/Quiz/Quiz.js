@@ -89,6 +89,7 @@ function Quiz() {
 
     return (
         <Container className="quiz-container mb-4">
+            <h1>Quiz</h1>
             <Row>
                 <Col>
                     <EditableTitle title={quizInfo.title} onTitleSave={handleTitleSave} />
@@ -105,7 +106,7 @@ function Quiz() {
                 </Col>
             </Row>
             {showForm && (
-                <Row>
+                <div className="d-flex">
                     <Col>
                         <Formik
                             initialValues={{
@@ -225,7 +226,7 @@ function Quiz() {
                             )}
                         </Formik>
                     </Col>
-                </Row>
+                </div>
             )}
             <hr />
             {questions.map((question, index) => (

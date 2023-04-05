@@ -37,7 +37,7 @@ const EditableTitle = ({ title, onTitleSave }) => {
     };
 
     return (
-        <h1>
+        <h2>
             Název kvízu:{" "}
             {showEditTitle ? (
                 <div ref={inputRef}>
@@ -49,7 +49,7 @@ const EditableTitle = ({ title, onTitleSave }) => {
                     {title} <PencilFill className="m-2" size={22} />
                 </span>
             )}
-        </h1>
+        </h2>
     );
 };
 

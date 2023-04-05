@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Container, Row, Col } from "react-bootstrap";
 import * as Yup from "yup";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -73,43 +74,56 @@ function CreateQuiz() {
 
     return (
         <div className="createQuizPage">
-            <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validationSchema={validationSchema}
-            >
-                <Form className="formContainer">
-                    <label>Title: </label>
-                    <ErrorMessage name="title" component="span" />
-                    <Field
-                        autoComplete="off"
-                        id="inputCreateQuizTitle"
-                        name="title"
-                        placeholder="(Ex. Quiz Title...)"
-                    />
-                    <div className="categories-group p-5">
-                        <label>Categories: </label>
-                        <ErrorMessage name="categories" component="span" />
-                        <CheckboxGroup
-                            name="categories"
-                            options={categories.map((category) => category.name)}
-                        />
-                    </div>
-                    {error && <span className="error">{error}</span>}
-                    <label>Description: </label>
-                    <ErrorMessage name="description" component="span" />
-                    <Field
-                        autoComplete="off"
-                        id="inputCreateQuizDescription"
-                        name="description"
-                        placeholder="(Ex. Quiz Description...)"
-                        as="textarea"
-                        rows="5"
-                    />
+            <Container>
+                <Row>
+                    <h1>Create Quiz</h1>
 
-                    <button type="submit"> Create Quiz</button>
-                </Form>
-            </Formik>
+                    <Formik
+                        initialValues={initialValues}
+                        onSubmit={onSubmit}
+                        validationSchema={validationSchema}
+                    >
+                        <Form className="formContainer">
+                            <label>Title: </label>
+                            <ErrorMessage name="title" component="span" />
+                            <Field
+                                autoComplete="off"
+                                id="inputCreateQuizTitle"
+                                name="title"
+                                placeholder="(Ex. Quiz Title...)"
+                            />
+                            <div className="categories-group p-5">
+                                <label>Categories: </label>
+                                <ErrorMessage name="categories" component="span" />
+                                <div className="d-flex flex-wrap">
+                                    <CheckboxGroup
+                                        name="categories"
+                                        options={categories.map((category) => category.name)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="d-flex flex-column">
+
+
+                                {error && <span className="error">{error}</span>}
+                                <label>Description: </label>
+                                <ErrorMessage name="description" component="span" />
+                                <Field
+                                    autoComplete="off"
+                                    id="inputCreateQuizDescription"
+                                    name="description"
+                                    placeholder="(Ex. Quiz Description...)"
+                                    as="textarea"
+                                    rows="5"
+                                />
+
+                                <button type="submit"> Create Quiz</button>
+                            </div>
+                        </Form>
+                    </Formik>
+
+                </Row>
+            </Container>
         </div>
     );
 }
