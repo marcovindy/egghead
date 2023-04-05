@@ -131,7 +131,7 @@ const Dashboard = () => {
         );
       })} */}
       <Row>
-        <h2>List of Quizzes</h2>
+        <h2>Custom Game</h2>
         {listOfQuizzes.map((value, key) => {
           return (
             <Col className="card-col" key={key}>

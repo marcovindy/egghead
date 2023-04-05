@@ -117,10 +117,8 @@ function App() {
                     </Navbar.Brand>
                     <Nav className='justify-content-end'>
                       <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Home')}</span></NavLink>
-                      <NavLink className='px-3 navlink' to='/lobby'><span className="align-middle">{t('Play')}</span></NavLink>
-                      <NavLink className='px-3 navlink' to='/play'><span className="align-middle">{t('Play')}Test</span></NavLink>
-                      <NavLink className='px-3 navlink' to='/dashboard'><span className="align-middle">{t('Dashboard')}</span></NavLink>
-
+                      <NavLink className='px-3 navlink' to='/lobby'><span className="align-middle">{t('Play')}(OLD)</span></NavLink>
+                      <NavLink className='px-3 navlink' to='/play'><span className="align-middle">{t('Play')}(NEW)</span></NavLink>
                       {!authState.status && (
                         <>
                           <NavLink className='px-3 navlink' to='/signup'><span className="align-middle">{t('Sign up')}</span></NavLink>
@@ -154,7 +152,7 @@ function App() {
             <Switch>
               <Route path="/" exact component={LandingPage} />
               <Route path="/createquiz" exact component={CreateQuiz} />
-              <Route path="/dashboard" exact component={Dashboard} />
+              <Route path="/customgame" exact component={Dashboard} />
               <Route path="/lobby" exact component={JoinGame} />
               <Route path="/createpost" exact component={CreatePost} />
               <Route path="/post/:id" exact component={Post} />
