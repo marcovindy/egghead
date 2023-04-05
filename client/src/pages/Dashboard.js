@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import io from "socket.io-client";
+import { useEffect, useState, useContext } from "react";
 import Card from 'react-bootstrap/Card';
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 import '../assets/styles/Cards/Cards.css';
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const IS_PROD = process.env.NODE_ENV === "development";
   const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
 
+  const [activeRooms, setActiveRooms] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
   const [listOfPosts, setListOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
@@ -39,12 +40,26 @@ const Dashboard = () => {
           console.log('Error:', error);
         });
 
+
+      const socket = io(URL);
+      socket.on("activeRooms", (rooms) => {
+        setActiveRooms(rooms);
+      });
+
     }
   }, []);
 
   return (
     <div>
       <Row>
+        <h2>Active Rooms</h2>
+        <Col span={8}>
+          <Card title="Active Rooms">
+            {activeRooms.map((room) => (
+              <p key={room.id}>{room.name}</p>
+            ))}
+          </Card>
+        </Col>
         <h2>Custom Game</h2>
         {listOfQuizzes.map((value, key) => {
           return (
@@ -58,28 +73,28 @@ const Dashboard = () => {
                         history.push(`/quiz/${value.id}`);
                       }}
                     >
-                       <EyeFill 
-                       size={24}
-                       />
+                      <EyeFill
+                        size={24}
+                      />
                     </Button>
                     <Button
                       onClick={() => {
                         history.push(`/quiz/${value.id}`);
                       }}
                     >
-                        <HeartFill 
-                       size={24}
-                       />
+                      <HeartFill
+                        size={24}
+                      />
                     </Button>
                     <Button
-                    
+
                       onClick={() => {
                         history.push(`/gamemaster?roomName=${value.title}&masterName=${value.User.username}`);
                       }}
                     >
-                      <PlayCircleFill 
-                       size={24}
-                       />
+                      <PlayCircleFill
+                        size={24}
+                      />
                     </Button>
                   </div>
                   <Card.Title>{value.title} </Card.Title>

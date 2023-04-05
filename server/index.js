@@ -63,10 +63,19 @@ app.get("*", (req, res) => {
 const uuidv1 = require('uuid/v1');
 rooms = [];
 
+// Create new room
 io.on('connect', (socket) => {
   console.log('new connection', socket.id);
 
   socket.emit('newConn', { msg: 'welcome' });
+
+  // Send list of active rooms to client whenever a new room is created or a player joins a room
+  const sendActiveRooms = () => {
+    const activeRooms = Object.values(rooms).map(room => {
+      return { id: room.id, name: room.name, players: Object.values(room.players) }
+    });
+    io.emit('activeRooms', activeRooms);
+  }
 
   socket.on('createRoom', ({ roomName, masterName }, callback) => {
     if (rooms[roomName]) {
@@ -81,8 +90,12 @@ io.on('connect', (socket) => {
     rooms[roomName] = room;
 
     joinRoom(socket, room, masterName);
+
+    // Send updated list of active rooms to all clients
+    sendActiveRooms();
   });
 
+  // Join existing room
   socket.on('joinRoom', ({ joinRoomName, playerName }, callback) => {
     const room = rooms[joinRoomName];
     if (typeof room === 'undefined') {
@@ -95,8 +108,12 @@ io.on('connect', (socket) => {
       return callback({ error: "A player with that name is already in the room" });
     };
     joinRoom(socket, room, playerName);
+
+    // Send updated list of active rooms to all clients
+    sendActiveRooms();
   });
 
+  // Join existing room
   const joinRoom = (socket, room, playerName) => {
     socket.join(room.id, () => {
       room.sockets.push(socket);
@@ -180,7 +197,7 @@ io.on('connect', (socket) => {
 
   socket.on('startTimer', () => {
     const room = rooms[socket.roomName];
-    const players = Object.values(room.players);  
+    const players = Object.values(room.players);
     let timeLeft = questionDuration;
     console.log('Start timer', timeLeft);
     const timerInterval = setInterval(() => {
