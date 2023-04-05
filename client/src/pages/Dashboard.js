@@ -5,7 +5,6 @@ import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import { AuthContext } from "../helpers/AuthContext";
 import '../assets/styles/Cards/Cards.css';
 
