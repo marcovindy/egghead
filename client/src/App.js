@@ -59,7 +59,6 @@ function App() {
         }
       )
       .then((response) => {
-        console.log(response);
         if (response.data.error) {
           setAuthState({ ...authState, status: false });
         } else {
@@ -135,7 +134,7 @@ function App() {
                             <>
                               <Col>
                                 <DropdownButton id="dropdown-basic-button" title={`${authState.username}`}>
-                                  <Dropdown.Item href={`/profile/${authState.id}`}>{t("Profile")}</Dropdown.Item>
+                                  <Dropdown.Item href={`/profile/${authState.username}`}>{t("Profile")}</Dropdown.Item>
                                   <Dropdown.Item onClick={logout} href="#/action-2">{t("Logout")}</Dropdown.Item>
                                   <Dropdown.Item href="#/action-3">{t("Report bug")}</Dropdown.Item>
                                 </DropdownButton>
@@ -161,7 +160,7 @@ function App() {
               <Route path="/post/:id" exact component={Post} />
               <Route path="/signup" exact component={Signup} />
               <Route path="/login" exact component={Login} />
-              <Route path="/profile/:id" exact component={Profile} />
+              <Route path="/profile/:username" exact component={Profile} />
               <Route path="/quiz/:id" exact component={Quiz} />
               <Route path="/changepassword" exact component={ChangePassword} />
               <Route path="/gamemaster" component={GameMaster} />

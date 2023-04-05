@@ -171,7 +171,7 @@ const Dashboard = () => {
                   <Card.Title>{value.title} </Card.Title>
                   <div className="body">
                     <div className="username">
-                      <Link to={`/profile/${value.userId}`}> {value.User.username} </Link>
+                      <Link to={`/profile/${value.User.username}`}> {value.User.username} </Link>
                     </div>
                     <div
                       className="quizDesc"

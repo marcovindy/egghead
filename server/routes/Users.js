@@ -50,6 +50,21 @@ router.get("/basicinfo/:id", async (req, res) => {
   res.json(basicInfo);
 });
 
+router.get("/basicinfobyUsername/:username", async (req, res) => {
+  const { username } = req.params; // Destructure username from params
+
+  console.log(username); // Debugging line to check if the value of username is correct
+
+  const basicInfo = await Users.findOne({
+    where: { username },
+    attributes: { exclude: ["password"] },
+  });
+
+  res.json(basicInfo);
+});
+
+
+
 router.put("/changepassword", validateToken, async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await Users.findOne({ where: { username: req.user.username } });
