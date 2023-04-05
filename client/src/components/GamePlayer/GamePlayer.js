@@ -141,7 +141,7 @@ const GamePlayer = ({ location }) => {
                 {error === true ? (
                     <div className="errorMsg">
                         <p>{errorMsg.error}</p>
-                        <a href="/">Go back</a>
+                        <Link to="/customgames">Go back</Link>
                     </div>
                 ) : (
                     <div>
@@ -173,7 +173,7 @@ const GamePlayer = ({ location }) => {
                                             onClickChange={handleClickChange}
                                             correctAnswer={correctAnswer}
                                         />
-                                        <Scoreboard playersInRoom={playersInRoom} />
+                                        {/* <Scoreboard playersInRoom={playersInRoom} /> */}
                                     </div>
                                 ) : (
                                     <EndGame players={players} player={player} />
@@ -190,19 +190,22 @@ const GamePlayer = ({ location }) => {
 
                 <div className="players-container">
                     {playersInRoom.length > 0 ? (
-                        playersInRoom.map((playerInfo, index) => (
-                            <div key={index}>
-
-                                <p className="p-players">
-
-                                    Playername: {playerInfo.username}
-
-                                </p>
-                                <p className="p-players">
-                                    Score: {playerInfo.score}
-                                </p>
-                            </div>
-                        ))
+                        <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>Player name</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {playersInRoom.map((playerInfo, index) =>
+                                <tr key={index}>
+                                    <td>{playerInfo.username}</td>
+                                    <td>{playerInfo.score}</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
                     ) : (
                         <p>No players in the room yet...</p>
                     )}

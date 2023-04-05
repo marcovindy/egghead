@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory  } from "react-router-dom";
+import { useHistory, Link  } from "react-router-dom";
 import { Form, Container, Button, Table } from 'react-bootstrap';
 import './EndGame.css';
 
@@ -51,16 +51,16 @@ const EndGame = ({ players, player }) => {
                     </Table>
                 </div>
 
-                <div className="save-score-container">
+                {/* <div className="save-score-container">
                     <h3>Save score to leaderboard</h3>
                     <Form onSubmit={handleSubmit} method="POST">
                         <input disabled={true} readOnly defaultValue={player.username} className="form-control"/>
                         <input disabled={true} readOnly defaultValue={player.score} className="form-control"/>
                         <Button variant="primary" type="submit">Save score</Button>
                     </Form>
-                </div>
+                </div> */}
                 <p>Don't leave, if you want to play again!</p>
-                <a href="/">Leave room</a>
+                <Link to="/customgame">Leave room</Link>
             </div>
         </Container>
     );
