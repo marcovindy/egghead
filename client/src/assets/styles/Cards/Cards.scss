@@ -1,41 +1,60 @@
 .card-col.col {
     padding: 10px;
+  
+    /* Style for cards */
     .card {
-        min-width: 200px !important;
-        ul {
-            margin: 0;
-            padding: 0;
-            display: flex !important;
-            li {
-                list-style: none;
-                padding: 3px 6px;
-                color: #fff;
-                background-color: rgb(91, 144, 250);
-                margin: 3px;
-                border-radius: 5px;
-            }
+      min-width: 200px !important;
+  
+      /* Style for unordered list inside the card */
+      ul {
+        margin: 0;
+        padding: 0;
+        display: flex !important;
+  
+        /* Style for list items inside the unordered list */
+        li {
+          list-style: none;
+          padding: 3px 6px;
+          color: #fff;
+          background-color: rgb(91, 144, 250);
+          margin: 3px;
+          border-radius: 5px;
+          cursor: pointer;
         }
-        .card-buttons {
-            margin-top: -1.33rem;
-            // margin-bottom: -5rem;
-            button {
-                margin: 0 5px;
-            }
+      }
+  
+      /* Style for card buttons */
+      .card-buttons {
+        margin-top: -1.33rem;
+  
+        /* Style for buttons inside card-buttons */
+        button {
+          margin: 0 5px;
         }
-        .card-title {
-            padding-top: 5px;
-            margin: 0;
+      }
+  
+      /* Style for card title */
+      .card-title {
+        padding-top: 5px;
+        margin: 0;
+      }
+  
+      /* Style for card body */
+      .card-body {
+        padding: 0;
+  
+        /* Style for .body inside card-body */
+        .body {
+          padding: 5px;
         }
-        .card-body {
-            padding: 0;
-            .body {
-                padding: 5px;
-            }
-            .footer {
-                display: flex;
-                padding: 5px;
-                background-color: #dddddd;
-            }
+  
+        /* Style for .footer inside card-body */
+        .footer {
+          display: flex;
+          padding: 5px;
+          background-color: #dddddd;
         }
+      }
     }
-}
+  }
+  

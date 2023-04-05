@@ -30,7 +30,7 @@ import axios from "axios";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import './assets/styles/navigation.css';
+import './assets/styles/Navigation/Navigation.css';
 import './assets/styles/Progress/Progress.css';
 
 import { I18nPropvider, LOCALES } from './i18nProvider';

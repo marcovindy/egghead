@@ -1,9 +1,14 @@
 .card-col.col {
   padding: 10px;
+  /* Style for cards */
 }
 
 .card-col.col .card {
   min-width: 200px !important;
+  /* Style for unordered list inside the card */
+  /* Style for card buttons */
+  /* Style for card title */
+  /* Style for card body */
 }
 
 .card-col.col .card ul {
@@ -12,6 +17,7 @@
   display: -webkit-box !important;
   display: -ms-flexbox !important;
   display: flex !important;
+  /* Style for list items inside the unordered list */
 }
 
 .card-col.col .card ul li {
@@ -21,10 +27,12 @@
   background-color: #5b90fa;
   margin: 3px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .card-col.col .card .card-buttons {
   margin-top: -1.33rem;
+  /* Style for buttons inside card-buttons */
 }
 
 .card-col.col .card .card-buttons button {
@@ -38,6 +46,8 @@
 
 .card-col.col .card .card-body {
   padding: 0;
+  /* Style for .body inside card-body */
+  /* Style for .footer inside card-body */
 }
 
 .card-col.col .card .card-body .body {

@@ -1,9 +1,7 @@
 .navBar-header {
   width: 100%;
-  /* background-color: rgb(46, 157, 104); */
   background: -webkit-gradient(linear, left top, right top, from(#012f94), to(#A3E8C8));
   background: linear-gradient(90deg, #012f94 0%, #A3E8C8 100%);
-  /* background: #F2C438; */
 }
 
 .navBar-header .container .row {
@@ -36,9 +34,9 @@
   vertical-align: center;
 }
 
-@media (max-width: 988px) {
+@media (max-width: 991px) {
   .navBar-header {
     padding: 10px;
   }
 }
-/*# sourceMappingURL=navigation.css.map */
+/*# sourceMappingURL=Navigation.css.map */
