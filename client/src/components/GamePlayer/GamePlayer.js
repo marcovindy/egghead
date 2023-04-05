@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { Container, ProgressBar, Row, Col, Button } from 'react-bootstrap';
+import { useHistory, Link  } from "react-router-dom";
+import { Container, ProgressBar, Row, Col, Button, Table } from 'react-bootstrap';
 import io from 'socket.io-client';
 import Messages from '../Messages/Messages';
 import GameQuestion from '../GameQuestion/GameQuestion';
