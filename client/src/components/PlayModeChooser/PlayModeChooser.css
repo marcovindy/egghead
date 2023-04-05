@@ -1,0 +1,10 @@
+.info-icon {
+  cursor: pointer;
+  -webkit-transition: color 0.3s ease;
+  transition: color 0.3s ease;
+}
+
+.info-icon:hover {
+  color: #007bff;
+}
+/*# sourceMappingURL=PlayModeChooser.css.map */

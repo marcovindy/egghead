@@ -1,20 +1,98 @@
-import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Button, Modal } from 'react-bootstrap';
+import { InfoCircleFill } from 'react-bootstrap-icons';
 
-const GameModeSelection = () => {
+import './PlayModeChooser.css';
+
+const PlayModeChooser = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMode, setSelectedMode] = useState(null);
+  const [selectedModeDescription, setSelectedModeDescription] = useState(null);
+
+  const handleShowModal = (mode, description) => {
+    setSelectedMode(mode);
+    setSelectedModeDescription(description);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedModeDescription(null);
+    setSelectedMode(null);
+  };
+
   return (
-      <div className="justify-content-center align-items-center flex-column">
-        <Col xs={12} md={12} lg={12} className="mb-4">
-          <Button className='w-100'  block>Ranked Game</Button>
+    <Container className="d-flex flex-column align-items-center justify-content-center">
+      <Row>
+        <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
+          <Col lg={10}>
+            <Button className="w-100" block>
+              Ranked Game
+            </Button>
+          </Col>
+          <Col lg={2} className="d-flex flex-column align-items-center justify-content-center">
+            <InfoCircleFill
+              size={20}
+              className="info-icon"
+              onClick={() =>
+                handleShowModal(
+                  'Ranked Game',
+                  'Play random quiz and earn XP and coins!'
+                )
+              }
+            />
+          </Col>
         </Col>
-        <Col xs={12} md={12} lg={12} className="mb-4">
-          <Button className='w-100' block>Custom Game</Button>
+        <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
+          <Col lg={10}>
+            <Button className="w-100" block>
+              Custom Game
+            </Button>
+          </Col>
+          <Col lg={2} className="d-flex flex-column align-items-center justify-content-center">
+            <InfoCircleFill
+              size={20}
+              className="info-icon"
+              onClick={() =>
+                handleShowModal(
+                  'Custom Game',
+                  'Play custom quiz from our egghead community.'
+                )
+              }
+            />
+          </Col>
         </Col>
-        <Col xs={12} md={12} lg={12} className="mb-4">
-          <Button className='w-100'  block>Random Game with Friends</Button>
+        <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
+          <Col lg={10}>
+            <Button className="w-100" block>
+              Random Game with Friends
+            </Button>
+          </Col>
+          <Col lg={2} className="d-flex flex-column align-items-center justify-content-center">
+            <InfoCircleFill
+              size={20}
+              className="info-icon"
+              onClick={() =>
+                handleShowModal(
+                  'Random Game with Friends',
+                  'Play random game with your friends random quiz and compete.'
+                )
+              }
+            />
+          </Col>
         </Col>
-      </div>
+      </Row>
+
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedMode}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{selectedModeDescription}</p>
+        </Modal.Body>
+      </Modal>
+    </Container>
   );
 };
 
-export default GameModeSelection;
+export default PlayModeChooser;
