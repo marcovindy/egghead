@@ -91,6 +91,9 @@ function Quiz() {
     };
 
     const handleAnswerEdit = (index, newAnswer) => {
+        if (!newAnswer) {
+            return;
+        }
         console.log(newAnswer);
         console.log(index);
         const newQuestions = [...questions];
@@ -249,29 +252,7 @@ function Quiz() {
                 </div>
             )}
             <hr />
-            {questions.map((question, index) => (
-                <div key={index}>
-                    <Row>
-                        <Col>
-                            <h4>Question {index + 1}: {question.question}</h4>
-                        </Col>
-                    </Row>
-                    <Row>
-                        {question.answers.map((answer, index) => (
-                            answer.text !== "" && (
-                                <Col key={index} lg={6} className="mb-3">
-                                    <div className="p-3 text-light w-100" style={{ backgroundColor: answer.isCorrect ? "green" : "#007bff" }}>
-                                        {answer.text}
-                                        <EditableTitle title={answer.text} onTitleSave={handleAnswerEdit} />
-                                    </div>
-                                </Col>
-                            )
-                        ))}
-                    </Row>
-                    <Button variant="danger" onClick={() => handleQuestionDelete(index)}>{t("deleteButton")}</Button>
-                    {index !== questions.length - 1 && <hr />}
-                </div>
-            ))}
+
 
             {questions.map((question, index) => (
                 <div key={index}>
@@ -284,6 +265,7 @@ function Quiz() {
                             onAnswerEdit={handleAnswerEdit}
                         />
                     </Row>
+                    <hr />
                 </div>
             ))}
 
