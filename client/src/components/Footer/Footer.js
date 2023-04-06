@@ -3,7 +3,8 @@ import Logo from "../../assets/images/trivia.png";
 
 
 
-const Footer = () => <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+const Footer = () => 
+<footer className="d-flex flex-wrap justify-content-between align-items-center py-3 m-0 border-top">
     <div className="justify-content-between container p-2">
 
    
