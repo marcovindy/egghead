@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import EditableTitle from "../../components/EditableTitle/EditableTitle";
 import AnimatedRadioCircle from "../../components/AnimatedRadioCircle/AnimatedRadioCircle";
+import Question from "../../components/Question/Question";
 import "./Quiz.css";
 import * as Yup from "yup";
 import { toast } from 'react-toastify';
@@ -47,10 +48,12 @@ function Quiz() {
             .catch((error) => console.log(error));
     };
 
+
+
     const [showForm, setShowForm] = useState(false);
 
     const handleButtonClick = () => {
-        setShowForm(true);
+        showForm === false ? setShowForm(true) : setShowForm(false);
     };
 
     const handleFormSubmit = (values, actions) => {
@@ -87,12 +90,29 @@ function Quiz() {
         setQuestions(newQuestions);
     };
 
+    const handleAnswerEdit = (index, newAnswer) => {
+        console.log(newAnswer);
+        console.log(index);
+        const newQuestions = [...questions];
+        newQuestions[index].answers = newQuestions[index].answers.map((answer, i) => {
+            console.log("newAnswer.index", newAnswer.index);
+            if (i === newAnswer.index) {
+                return { text: newAnswer.text, isCorrect: answer.isCorrect };
+            } else {
+                return answer;
+            }
+        });
+        console.log(newQuestions);
+        setQuestions(newQuestions);
+    };
+
+
     return (
         <Container className="quiz-container mb-4">
-            <h1>Quiz</h1>
+
             <Row>
                 <Col>
-                    <EditableTitle title={quizInfo.title} onTitleSave={handleTitleSave} />
+                    <h2>Název kvízu: </h2><EditableTitle title={quizInfo.title} onTitleSave={handleTitleSave} />
                 </Col>
             </Row>
             <Row className="mb-4">
@@ -242,6 +262,7 @@ function Quiz() {
                                 <Col key={index} lg={6} className="mb-3">
                                     <div className="p-3 text-light w-100" style={{ backgroundColor: answer.isCorrect ? "green" : "#007bff" }}>
                                         {answer.text}
+                                        <EditableTitle title={answer.text} onTitleSave={handleAnswerEdit} />
                                     </div>
                                 </Col>
                             )
@@ -252,6 +273,19 @@ function Quiz() {
                 </div>
             ))}
 
+            {questions.map((question, index) => (
+                <div key={index}>
+                    <Row>
+                        <Question
+                            key={index}
+                            index={index}
+                            question={question}
+                            onQuestionDelete={handleQuestionDelete}
+                            onAnswerEdit={handleAnswerEdit}
+                        />
+                    </Row>
+                </div>
+            ))}
 
 
             <Button
