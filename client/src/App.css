@@ -263,6 +263,10 @@ input[type="radio"] {
   height: 0;
 }
 
+.z-index-1 {
+  z-index: 1;
+}
+
 .row {
   margin: 0;
 }
@@ -275,3 +279,27 @@ input[type="radio"] {
 .w-40px {
   width: 40px;
 }
+
+
+.filter-box-enter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.filter-box-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.filter-box-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.filter-box-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 400ms, transform 400ms;
+}
+

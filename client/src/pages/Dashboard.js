@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, useMemo } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
+import { CSSTransition } from 'react-transition-group';
 import Card from 'react-bootstrap/Card';
 import axios from "axios";
 import io from "socket.io-client";
@@ -11,6 +12,7 @@ import t from "../i18nProvider/translate";
 import { uuid } from 'short-uuid';
 import '../assets/styles/Cards/Cards.css';
 import FilterBox from '../components/FilterBox/FilterBox';
+
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
@@ -226,31 +228,33 @@ const Dashboard = () => {
                 )}
               </h5>
             </Col>
-            <Col xs={12} lg={6} className="d-flex flex-column  flex-lg-row justify-content-end ">
+            <Col xs={12} lg={6} className="d-flex flex-column  flex-lg-row justify-content-end z-index-1">
               {createFilterMessage() ? (
                 <Button className="m-2" variant="primary" onClick={resetFilters}>Reset Filters</Button>
               ) : (
                 ""
               )}
-              <Button className="m-2" variant="primary" onClick={toggleFilter}>
-                {isFilterOpen ? 'Close' : 'Open'} Filters
+              <Button variant="primary" className="m-2" onClick={toggleFilter}>
+                {isFilterOpen ? t('Close Filter') : t('Open Filter')}
               </Button>
             </Col>
           </div>
+          <Col xs={12}>
+            <CSSTransition
+              in={isFilterOpen}
+              timeout={300}
+              classNames="filter-box"
+              unmountOnExit
+            >
 
-          {isFilterOpen && (
-
-
-            <Col xs={12} className="mt-3">
               <MemoizedFilterBox
                 categories={categories}
                 languageOptions={languageOptions}
                 filterValues={filterValues}
                 onFilterApply={onFilterApply}
               />
-            </Col>
-          )}
-
+            </CSSTransition>
+          </Col>
         </Card>
 
         {filteredQuizzes.map((value, key) => {
@@ -321,7 +325,7 @@ const Dashboard = () => {
           );
         })}
       </Row>
-    </div>
+    </div >
   );
 }
 
