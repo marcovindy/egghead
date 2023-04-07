@@ -23,6 +23,7 @@ const Dashboard = () => {
   const IS_PROD = process.env.NODE_ENV === "development";
   const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
 
+  const [filteredQuizzes, setFilteredQuizzes] = useState([]);
   const [activeRooms, setActiveRooms] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
   const [listOfPosts, setListOfPosts] = useState([]);
@@ -51,7 +52,6 @@ const Dashboard = () => {
     const shortId = uuid().slice(0, 6);
     return `${quizTitle}-${shortId}`;
   }
-
   const onFilterApply = (filterValues) => {
     if (filterValues.categories.length === 0) {
       const categoryNames = categories.map((c) => c.name);
@@ -59,15 +59,47 @@ const Dashboard = () => {
     } else {
       setFilterValues(filterValues);
     }
+    
+    // Filter the quizzes based on the filter values
+    const newQuizzes = listOfQuizzes.filter((quiz) => {
+      // Filter by language
+      if (filterValues.language && quiz.language !== filterValues.language.value) {
+        return false;
+      }
+      
+      // Filter by categories
+      if (filterValues.categories.length > 0) {
+        const quizCategories = quiz.Categories.map((c) => c.name);
+        if (!filterValues.categories.some((c) => quizCategories.includes(c))) {
+          return false;
+        }
+      }
+      
+      // // Filter by length
+      // if (filterValues.length && quiz.questions.length !== filterValues.length.value) {
+      //   return false;
+      // }
+      
+      return true;
+    });
+    
+    setFilteredQuizzes(newQuizzes);
   };
+  
+
 
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   }
 
+  // useEffect(() => {
+  //   console.log("Applying filter Final: ", filterValues);
+  // }, [filterValues]);
+
   useEffect(() => {
-    console.log("Applying filter Final: ", filterValues);
-  }, [filterValues]);
+    console.log("filteredQuizzes: ", filteredQuizzes);
+    console.log("list of quizzes: ", listOfQuizzes);
+  }, [filteredQuizzes, listOfQuizzes]);
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
@@ -93,6 +125,7 @@ const Dashboard = () => {
         })
         .then((response) => {
           setListOfQuizzes(response.data.quizzes);
+          setFilteredQuizzes(response.data.quizzes);
         })
         .catch((error) => {
           console.log('Error:', error);
@@ -110,6 +143,8 @@ const Dashboard = () => {
       }
     }
   }, []);
+
+
 
 
   return (
@@ -161,8 +196,8 @@ const Dashboard = () => {
             />
           )}
         </Col>
-    
-        {listOfQuizzes.map((value, key) => {
+
+        {filteredQuizzes.map((value, key) => {
           return (
             <Col className="card-col" key={key}>
               <Card className="h-100">
