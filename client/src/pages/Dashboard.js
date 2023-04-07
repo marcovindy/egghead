@@ -29,6 +29,7 @@ const Dashboard = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const { authState } = useContext(AuthContext);
   const [categories, setCategories] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [languageOptions, setLanguageOptions] = useState(
     [{ value: 'English', label: 'English' },
     { value: 'Czech', label: 'Czech' },
@@ -59,6 +60,10 @@ const Dashboard = () => {
       setFilterValues(filterValues);
     }
   };
+
+  const toggleFilter = () => {
+    setIsFilterOpen(!isFilterOpen);
+  }
 
   useEffect(() => {
     console.log("Applying filter Final: ", filterValues);
@@ -142,16 +147,21 @@ const Dashboard = () => {
       <Row>
         <h2 className="mt-4">{t('customGameTitle')}</h2>
 
-        <Col>
-          <FilterBox
-            categories={categories}
-            languageOptions={languageOptions}
-            filterValues={filterValues}
-            onFilterApply={onFilterApply}
-          />
+        <Col xs={12}>
+          {/* Tlačítko pro otevření / zavření filtru */}
+          <Button onClick={toggleFilter}>Filtr</Button>
+
+          {/* Zobrazí filtr, pokud je hodnota isFilterOpen true */}
+          {isFilterOpen && (
+            <FilterBox
+              categories={categories}
+              languageOptions={languageOptions}
+              filterValues={filterValues}
+              onFilterApply={onFilterApply}
+            />
+          )}
         </Col>
-      </Row>
-      <Row>
+    
         {listOfQuizzes.map((value, key) => {
           return (
             <Col className="card-col" key={key}>
