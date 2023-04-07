@@ -44,5 +44,10 @@ export default {
     'saveButton': 'Speichern',
     'questionNumberLabel': 'Frage {{number}}:',
     // Quiz Edit End
+    'featureInDevelopment': 'Diese Funktion befindet sich noch in der Entwicklung und ist noch nicht bereit zur Verwendung. Bitte versuchen Sie es später erneut.',
+    'noActiveRooms': 'Aktuell sind keine aktiven Räume verfügbar.',
+    'activeRoomsTitle': 'Aktive Räume',
+    'customGameTitle': 'Benutzerdefiniertes Spiel',
+
   },
 };

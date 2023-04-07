@@ -247,3 +247,7 @@ input[type="radio"] {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.h-0 {
+  height: 0;
+}

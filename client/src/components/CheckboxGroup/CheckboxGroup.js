@@ -19,7 +19,7 @@ const CheckboxGroup = ({ name, options }) => {
                 <div className="square--inner square--inner__5" ></div>
                 <div className="square--outer" ></div>
             </div>
-            <svg>
+            <svg className="h-0">
                 <defs>
                     <filter id="eggFil">
                         <feGaussianBlur

@@ -44,5 +44,10 @@ export default {
     'questionNumberLabel': 'Question {{number}} :',
     'saveButton': 'Save',
     // Quiz Edit End
+    'featureInDevelopment': 'Cette fonctionnalité est encore en développement et n\'est pas encore prête à être utilisée. Veuillez revenir plus tard.',
+    'noActiveRooms': 'Il n\'y a actuellement aucune salle active.',
+    'activeRoomsTitle': 'Salles actives',
+    'customGameTitle': 'Jeu personnalisé',
+
   },
 };

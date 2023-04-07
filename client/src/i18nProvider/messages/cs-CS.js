@@ -44,5 +44,11 @@ export default {
      'saveButton': 'Uložit',
      'questionNumberLabel': 'Otázka {{number}}:',
      // Quiz Edit End
+
+     'featureInDevelopment': 'Tato funkce je stále ve vývoji a zatím není k dispozici. Zkuste to později.',
+     'noActiveRooms': 'Momentálně nejsou k dispozici žádné aktivní místnosti.',
+     'activeRoomsTitle': 'Aktivní místnosti',
+     'customGameTitle': 'Vlastní hra',
+     
   },
 };

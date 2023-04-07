@@ -48,5 +48,9 @@ export default {
     // Quiz Edit End
 
     'featureInDevelopment': 'This feature is still in development and not yet ready for use. Please check back later.',
+    'noActiveRooms': 'There are currently no active rooms.',
+    'activeRoomsTitle': 'Active Rooms',
+    'customGameTitle': 'Custom Game',
+    
   },
 };
