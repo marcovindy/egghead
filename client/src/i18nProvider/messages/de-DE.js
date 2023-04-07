@@ -48,6 +48,5 @@ export default {
     'noActiveRooms': 'Aktuell sind keine aktiven Räume verfügbar.',
     'activeRoomsTitle': 'Aktive Räume',
     'customGameTitle': 'Benutzerdefiniertes Spiel',
-
   },
 };

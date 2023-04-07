@@ -5,6 +5,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// import 'react-range-slider/lib/index.css';
 
 import Dashboard from "./pages/Dashboard";
 import CreatePost from "./pages/CreatePost";

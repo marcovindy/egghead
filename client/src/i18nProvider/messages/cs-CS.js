@@ -49,6 +49,7 @@ export default {
      'noActiveRooms': 'Momentálně nejsou k dispozici žádné aktivní místnosti.',
      'activeRoomsTitle': 'Aktivní místnosti',
      'customGameTitle': 'Vlastní hra',
+     'unlockedText': 'Odemčen',
      
   },
 };

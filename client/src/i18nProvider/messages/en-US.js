@@ -51,6 +51,6 @@ export default {
     'noActiveRooms': 'There are currently no active rooms.',
     'activeRoomsTitle': 'Active Rooms',
     'customGameTitle': 'Custom Game',
-    
+    'unlockedText': 'Unlocked',
   },
 };
