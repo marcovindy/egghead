@@ -1,15 +1,16 @@
-import io from "socket.io-client";
 import { useEffect, useState, useContext } from "react";
-import Card from 'react-bootstrap/Card';
-import { toast } from 'react-toastify';
+import { useHistory, Link } from "react-router-dom";
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
+import Card from 'react-bootstrap/Card';
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import io from "socket.io-client";
+import { toast } from 'react-toastify';
 import { AuthContext } from "../helpers/AuthContext";
-import '../assets/styles/Cards/Cards.css';
 import t from "../i18nProvider/translate";
 import { uuid } from 'short-uuid';
+import '../assets/styles/Cards/Cards.css';
+
 
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
@@ -87,7 +88,6 @@ const Dashboard = () => {
                   <PlayCircleFill size={24} />
                 </Button>
                 <h3 className="m-2" key={room.id}>{room.name}</h3>
-
               </div>
             ))}
           </Card>
@@ -104,15 +104,6 @@ const Dashboard = () => {
                     }}
                     variant="top" src={img} />
                   <div className="card-buttons">
-                    {/* <Button
-                      onClick={() => {
-                        history.push(`/quiz/${value.id}`);
-                      }}
-                    >
-                      <EyeFill
-                        size={24}
-                      />
-                    </Button> */}
                     <Button
                       onClick={() => {
                         toast.warning(t('featureInDevelopment'));

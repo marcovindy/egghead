@@ -74,6 +74,7 @@ io.on('connect', (socket) => {
     const activeRooms = Object.values(rooms).map(room => {
       return { id: room.id, name: room.name, players: Object.values(room.players) }
     });
+    console.log(activeRooms);
     io.emit('activeRooms', activeRooms);
   }
 

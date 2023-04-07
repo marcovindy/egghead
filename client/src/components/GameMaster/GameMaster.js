@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import queryString from 'query-string';
-import { Button, Container, ProgressBar, Row, Col } from 'react-bootstrap';
+import { Button, Col, Container, ProgressBar, Row } from 'react-bootstrap';
 import io from 'socket.io-client';
-import Messages from '../Messages/Messages';
-import './GameMaster.css';
-import GameQuestion from '../GameQuestion/GameQuestion';
-import EndGame from '../EndGame/EndGame';
-import t from "../../i18nProvider/translate";
+import queryString from 'query-string';
 import { toast } from 'react-toastify';
+import './GameMaster.css';
+import EndGame from '../EndGame/EndGame';
+import GameQuestion from '../GameQuestion/GameQuestion';
+import Messages from '../Messages/Messages';
+import t from "../../i18nProvider/translate";
+
 
 let socket;     // Proměnná pro ukládání instance soketu pro komunikaci s ostatními hráči
 

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Col, Row, Button } from "react-bootstrap";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Button, Col, Row } from "react-bootstrap";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import AnimatedRadioCircle from "../AnimatedRadioCircle/AnimatedRadioCircle";
 import './Question.css';
+import AnimatedRadioCircle from "../AnimatedRadioCircle/AnimatedRadioCircle";
 import EditableTitle from "../EditableTitle/EditableTitle";
 import t from "../../i18nProvider/translate";
+
 
 function Question({ question, index, onQuestionDelete, onAnswerEdit }) {
 
