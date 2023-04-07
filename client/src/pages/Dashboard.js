@@ -145,53 +145,13 @@ const Dashboard = () => {
       <Row>
         <h2 className="mt-4">{t('customGameTitle')}</h2>
 
-        <div>
-          <Formik
-            initialValues={filterValues}
-            validationSchema={Yup.object({
-              language: Yup.string(),
-              categories: Yup.array().min(1, 'Select at least one category'),
-              length: Yup.string(),
-            })}
-            onSubmit={(values) => {
-              onFilterApply(values);
-            }}
-          >
-            {formik => (
-              <Form>
-                <div>
-                  <label htmlFor="language">Language:</label>
-                  <Field type="text" name="language" />
-                  {formik.touched.language && formik.errors.language && (
-                    <div>{formik.errors.language}</div>
-                  )}
-                </div>
-
-                <div>
-                  <label>Categories:</label>
-                  <CheckboxGroup
-                    name="categories"
-                    options={categories.map((category) => category.name)}
-                    onChange={handleCategoryChange}
-                  />
-                  {formik.touched.categories && formik.errors.categories && (
-                    <div>{formik.errors.categories}</div>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="length">Length:</label>
-                  <Field type="text" name="length" />
-                  {formik.touched.length && formik.errors.length && (
-                    <div>{formik.errors.length}</div>
-                  )}
-                </div>
-
-                <button type="submit">Submit</button>
-              </Form>
-            )}
-          </Formik>
-        </div>
+        <Col>
+          <FilterBox
+            categories={categories}
+            filterValues={filterValues}
+            onFilterApply={onFilterApply}
+          />
+        </Col>
       </Row>
       <Row>
         {listOfQuizzes.map((value, key) => {
