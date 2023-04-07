@@ -44,28 +44,20 @@ const Dashboard = () => {
   }
 
   const onFilterApply = (filterValues) => {
-    console.log(filterValues);
+    if (filterValues.categories.length === 0) {
+      const categoryNames = categories.map((c) => c.name);
+      setFilterValues({ ...filterValues, categories: categoryNames });
+      console.log("Applying categories: ", categoryNames);
+      console.log("Applying filter: ", filterValues);
+    } else {
+      console.log("Applying filter: ", filterValues);
+      setFilterValues(filterValues);
+    }
   };
 
-  const handleCategoryChange = (event) => {
-    const { value, checked } = event.target;
-
-    setFilterValues((prevValues) => {
-      if (checked) {
-        return {
-          ...prevValues,
-          categories: [...prevValues.categories, value],
-        };
-      } else {
-        return {
-          ...prevValues,
-          categories: prevValues.categories.filter(
-            (category) => category !== value
-          ),
-        };
-      }
-    });
-  };
+  useEffect(() => {
+    console.log("Applying filter Final: ", filterValues);
+  }, [filterValues]);
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {

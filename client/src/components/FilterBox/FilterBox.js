@@ -35,8 +35,8 @@ const FilterBox = ({ categories, onFilterApply }) => {
       initialValues={filterValues}
       validationSchema={Yup.object({
         language: Yup.string(),
-        categories: Yup.array().min(1, "Select at least one category"),
-        length: Yup.string(),
+        categories: Yup.array(),
+        length: Yup.number(),
       })}
       onSubmit={(values) => {
         onFilterApply(values);
