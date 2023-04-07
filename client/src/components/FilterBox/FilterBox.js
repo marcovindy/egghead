@@ -4,6 +4,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 import MultiRangeSlider from "multi-range-slider-react";
+import '../../assets/styles/MultiRangeSlider/MultiRangeSlider.css';
 
 const FilterBox = ({ categories, languageOptions, onFilterApply }) => {
     
