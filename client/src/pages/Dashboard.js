@@ -9,7 +9,8 @@ import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 import '../assets/styles/Cards/Cards.css';
 import t from "../i18nProvider/translate";
-import { v4 as uuidv4 } from 'uuid';
+import { uuid } from 'short-uuid';
+
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
@@ -24,20 +25,11 @@ const Dashboard = () => {
   const { authState } = useContext(AuthContext);
   let history = useHistory();
 
-  const generateRandomString = (length) => {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
 
   const createRoomName = (quizTitle) => {
-    const uniqueId = uuidv4();
-    const randomString = generateRandomString(6);
-    return `${quizTitle}-${uniqueId}-${randomString}`;
+    const uniqueId = uuid();
+    const shortId = uuid().slice(0, 6);
+    return `${quizTitle}-${shortId}`;
   }
 
   useEffect(() => {
