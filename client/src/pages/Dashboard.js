@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
@@ -15,9 +15,10 @@ import FilterBox from '../components/FilterBox/FilterBox';
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
 const Dashboard = () => {
+  const MemoizedFilterBox = React.memo(FilterBox);
+
   const IS_PROD = process.env.NODE_ENV === "development";
   const API_URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
-
   const [filteredQuizzes, setFilteredQuizzes] = useState([]);
   const [activeRooms, setActiveRooms] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
@@ -40,11 +41,12 @@ const Dashboard = () => {
     length: '',
   });
 
-  const createRoomName = (quizTitle) => {
+  const createRoomName = useMemo(() => {
     const uniqueId = uuid();
     const shortId = uuid().slice(0, 6);
-    return `${quizTitle}-${shortId}`;
-  }
+    return (quizTitle) => `${quizTitle}-${shortId}`;
+  }, []);
+
   const onFilterApply = (filterValues) => {
     if (filterValues.categories.length === 0) {
       const categoryNames = categories.map((c) => c.name);
@@ -79,6 +81,35 @@ const Dashboard = () => {
     setFilteredQuizzes(newQuizzes);
   };
 
+  const createFilterMessage = () => {
+    const { language, categories, length } = filterValues;
+    const messageParts = [];
+
+    if (language) {
+      // console.log(language);
+      messageParts.push(`language: ${language}`);
+    }
+
+    if (categories && categories.length > 0) {
+      const categoryNames = categories.map((category) => category);
+      messageParts.push(`categories: ${categoryNames.join(', ')}`);
+    }
+
+
+    if (length) {
+      const [minLength, maxLength] = length;
+      if (minLength > 0 || maxLength < 100) {
+        const lengthMessage = `${minLength} - ${maxLength} questions`;
+        messageParts.push(`length: ${lengthMessage}`);
+      }
+    }
+
+    if (messageParts.length > 0) {
+      return `Applid Filters: ${messageParts.join('; ')}`;
+    } else {
+      return '';
+    }
+  };
 
 
   const toggleFilter = () => {
@@ -89,10 +120,12 @@ const Dashboard = () => {
   //   console.log("Applying filter Final: ", filterValues);
   // }, [filterValues]);
 
-  useEffect(() => {
-    console.log("filteredQuizzes: ", filteredQuizzes);
-    console.log("list of quizzes: ", listOfQuizzes);
-  }, [filteredQuizzes, listOfQuizzes]);
+  // useEffect(() => {
+  //   useDebugValue(filteredQuizzes);
+  //   useDebugValue(listOfQuizzes);
+
+  // }, [filteredQuizzes, listOfQuizzes]);
+
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -142,8 +175,6 @@ const Dashboard = () => {
 
 
 
-
-
   return (
     <div>
       <Row>
@@ -151,8 +182,8 @@ const Dashboard = () => {
         <Col span={8}>
           <Card title={t('activeRoomsTitle')}>
             {activeRooms.length > 0 ? (
-              activeRooms.map((room) => (
-                <div className="d-flex">
+              activeRooms.map((room, index) => (
+                <div key={index} className="d-flex">
                   <Button
                     className="m-2"
                     onClick={() => {
@@ -177,19 +208,30 @@ const Dashboard = () => {
         </Col>
       </Row>
       <Row>
-        <h2 className="mt-4">{t('customGameTitle')}</h2>
 
-        <Col xs={12}>
-          <Button onClick={toggleFilter}>Filtr</Button>
-          {isFilterOpen && (
-            <FilterBox
-              categories={categories}
-              languageOptions={languageOptions}
-              filterValues={filterValues}
-              onFilterApply={onFilterApply}
-            />
-          )}
-        </Col>
+        <h2 className="mt-4">{t('customGameTitle')}</h2>
+        <Card className="my-4 p-3">
+          <div className="d-flex col-12 flex-wrap-reverse justify-content-between align-items-center">
+            <Col xs={12} lg={6} className="mb-3 ">
+              <h5 className="mb-0">{createFilterMessage()}</h5>
+            </Col>
+            <Col xs={12} lg={6} className="mb-3 d-flex flex-column  flex-lg-row justify-content-end ">
+              <Button variant="primary" onClick={toggleFilter}>
+                {isFilterOpen ? 'Close' : 'Open'} Filters
+              </Button>
+            </Col>
+          </div>
+          <Col xs={12}>
+            {isFilterOpen && (
+              <MemoizedFilterBox
+                categories={categories}
+                languageOptions={languageOptions}
+                filterValues={filterValues}
+                onFilterApply={onFilterApply}
+              />
+            )}
+          </Col>
+        </Card>
 
         {filteredQuizzes.map((value, key) => {
           return (

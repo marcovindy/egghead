@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -6,7 +6,7 @@ import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 import MultiRangeSlider from "multi-range-slider-react";
 import '../../assets/styles/MultiRangeSlider/MultiRangeSlider.css';
 
-const FilterBox = ({ categories, languageOptions, onFilterApply }) => {
+const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(100);
     const [filterValues, setFilterValues] = useState({
@@ -122,6 +122,6 @@ const FilterBox = ({ categories, languageOptions, onFilterApply }) => {
             )}
         </Formik>
     );
-};
+});
 
 export default FilterBox;
