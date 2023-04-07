@@ -29,7 +29,6 @@ export default {
     'Logout': 'Abmelden',
     'Profile': 'Profil',
     'createquiz-error': 'Quiz konnte nicht erstellt werden :(',
-    // Quiz Edit
     'quizTitle': 'Quiz-Titel',
     'category': 'Kategorie',
     'addQuestion': 'Frage hinzufügen',
@@ -43,10 +42,19 @@ export default {
     'deleteButton': 'Löschen',
     'saveButton': 'Speichern',
     'questionNumberLabel': 'Frage {{number}}:',
-    // Quiz Edit End
     'featureInDevelopment': 'Diese Funktion befindet sich noch in der Entwicklung und ist noch nicht bereit zur Verwendung. Bitte versuchen Sie es später erneut.',
     'noActiveRooms': 'Aktuell sind keine aktiven Räume verfügbar.',
     'activeRoomsTitle': 'Aktive Räume',
     'customGameTitle': 'Benutzerdefiniertes Spiel',
+
+    'Close Filter': 'Filter schließen',
+    'Open Filter': 'Filter öffnen',
+    'Reset Filter': 'Filter zurücksetzen',
+    "No filter has been applied.": "Es wurde kein Filter angewendet.",
+    'Language:': 'Sprache:',
+    'Select language': 'Sprache auswählen',
+    'Length:': 'Länge:',
+    'Categories:': 'Kategorien:',
+    'Apply Filter': 'Filter anwenden',
   },
 };

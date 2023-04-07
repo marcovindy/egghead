@@ -49,5 +49,15 @@ export default {
     'activeRoomsTitle': 'Salles actives',
     'customGameTitle': 'Jeu personnalisé',
 
+    'Close Filter': 'Fermer le filtre',
+    'Open Filter': 'Ouvrir le filtre',
+    'Reset Filter': 'Réinitialiser le filtre',
+    "No filter has been applied.": "Aucun filtre n'a été appliqué.",
+    'Language:': 'Langue :',
+    'Select language': 'Choisir la langue',
+    'Length:': 'Longueur :',
+    'Categories:': 'Catégories :',
+    'Apply Filter': 'Appliquer le filtre',
+
   },
 };

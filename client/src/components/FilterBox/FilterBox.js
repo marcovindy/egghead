@@ -2,6 +2,7 @@ import React, { memo, useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import t from "../../i18nProvider/translate";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 import MultiRangeSlider from "multi-range-slider-react";
 import '../../assets/styles/MultiRangeSlider/MultiRangeSlider.css';
@@ -61,7 +62,6 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
                 language: Yup.string(),
                 categories: Yup.array(),
                 length: Yup.array().of(Yup.number().min(0).max(100)),
-
             })}
             onSubmit={(values) => {
                 onFilterApply(values);
@@ -72,19 +72,19 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
                     <Row className="p-0">
                         <Col lg={6} xs={12}>
                             <Row className="p-0 pb-4">
-                                <label htmlFor="language">Language:</label>
+                                <label htmlFor="language">{t('Language')}:</label>
                                 <select id="language" name="language" value={formik.values.language} onChange={formik.handleChange}>
-                                    <option value="">Select language</option>
+                                    <option value="">{t('Select language')}</option>
                                     {languageOptions.map((option) => (
                                         <option key={option.value} value={option.value}>{option.label}</option>
                                     ))}
                                 </select>
                                 {formik.touched.language && formik.errors.language && (
-                                    <div>{formik.errors.language}</div>
+                                    <div>{t(formik.errors.language)}</div>
                                 )}
                             </Row>
                             <Row className="p-0">
-                                <label className="pb-2" htmlFor="length">Length:</label>
+                                <label className="pb-2" htmlFor="length">{t('Length')}:</label>
                                 <MultiRangeSlider
                                     min={0}
                                     max={100}
@@ -100,23 +100,19 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
                         </Col>
 
                         <Col lg={6} xs={12}>
-                            <label>Categories:</label>
+                            <label>{t('Categories')}:</label>
                             <CheckboxGroup
                                 name="categories"
-                                options={categories.map((category) => category.name)}
+                                options={categories.map((category) => t(category.name))}
                                 onChange={handleCategoryChange}
                             />
                             {formik.touched.categories && formik.errors.categories && (
-                                <div>{formik.errors.categories}</div>
+                                <div>{t(formik.errors.categories)}</div>
                             )}
                         </Col>
-
-
                     </Row>
                     <Row className="p-0">
-
-
-                        <Button size="md" type="submit">Apply Filter</Button>
+                        <Button size="md" type="submit">{t('Apply Filter')}</Button>
                     </Row>
                 </Form>
             )}

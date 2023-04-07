@@ -129,7 +129,7 @@ function Quiz() {
 
             <Row>
                 <Col>
-                    <h2>Název kvízu: </h2><EditableTitle title={quizInfo.title} onTitleSave={handleTitleSave} />
+                    <h2>{t('Quiz Title')}: </h2><EditableTitle title={quizInfo.title} onTitleSave={handleTitleSave} />
                 </Col>
             </Row>
             <Row className="mb-4">

@@ -29,9 +29,6 @@ export default {
     'Logout': 'Logout',
     'Profile': 'Profile',
     'createquiz-error': 'Quiz creation failed :(',
-
-
-    // Quiz Edit
     'quizTitle': 'Quiz Title',
     'category': 'Category: Category Name',
     'addQuestion': 'Add Question',
@@ -45,12 +42,21 @@ export default {
     'deleteButton': 'Delete',
     'saveButton': 'Save',
     'questionNumberLabel': 'Question {{number}}:',
-    // Quiz Edit End
-
     'featureInDevelopment': 'This feature is still in development and not yet ready for use. Please check back later.',
     'noActiveRooms': 'There are currently no active rooms.',
     'activeRoomsTitle': 'Active Rooms',
     'customGameTitle': 'Custom Game',
     'unlockedText': 'Unlocked',
+    'Close Filter': 'Close Filter',
+    'Open Filter': 'Open Filter',
+    'Open Filter': 'Reset Filter',
+    "No filter has been applied.": "No filter has been applied.",
+    'Language:': 'Language:',
+    'Select language': 'Select language',
+    'Length:': 'Length:',
+    'Categories:': 'Categories:',
+    'Apply Filter': 'Apply Filter',
+    'Quiz Title': 'Quiz Title',
+
   },
 };

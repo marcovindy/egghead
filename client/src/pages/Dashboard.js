@@ -224,18 +224,18 @@ const Dashboard = () => {
                 {createFilterMessage() ? (
                   createFilterMessage()
                 ) : (
-                  "No filter has been applied."
+                  t("No filter has been applied.")
                 )}
               </h5>
             </Col>
             <Col xs={12} lg={6} className="d-flex flex-column  flex-lg-row justify-content-end z-index-1">
               {createFilterMessage() ? (
-                <Button className="m-2" variant="primary" onClick={resetFilters}>Reset Filters</Button>
+                <Button className="m-2" variant="primary" onClick={resetFilters}> {t('Reset Filters')} </Button>
               ) : (
                 ""
               )}
               <Button variant="primary" className="m-2" onClick={toggleFilter}>
-                {isFilterOpen ? t('Close Filter') : t('Open Filter')}
+                {isFilterOpen ? t('Close Filters') : t('Open Filters')}
               </Button>
             </Col>
           </div>

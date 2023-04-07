@@ -5,7 +5,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import 'react-range-slider/lib/index.css';
 
 import Dashboard from "./pages/Dashboard";
 import CreatePost from "./pages/CreatePost";
@@ -41,28 +40,33 @@ import t from "./i18nProvider/translate";
 function App() {
 
 
+  // Inicializace stavu autentizace se výchozími hodnotami
   const [authState, setAuthState] = useState({
     username: "",
     id: 0,
     status: false,
   });
 
+  // Získání stavu autentizace při načtení komponenty
   useEffect(() => {
-    axios
-      .get(
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:5000/auth/auth"
-          : "https://testing-egg.herokuapp.com/auth/auth",
-        {
-          headers: {
-            accessToken: localStorage.getItem("accessToken"),
-          },
-        }
-      )
+    // Zavolání API pro ověření stavu autentizace
+    axios.get(
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:5000/auth/auth"
+        : "https://testing-egg.herokuapp.com/auth/auth",
+      {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
+      }
+    )
       .then((response) => {
+        // Pokud dojde k chybě, nastaví se stav autentizace na false
         if (response.data.error) {
           setAuthState({ ...authState, status: false });
-        } else {
+        }
+        // V opačném případě se nastaví stav autentizace na základě odpovědi
+        else {
           setAuthState({
             username: response.data.username,
             id: response.data.id,
@@ -71,33 +75,44 @@ function App() {
         }
       });
   }, []);
-  
+
+  // Funkce pro odhlášení uživatele
   const logout = () => {
     localStorage.removeItem("accessToken");
     setAuthState({ username: "", id: 0, status: false });
     toast.success(t("logout-success"));
   };
 
-
-
+  // Dostupné možnosti jazyků
   const options = [
     { value: "en", label: "ENGLISH" },
     { value: "cs", label: "ČEŠTINA" },
-    { value: "fr", label: "FRENCH" }
+    { value: "fr", label: "FRENCH" },
+    { value: "es", label: "SPANISH" },
+    { value: "ru", label: "RUSSIAN" },
+    { value: "uk", label: "UKRAINIAN" }
   ];
 
+  // Inicializace stavu jazyka s výchozí hodnotou
   const [locale, setLocale] = useState(LOCALES.ENGLISH);
 
+  // Funkce pro změnu vybraného jazyka
   function handleChange(selectedOption) {
     console.log(selectedOption.value);
+    // Nastavení jazyka na základě vybrané možnosti
     if (selectedOption.value === "cs") {
       setLocale(LOCALES.CZECH);
     } else if (selectedOption.value === "en") {
       setLocale(LOCALES.ENGLISH);
-    } else if (selectedOption.value === "fr") {
-      setLocale(LOCALES.FRENCH);
+    } else if (selectedOption.value === "es") {
+      setLocale(LOCALES.SPANISH);
+    } else if (selectedOption.value === "ru") {
+      setLocale(LOCALES.RUSSIAN);
+    } else if (selectedOption.value === "uk") {
+      setLocale(LOCALES.UKRAINIAN);
     }
   };
+
 
 
   return (
@@ -169,7 +184,7 @@ function App() {
           </Router>
           <ToastContainer />
           <Footer />
-     
+
         </AuthContext.Provider>
       </I18nPropvider>
     </div>
