@@ -2,8 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import Card from 'react-bootstrap/Card';
 import axios from "axios";
 import io from "socket.io-client";
@@ -13,21 +11,16 @@ import t from "../i18nProvider/translate";
 import { uuid } from 'short-uuid';
 import '../assets/styles/Cards/Cards.css';
 import FilterBox from '../components/FilterBox/FilterBox';
-import CheckboxGroup from "../components/CheckboxGroup/CheckboxGroup";
-
-
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
 const Dashboard = () => {
   const IS_PROD = process.env.NODE_ENV === "development";
-  const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
+  const API_URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
 
   const [filteredQuizzes, setFilteredQuizzes] = useState([]);
   const [activeRooms, setActiveRooms] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
-  const [listOfPosts, setListOfPosts] = useState([]);
-  const [likedPosts, setLikedPosts] = useState([]);
   const { authState } = useContext(AuthContext);
   const [categories, setCategories] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -59,14 +52,14 @@ const Dashboard = () => {
     } else {
       setFilterValues(filterValues);
     }
-    
+
     // Filter the quizzes based on the filter values
     const newQuizzes = listOfQuizzes.filter((quiz) => {
       // Filter by language
       if (filterValues.language && quiz.language !== filterValues.language.value) {
         return false;
       }
-      
+
       // Filter by categories
       if (filterValues.categories.length > 0) {
         const quizCategories = quiz.Categories.map((c) => c.name);
@@ -74,18 +67,18 @@ const Dashboard = () => {
           return false;
         }
       }
-      
+
       // // Filter by length
       // if (filterValues.length && quiz.questions.length !== filterValues.length.value) {
       //   return false;
       // }
-      
+
       return true;
     });
-    
+
     setFilteredQuizzes(newQuizzes);
   };
-  
+
 
 
   const toggleFilter = () => {
@@ -100,49 +93,53 @@ const Dashboard = () => {
     console.log("filteredQuizzes: ", filteredQuizzes);
     console.log("list of quizzes: ", listOfQuizzes);
   }, [filteredQuizzes, listOfQuizzes]);
-
   useEffect(() => {
-    if (!localStorage.getItem("accessToken")) {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
       history.push("/login");
-    } else {
-      // Fetch categories
-      axios
-        .get(`${URL}/categories`, {
-          headers: { accessToken: localStorage.getItem("accessToken") },
-        })
-        .then((response) => {
-          setCategories(response.data.listOfCategories);
-          console.log("categories response.data: ", response.data.listOfCategories);
-        })
-        .catch((error) => {
-          console.log('Error:', error);
-        });
-
-      // Fetch quizzes
-      axios
-        .get(`${URL}/quizzes`, {
-          headers: { accessToken: localStorage.getItem("accessToken") },
-        })
-        .then((response) => {
-          setListOfQuizzes(response.data.quizzes);
-          setFilteredQuizzes(response.data.quizzes);
-        })
-        .catch((error) => {
-          console.log('Error:', error);
-        });
-
-      const socket = io(URL);
-
-      socket.on("activeRooms", (rooms) => {
-        setActiveRooms(rooms);
-      });
-
-      socket.emit("showActiveRooms");
-      return () => {
-        socket.disconnect();
-      }
+      return;
     }
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/categories`, {
+          headers: { accessToken },
+        });
+        setCategories(response.data.listOfCategories);
+        console.log("categories response.data: ", response.data.listOfCategories);
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    };
+
+    const fetchQuizzes = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/quizzes`, {
+          headers: { accessToken },
+        });
+        setListOfQuizzes(response.data.quizzes);
+        setFilteredQuizzes(response.data.quizzes);
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    };
+
+    const socket = io(API_URL);
+
+    socket.on("activeRooms", (rooms) => {
+      setActiveRooms(rooms);
+    });
+
+    socket.emit("showActiveRooms");
+
+    fetchCategories();
+    fetchQuizzes();
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
+
 
 
 
@@ -183,10 +180,7 @@ const Dashboard = () => {
         <h2 className="mt-4">{t('customGameTitle')}</h2>
 
         <Col xs={12}>
-          {/* Tlačítko pro otevření / zavření filtru */}
           <Button onClick={toggleFilter}>Filtr</Button>
-
-          {/* Zobrazí filtr, pokud je hodnota isFilterOpen true */}
           {isFilterOpen && (
             <FilterBox
               categories={categories}

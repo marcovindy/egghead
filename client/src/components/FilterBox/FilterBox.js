@@ -7,7 +7,6 @@ import MultiRangeSlider from "multi-range-slider-react";
 import '../../assets/styles/MultiRangeSlider/MultiRangeSlider.css';
 
 const FilterBox = ({ categories, languageOptions, onFilterApply }) => {
-    
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(100);
     const [filterValues, setFilterValues] = useState({
@@ -15,6 +14,14 @@ const FilterBox = ({ categories, languageOptions, onFilterApply }) => {
         categories: [],
         length: [minValue, maxValue]
     });
+
+    useEffect(() => {
+        setFilterValues({
+            language: "",
+            categories: [],
+            length: [minValue, maxValue]
+        });
+    }, [minValue, maxValue]);
 
     const handleCategoryChange = (event) => {
         const { value, checked } = event.target;
@@ -39,6 +46,12 @@ const FilterBox = ({ categories, languageOptions, onFilterApply }) => {
     const handleInput = (e) => {
         setMinValue(e.minValue);
         setMaxValue(e.maxValue);
+    };
+
+    const handleSubmit = (values) => {
+        if (onFilterApply) {
+            onFilterApply(values);
+        }
     };
 
     return (
@@ -81,7 +94,7 @@ const FilterBox = ({ categories, languageOptions, onFilterApply }) => {
                                     onInput={(e) => {
                                         handleInput(e);
                                         formik.setFieldValue('length', [minValue, maxValue]);
-                                      }}
+                                    }}
                                 />
                             </Row>
                         </Col>
