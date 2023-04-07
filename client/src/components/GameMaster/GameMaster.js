@@ -6,6 +6,8 @@ import Messages from '../Messages/Messages';
 import './GameMaster.css';
 import GameQuestion from '../GameQuestion/GameQuestion';
 import EndGame from '../EndGame/EndGame';
+import t from "../../i18nProvider/translate";
+import { toast } from 'react-toastify';
 
 let socket;     // Proměnná pro ukládání instance soketu pro komunikaci s ostatními hráči
 
@@ -230,12 +232,10 @@ const GameMaster = ({ location }) => {
                                                 <Button variant="primary" disabled size="md" onClick={InitGame}>Play Again</Button>
                                             )
                                             }
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            {/* <Button variant="primary" size="md" onClick={NextQuestion}>Next question</Button> */}
 
                                         </div>
+                                    ) : (
+                                        <div></div>
                                     )
                                     }
                                 </div>
@@ -245,9 +245,19 @@ const GameMaster = ({ location }) => {
 
                                         <Button variant="primary" size="md" onClick={InitGame}>Start Game</Button>
                                     ) : (
-                                        <Button variant="primary" disabled size="md" onClick={InitGame}>Start Game</Button>
+                                        <Button variant="primary" disabled size="md" onClick={() => {
+                                            toast.warning('You need have at least 2 players to play this game.');
+                                        }}>Start Game</Button>
                                     )
                                     }
+                                    <Button variant="primary" size="md" className='m-2'
+                                        onClick={() => {
+                                            toast.warning(t('featureInDevelopment'));
+                                        }}>
+
+                                        Join Game as Player
+                                    </Button>
+
                                 </div>
                             )
                             }
@@ -267,11 +277,11 @@ const GameMaster = ({ location }) => {
                             <hr />
                             <Messages messages={messages} />
                         </div>
-                        <a href="/">Leave room</a>
+                        <a href="/customgame">Leave room</a>
                     </div>
                 )}
             </div>
-        </Container>
+        </Container >
     );
 };
 

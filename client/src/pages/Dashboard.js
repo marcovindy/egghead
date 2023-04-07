@@ -9,6 +9,7 @@ import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 import '../assets/styles/Cards/Cards.css';
 import t from "../i18nProvider/translate";
+import { v4 as uuidv4 } from 'uuid';
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
@@ -23,8 +24,21 @@ const Dashboard = () => {
   const { authState } = useContext(AuthContext);
   let history = useHistory();
 
+  const generateRandomString = (length) => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
-
+  const createRoomName = (quizTitle) => {
+    const uniqueId = uuidv4();
+    const randomString = generateRandomString(6);
+    return `${quizTitle}-${uniqueId}-${randomString}`;
+  }
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
@@ -50,7 +64,9 @@ const Dashboard = () => {
       });
 
       socket.emit("showActiveRooms");
-
+      return () => {
+        socket.disconnect();
+      }
     }
   }, []);
 
@@ -88,7 +104,7 @@ const Dashboard = () => {
         {listOfQuizzes.map((value, key) => {
           return (
             <Col className="card-col" key={key}>
-              <Card  className="h-100">
+              <Card className="h-100">
                 <Card.Body className="d-flex flex-column">
                   <Card.Img className="cursor-pointer"
                     onClick={() => {
@@ -117,7 +133,10 @@ const Dashboard = () => {
                     <Button
 
                       onClick={() => {
-                        history.push(`/gamemaster?roomName=${value.title}&masterName=${value.User.username}`);
+                        const quizTitle = value.title;
+                        const roomName = createRoomName(quizTitle); // Generate random room name
+                        const masterName = value.User.username;
+                        history.push(`/gamemaster?roomName=${roomName}&masterName=${masterName}`);
                       }}
                     >
                       <PlayCircleFill
@@ -125,7 +144,7 @@ const Dashboard = () => {
                       />
                     </Button>
                   </div>
-                  <Card.Title  className="cursor-pointer"
+                  <Card.Title className="cursor-pointer"
                     onClick={() => {
                       history.push(`/quiz/${value.id}`);
                     }}
@@ -162,7 +181,7 @@ const Dashboard = () => {
           );
         })}
       </Row>
-    </div>
+    </div >
   );
 }
 
