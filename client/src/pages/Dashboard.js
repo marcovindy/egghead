@@ -111,6 +111,11 @@ const Dashboard = () => {
     }
   };
 
+  const resetFilters = () => {
+    setFilteredQuizzes(listOfQuizzes);
+    setFilterValues({ language: '', categories: [], length: '' });
+  };
+
 
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
@@ -212,25 +217,40 @@ const Dashboard = () => {
         <h2 className="mt-4">{t('customGameTitle')}</h2>
         <Card className="my-4 p-3">
           <div className="d-flex col-12 flex-wrap-reverse justify-content-between align-items-center">
-            <Col xs={12} lg={6} className="mb-3 ">
-              <h5 className="mb-0">{createFilterMessage()}</h5>
+            <Col xs={12} lg={6} className="d-flex flex-column justify-content-center align-items-center">
+              <h5 className="mb-0">
+                {createFilterMessage() ? (
+                  createFilterMessage()
+                ) : (
+                  "No filter has been applied."
+                )}
+              </h5>
             </Col>
-            <Col xs={12} lg={6} className="mb-3 d-flex flex-column  flex-lg-row justify-content-end ">
-              <Button variant="primary" onClick={toggleFilter}>
+            <Col xs={12} lg={6} className="d-flex flex-column  flex-lg-row justify-content-end ">
+              {createFilterMessage() ? (
+                <Button className="m-2" variant="primary" onClick={resetFilters}>Reset Filters</Button>
+              ) : (
+                ""
+              )}
+              <Button className="m-2" variant="primary" onClick={toggleFilter}>
                 {isFilterOpen ? 'Close' : 'Open'} Filters
               </Button>
             </Col>
           </div>
-          <Col xs={12}>
-            {isFilterOpen && (
+
+          {isFilterOpen && (
+
+
+            <Col xs={12} className="mt-3">
               <MemoizedFilterBox
                 categories={categories}
                 languageOptions={languageOptions}
                 filterValues={filterValues}
                 onFilterApply={onFilterApply}
               />
-            )}
-          </Col>
+            </Col>
+          )}
+
         </Card>
 
         {filteredQuizzes.map((value, key) => {
