@@ -7,11 +7,11 @@ const CheckboxGroup = ({ name, options }) => {
     <>
       {options.map((option) => (
         <div className="p-2" key={option}>
-          <label>
-            {option}
+          <label className="d-flex justify-content-end p-2">
+            <span className="p-2 cursor-pointer">{option}</span>
 
             <Field type="checkbox" id={option} name={name} value={option} />
-            <div className="square">
+            <div className="square wh-0 w-40px mt-0">
                 <div className="square--inner square--inner__1" ></div>
                 <div className="square--inner square--inner__2" ></div>
                 <div className="square--inner square--inner__3" ></div>
@@ -19,7 +19,7 @@ const CheckboxGroup = ({ name, options }) => {
                 <div className="square--inner square--inner__5" ></div>
                 <div className="square--outer" ></div>
             </div>
-            <svg className="h-0">
+            <svg className="wh-0 w-40px mt-0">
                 <defs>
                     <filter id="eggFil">
                         <feGaussianBlur

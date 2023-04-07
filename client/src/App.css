@@ -22,7 +22,9 @@ code {
 
 .App {
   text-align: center;
+  display: flex;
   min-height: 100vh;
+  flex-direction: column;
 }
 
 .App-logo {
@@ -250,4 +252,26 @@ input[type="radio"] {
 
 .h-0 {
   height: 0;
+}
+
+.w-0 {
+  width: 0;
+}
+
+.wh-0 {
+  width: 0;
+  height: 0;
+}
+
+.row {
+  margin: 0;
+}
+
+.square {
+  width: 0;
+  margin: 0;
+}
+
+.w-40px {
+  width: 40px;
 }

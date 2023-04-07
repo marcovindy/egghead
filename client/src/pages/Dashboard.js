@@ -29,6 +29,14 @@ const Dashboard = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const { authState } = useContext(AuthContext);
   const [categories, setCategories] = useState([]);
+  const [languageOptions, setLanguageOptions] = useState(
+    [{ value: 'English', label: 'English' },
+    { value: 'Czech', label: 'Czech' },
+    { value: 'French', label: 'French' },
+    { value: 'German', label: 'German' },
+    ]
+  );
+
 
   let history = useHistory();
   const [filterValues, setFilterValues] = useState({
@@ -47,10 +55,7 @@ const Dashboard = () => {
     if (filterValues.categories.length === 0) {
       const categoryNames = categories.map((c) => c.name);
       setFilterValues({ ...filterValues, categories: categoryNames });
-      console.log("Applying categories: ", categoryNames);
-      console.log("Applying filter: ", filterValues);
     } else {
-      console.log("Applying filter: ", filterValues);
       setFilterValues(filterValues);
     }
   };
@@ -140,6 +145,7 @@ const Dashboard = () => {
         <Col>
           <FilterBox
             categories={categories}
+            languageOptions={languageOptions}
             filterValues={filterValues}
             onFilterApply={onFilterApply}
           />

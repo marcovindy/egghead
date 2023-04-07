@@ -148,7 +148,6 @@ function App() {
               </Navbar>
 
             </header>
-
             <Switch>
               <Route path="/" exact component={LandingPage} />
               <Route path="/createquiz" exact component={CreateQuiz} />
