@@ -1,12 +1,14 @@
 import io from "socket.io-client";
 import { useEffect, useState, useContext } from "react";
 import Card from 'react-bootstrap/Card';
+import { toast } from 'react-toastify';
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 import '../assets/styles/Cards/Cards.css';
+import t from "../i18nProvider/translate";
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
@@ -21,9 +23,9 @@ const Dashboard = () => {
   const { authState } = useContext(AuthContext);
   let history = useHistory();
 
-  
-  
-  
+
+
+
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       history.push("/login");
@@ -41,8 +43,8 @@ const Dashboard = () => {
         });
 
 
-        const socket = io(URL);
-      
+      const socket = io(URL);
+
       socket.on("activeRooms", (rooms) => {
         setActiveRooms(rooms);
       });
@@ -86,11 +88,15 @@ const Dashboard = () => {
         {listOfQuizzes.map((value, key) => {
           return (
             <Col className="card-col" key={key}>
-              <Card>
-                <Card.Body>
-                  <Card.Img variant="top" src={img} />
+              <Card  className="h-100">
+                <Card.Body className="d-flex flex-column">
+                  <Card.Img className="cursor-pointer"
+                    onClick={() => {
+                      history.push(`/quiz/${value.id}`);
+                    }}
+                    variant="top" src={img} />
                   <div className="card-buttons">
-                    <Button
+                    {/* <Button
                       onClick={() => {
                         history.push(`/quiz/${value.id}`);
                       }}
@@ -98,10 +104,10 @@ const Dashboard = () => {
                       <EyeFill
                         size={24}
                       />
-                    </Button>
+                    </Button> */}
                     <Button
                       onClick={() => {
-                        history.push(`/quiz/${value.id}`);
+                        toast.warning(t('featureInDevelopment'));
                       }}
                     >
                       <HeartFill
@@ -119,13 +125,17 @@ const Dashboard = () => {
                       />
                     </Button>
                   </div>
-                  <Card.Title>{value.title} </Card.Title>
+                  <Card.Title  className="cursor-pointer"
+                    onClick={() => {
+                      history.push(`/quiz/${value.id}`);
+                    }}
+                  >{value.title} </Card.Title>
                   <div className="body">
                     <div className="username">
                       <Link to={`/profile/${value.User.username}`}> {value.User.username} </Link>
                     </div>
                     <div
-                      className="quizDesc"
+                      className="quizDesc cursor-pointer"
                       onClick={() => {
                         history.push(`/quiz/${value.id}`);
                       }}
@@ -138,7 +148,7 @@ const Dashboard = () => {
                       ))}
                     </ul>
                   </div>
-                  <div className="footer">
+                  <div className="footer mt-auto">
                     <Col lg={6}>
                       {value.updatedAt.slice(0, 19).replace('T', ' ')}
                     </Col>

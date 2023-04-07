@@ -44,7 +44,9 @@ export default {
     'submitButton': 'Submit',
     'deleteButton': 'Delete',
     'saveButton': 'Save',
-    'questionNumberLabel': 'Question {{number}}:'
+    'questionNumberLabel': 'Question {{number}}:',
     // Quiz Edit End
+
+    'featureInDevelopment': 'This feature is still in development and not yet ready for use. Please check back later.',
   },
 };

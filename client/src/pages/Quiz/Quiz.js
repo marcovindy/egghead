@@ -109,6 +109,20 @@ function Quiz() {
         setQuestions(newQuestions);
     };
 
+    const handleQuizSave = () => {
+        axios
+          .post(`${API_URL}/questions`, {
+            quizId: quizInfo.id,
+            questions: questions,
+          })
+          .then((response) => {
+            console.log(response.data);
+            toast.success("Quiz questions have been saved successfully.");
+          })
+          .catch((error) => console.log(error));
+      };
+      
+
 
     return (
         <Container className="quiz-container mb-4">
@@ -274,6 +288,7 @@ function Quiz() {
                 style={{ position: "fixed", bottom: 20, right: 20 }}
                 onClick={() => {
                     toast.warning('This feature is still in development and not yet ready for use. Please check back later.')
+                    handleQuizSave();
                 }}
             >
                 {t("saveButton")}

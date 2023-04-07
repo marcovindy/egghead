@@ -30,7 +30,7 @@ const PlayModeChooser = () => {
     if (gamemode === 'customgame') {
       history.push(`/${gamemode}`);
     } else {
-      toast.warning('This feature is still in development and not yet ready for use. Please check back later.');
+      toast.warning(t('featureInDevelopment'));
     }
   };
 
@@ -39,7 +39,7 @@ const PlayModeChooser = () => {
       <Row>
         <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
           <Col lg={10}>
-             <Button className="w-100" block onClick={() => handleButtonClick('rankedgame')}>
+             <Button className="w-100" block="true" onClick={() => handleButtonClick('rankedgame')}>
               Ranked Game
             </Button>
           </Col>
@@ -58,7 +58,7 @@ const PlayModeChooser = () => {
         </Col>
         <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
           <Col lg={10}>
-             <Button className="w-100" block onClick={() => handleButtonClick('customgame')}>
+             <Button className="w-100" block="true" onClick={() => handleButtonClick('customgame')}>
               Custom Game
             </Button>
           </Col>
@@ -77,7 +77,7 @@ const PlayModeChooser = () => {
         </Col>
         <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
           <Col lg={10}>
-             <Button className="w-100" block onClick={() => handleButtonClick('randomgame')}>
+             <Button className="w-100" block="true" onClick={() => handleButtonClick('randomgame')}>
               Random Game with Friends
             </Button>
           </Col>

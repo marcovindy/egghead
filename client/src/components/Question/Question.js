@@ -36,7 +36,7 @@ function Question({ question, index, onQuestionDelete, onAnswerEdit }) {
                 answer.text !== "" && (
                     <Col key={index} lg={6} className="mb-3">
                         <div className="p-3 text-light w-100" style={{ backgroundColor: answer.isCorrect ? "green" : "#007bff" }}>
-                            {answer.text}
+                       
                             <EditableTitle title={answer.text} onTitleSave={(newTitle) => handleAnswerEdit(index, newTitle)} />
 
                         </div>

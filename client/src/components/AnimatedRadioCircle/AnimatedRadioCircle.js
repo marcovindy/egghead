@@ -13,7 +13,7 @@ const AnimatedRadioCircle = () => {
                 <div className="circle--inner circle--inner__5" ></div>
                 <div className="circle--outer" ></div>
             </div>
-            <svg>
+            <svg className="svg-radio">
                 <defs>
                     <filter id="eggFil">
                         <feGaussianBlur
