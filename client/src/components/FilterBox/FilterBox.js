@@ -17,11 +17,23 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
     });
 
     useEffect(() => {
-        setFilterValues({
-            language: "",
-            categories: [],
-            length: [minValue, maxValue]
-        });
+        let isMounted = true;
+
+        const updateFilterValues = () => {
+            if (isMounted) {
+                setFilterValues({
+                    language: "",
+                    categories: [],
+                    length: [minValue, maxValue]
+                });
+            }
+        };
+
+        updateFilterValues();
+
+        return () => {
+            isMounted = false;
+        };
     }, [minValue, maxValue]);
 
     const handleCategoryChange = (event) => {
@@ -55,6 +67,7 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
         }
     };
 
+    
     return (
         <Formik
             initialValues={filterValues}
