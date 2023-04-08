@@ -111,9 +111,15 @@ function Quiz() {
 
     const handleQuizSave = () => {
         axios
-          .post(`${API_URL}/questions`, {
+          .post(`${API_URL}/questions/save`, {
             quizId: quizInfo.id,
-            questions: questions,
+            questions: questions.map((q) => ({
+              question: q.question,
+              answers: q.answers.map((a) => ({
+                answer: a.text,
+                isCorrect: a.isCorrect,
+              })),
+            })),
           })
           .then((response) => {
             console.log(response.data);
@@ -121,6 +127,7 @@ function Quiz() {
           })
           .catch((error) => console.log(error));
       };
+      
       
 
 
