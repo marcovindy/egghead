@@ -294,7 +294,6 @@ function Quiz() {
             <Button
                 style={{ position: "fixed", bottom: 20, right: 20 }}
                 onClick={() => {
-                    toast.warning('This feature is still in development and not yet ready for use. Please check back later.')
                     handleQuizSave();
                 }}
             >
