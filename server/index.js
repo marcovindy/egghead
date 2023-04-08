@@ -52,6 +52,8 @@ const categoriesRouter = require("./routes/Categories");
 app.use("/categories", categoriesRouter);
 const quizzesRouter = require("./routes/Quizzes");
 app.use("/quizzes", quizzesRouter);
+const questionsRouter = require("./routes/Questions");
+app.use("/questions", questionsRouter);
 
 // Serve any static files
 app.use(express.static(path.join(__dirname, "../client/build")));

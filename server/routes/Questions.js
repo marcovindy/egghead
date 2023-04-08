@@ -1,68 +1,35 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { Quizzes, Answers, Questions } = require('../models');
+const { Quizzes, Questions, Answers } = require("../models");
 
-const { validateToken } = require("../middlewares/AuthMiddleware");
-
-router.post("/save", validateToken, async (req, res) => {
-    try {
-        const { quizId, questions } = req.body;
-
-        // First, create the quiz questions in the database
-        const createdQuestions = await Promise.all(
-            questions.map(async (question) => {
-                const createdQuestion = await Questions.create({
-                    question: question.question,
-                    QuizId: quizId,
-                });
-
-                // Then, create the question answers in the database
-                const createdAnswers = await Promise.all(
-                    question.answers.map(async (answer) => {
-                        await Answers.create({
-                            text: answer.text,
-                            isCorrect: answer.isCorrect,
-                            QuestionId: createdQuestion.id,
-                        });
-                    })
-                );
-
-                // Return the created question with its answers
-                return {
-                    question: createdQuestion,
-                    answers: createdAnswers,
-                };
-            })
-        );
-
-        res.json({ questions: createdQuestions });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: "Server error" });
+router.post("/save", async (req, res) => {
+   
+  const { quizId, questions } = req.body;
+  try {
+    const quiz = await Quizzes.findByPk(quizId);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
     }
+    for (const q of questions) {
+      const question = await Questions.create({
+        question: q.question,
+        description: "",
+        quizId: quizId,
+      });
+      for (const a of q.answers) {
+        console.log(a);
+        await Answers.create({
+          answer: a.answer,
+          isCorrect: a.isCorrect,
+          questionId: question.id,
+        });
+      }
+    }
+    return res.status(200).json({ message: "Quiz questions have been saved successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
-
-router.post("/questions", async (req, res) => {
-    try {
-      const questions = req.body.questions;
-      const quiz = await Quiz.findByPk(req.body.quizId);
-      const createdQuestions = await Promise.all(
-        questions.map((q) => {
-          return quiz.createQuestion({ question: q.question }).then((createdQuestion) => {
-            const createdAnswers = q.answers.map((a) => {
-              return createdQuestion.createAnswer({ answer: a.answer, isCorrect: a.isCorrect });
-            });
-            return Promise.all(createdAnswers).then(() => createdQuestion);
-          });
-        })
-      );
-      res.status(201).json(createdQuestions);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Server error" });
-    }
-  });
-  
-
 
 module.exports = router;

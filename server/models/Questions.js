@@ -3,15 +3,11 @@ module.exports = (sequelize, DataTypes) => {
         question: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        description: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+        }
     });
 
     Questions.associate = (models) => {
-        
+
         // Associate with User
         Questions.belongsTo(models.Quizzes, {
             foreignKey: "quizId",
