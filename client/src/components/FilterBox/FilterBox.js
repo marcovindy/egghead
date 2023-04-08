@@ -74,13 +74,13 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
                             <Row className="p-0 pb-4">
                                 <label htmlFor="language">{t('Language')}:</label>
                                 <select id="language" name="language" value={formik.values.language} onChange={formik.handleChange}>
-                                    <option value="">{t('Select language')}</option>
+                                    <option value="">{'Select language'}</option>
                                     {languageOptions.map((option) => (
                                         <option key={option.value} value={option.value}>{option.label}</option>
                                     ))}
                                 </select>
                                 {formik.touched.language && formik.errors.language && (
-                                    <div>{t(formik.errors.language)}</div>
+                                    <div>{formik.errors.language}</div>
                                 )}
                             </Row>
                             <Row className="p-0">
@@ -103,7 +103,7 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
                             <label>{t('Categories')}:</label>
                             <CheckboxGroup
                                 name="categories"
-                                options={categories.map((category) => t(category.name))}
+                                options={categories.map((category) => category.name)}
                                 onChange={handleCategoryChange}
                             />
                             {formik.touched.categories && formik.errors.categories && (

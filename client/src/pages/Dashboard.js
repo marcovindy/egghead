@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
+import React, { useEffect, useState, useContext, useMemo, useRef  } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
@@ -18,6 +18,7 @@ const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.
 
 const Dashboard = () => {
   const MemoizedFilterBox = React.memo(FilterBox);
+  const ref = useRef(null);
 
   const IS_PROD = process.env.NODE_ENV === "development";
   const API_URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
@@ -234,8 +235,8 @@ const Dashboard = () => {
               ) : (
                 ""
               )}
-              <Button variant="primary" className="m-2" onClick={toggleFilter}>
-                {isFilterOpen ? t('Close Filters') : t('Open Filters')}
+              <Button className="m-2" variant="primary" onClick={toggleFilter}>
+                {isFilterOpen ? 'Close' : 'Open'} Filters
               </Button>
             </Col>
           </div>
@@ -245,14 +246,19 @@ const Dashboard = () => {
               timeout={300}
               classNames="filter-box"
               unmountOnExit
+              nodeRef={ref}
             >
+              {(status) => (
+                <div ref={ref} className={`transition ${status}`}>
+                  <MemoizedFilterBox
+                    categories={categories}
+                    languageOptions={languageOptions}
+                    filterValues={filterValues}
+                    onFilterApply={onFilterApply}
+                  />
+                </div>
+              )}
 
-              <MemoizedFilterBox
-                categories={categories}
-                languageOptions={languageOptions}
-                filterValues={filterValues}
-                onFilterApply={onFilterApply}
-              />
             </CSSTransition>
           </Col>
         </Card>

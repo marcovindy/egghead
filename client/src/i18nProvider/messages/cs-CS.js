@@ -56,6 +56,7 @@ export default {
     'Reset Filter': 'Obnovit filtr',
     "No filter has been applied.": "Nebyl použit žádný filtr.",
     'Language:': 'Jazyk:',
+    'Language': 'Jazyk',
     'Select language': 'Vyberte jazyk',
     'Length:': 'Délka:',
     'Categories:': 'Kategorie:',

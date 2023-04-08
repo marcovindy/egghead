@@ -57,6 +57,14 @@ export default {
     'Categories:': 'Categories:',
     'Apply Filter': 'Apply Filter',
     'Quiz Title': 'Quiz Title',
+    'Select language': 'Select language',
+    'Language': 'Language',
+    'Categories': 'Categories',
+    'Length': 'Length',
+    'Length:': 'Length:',
+    'Reset Filters': 'Reset Filters',
+    'Categories:': 'Categories:',
+
 
   },
 };
