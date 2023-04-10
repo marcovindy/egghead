@@ -30,6 +30,7 @@ router.post("/save", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 router.get('/byquizId/:id', async (req, res) => {
   try {
     const quizId = req.params.id;
@@ -52,6 +53,24 @@ router.get('/byquizId/:id', async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
+router.delete('/byquizId/:quizId', async (req, res) => {
+  try {
+    const quizId = req.params.quizId;
+    const quiz = await Quizzes.findByPk(quizId);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+    await Questions.destroy({
+      where: { quizId },
+    });
+    return res.status(200).json({ message: "Quiz questions have been deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 
 module.exports = router;

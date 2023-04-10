@@ -28,8 +28,8 @@ function Quiz() {
             .then((response) => setQuizInfo(response.data))
             .catch((error) => console.log(error));
     }, [id, API_URL]);
- 
-    
+
+
     useEffect(() => {
         setIsLoading(true);
         axios
@@ -133,20 +133,28 @@ function Quiz() {
     };
 
     const handleQuizSave = () => {
+        // Delete all questions and answers associated with the quiz ID
         axios
-            .post(`${API_URL}/questions/save`, {
-                quizId: quizInfo.id,
-                questions: questions.map((q) => ({
-                    question: q.question,
-                    answers: q.answers.map((a) => ({
-                        answer: a.text,
-                        isCorrect: a.isCorrect,
-                    })),
-                })),
-            })
+            .delete(`${API_URL}/questions/byquizId/${id}`)
             .then((response) => {
                 console.log(response.data);
-                toast.success("Quiz questions have been saved successfully.");
+                // Save the new questions and answers
+                axios
+                    .post(`${API_URL}/questions/save`, {
+                        quizId: quizInfo.id,
+                        questions: questions.map((q) => ({
+                            question: q.question,
+                            answers: q.answers.map((a) => ({
+                                answer: a.text,
+                                isCorrect: a.isCorrect,
+                            })),
+                        })),
+                    })
+                    .then((response) => {
+                        console.log(response.data);
+                        toast.success("Quiz questions have been saved successfully.");
+                    })
+                    .catch((error) => console.log(error));
             })
             .catch((error) => console.log(error));
     };
@@ -159,7 +167,7 @@ function Quiz() {
 
             <Row>
                 <Col>
-                    <h2>{t('Quiz Title')}: </h2><EditableTitle title={quizInfo.title} onTitleSave={handleTitleSave} />
+                    <h2>{t('Quiz Title')}: <EditableTitle title={quizInfo.title} onTitleSave={handleTitleSave} /></h2>
                 </Col>
             </Row>
             <Row className="mb-4">
@@ -322,19 +330,6 @@ function Quiz() {
             >
                 {t("saveButton")}
             </Button>
-            {/* {isLoading ? (
-                    <span className="visually-hidden">Loading...</span>
-            ) : (
-                questions.map((question, index) => (
-                    <Question
-                        key={index}
-                        question={question.question}
-                        answers={question.answers}
-                        onQuestionDelete={() => handleQuestionDelete(index)}
-                        onAnswerEdit={(newAnswer) => handleAnswerEdit(index, newAnswer)}
-                    />
-                ))
-            )} */}
         </Container>
 
     );
