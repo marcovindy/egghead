@@ -20,6 +20,7 @@ function Quiz() {
     const { id } = useParams();
     const [quizInfo, setQuizInfo] = useState({});
     const [questions, setQuestions] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         axios
@@ -27,13 +28,38 @@ function Quiz() {
             .then((response) => setQuizInfo(response.data))
             .catch((error) => console.log(error));
     }, [id, API_URL]);
+ 
+    
+    useEffect(() => {
+        setIsLoading(true);
+        axios
+            .get(`${API_URL}/questions/byquizId/${id}`)
+            .then((response) => {
+                const formattedQuestions = response.data.questions.map(question => {
+                    const formattedAnswers = question.Answers.map(answer => ({
+                        text: answer.answer,
+                        isCorrect: answer.isCorrect,
+                    }));
+                    return {
+                        question: question.question,
+                        answers: formattedAnswers,
+                    };
+                });
+                setQuestions(formattedQuestions);
+                console.log(formattedQuestions);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.log(error);
+                setIsLoading(false);
+            });
+    }, [id, API_URL]);
 
     const validationSchema = Yup.object().shape({
         question: Yup.string().required("Question is required"),
         answer1: Yup.string().required("Answer1 is required"),
         answer2: Yup.string().required("Answer2 is required")
     });
-
 
     const handleTitleSave = (newTitle) => {
         axios
@@ -48,8 +74,6 @@ function Quiz() {
             .catch((error) => console.log(error));
     };
 
-
-
     const [showForm, setShowForm] = useState(false);
 
     const handleButtonClick = () => {
@@ -58,7 +82,6 @@ function Quiz() {
 
     const handleFormSubmit = (values, actions) => {
         if (values.correctAnswer) {
-            // A radio button has been selected
             setQuestions([
                 ...questions,
                 {
@@ -74,14 +97,14 @@ function Quiz() {
             actions.resetForm();
             toast.success("Question has been created successfully.");
         } else {
-            // No radio button has been selected
             toast.error("Please select a correct answer");
         }
     };
 
 
     useEffect(() => {
-        console.log(questions);
+        console.log("quizInfo: ", quizInfo);
+        console.log("questions: ", questions);
     }, [questions]);
 
     const handleQuestionDelete = (index) => {
@@ -111,24 +134,24 @@ function Quiz() {
 
     const handleQuizSave = () => {
         axios
-          .post(`${API_URL}/questions/save`, {
-            quizId: quizInfo.id,
-            questions: questions.map((q) => ({
-              question: q.question,
-              answers: q.answers.map((a) => ({
-                answer: a.text,
-                isCorrect: a.isCorrect,
-              })),
-            })),
-          })
-          .then((response) => {
-            console.log(response.data);
-            toast.success("Quiz questions have been saved successfully.");
-          })
-          .catch((error) => console.log(error));
-      };
-      
-      
+            .post(`${API_URL}/questions/save`, {
+                quizId: quizInfo.id,
+                questions: questions.map((q) => ({
+                    question: q.question,
+                    answers: q.answers.map((a) => ({
+                        answer: a.text,
+                        isCorrect: a.isCorrect,
+                    })),
+                })),
+            })
+            .then((response) => {
+                console.log(response.data);
+                toast.success("Quiz questions have been saved successfully.");
+            })
+            .catch((error) => console.log(error));
+    };
+
+
 
 
     return (
@@ -299,6 +322,19 @@ function Quiz() {
             >
                 {t("saveButton")}
             </Button>
+            {/* {isLoading ? (
+                    <span className="visually-hidden">Loading...</span>
+            ) : (
+                questions.map((question, index) => (
+                    <Question
+                        key={index}
+                        question={question.question}
+                        answers={question.answers}
+                        onQuestionDelete={() => handleQuestionDelete(index)}
+                        onAnswerEdit={(newAnswer) => handleAnswerEdit(index, newAnswer)}
+                    />
+                ))
+            )} */}
         </Container>
 
     );

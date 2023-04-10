@@ -3,7 +3,7 @@ const router = express.Router();
 const { Quizzes, Questions, Answers } = require("../models");
 
 router.post("/save", async (req, res) => {
-   
+
   const { quizId, questions } = req.body;
   try {
     const quiz = await Quizzes.findByPk(quizId);
@@ -17,7 +17,6 @@ router.post("/save", async (req, res) => {
         quizId: quizId,
       });
       for (const a of q.answers) {
-        console.log(a);
         await Answers.create({
           answer: a.answer,
           isCorrect: a.isCorrect,
@@ -31,5 +30,28 @@ router.post("/save", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+router.get('/byquizId/:id', async (req, res) => {
+  try {
+    const quizId = req.params.id;
+    const quiz = await Quizzes.findByPk(quizId);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+    const questions = await Questions.findAll({
+      where: { quizId },
+      include: [
+        {
+          model: Answers,
+          attributes: ["id", "answer", "isCorrect"],
+        },
+      ],
+    });
+    return res.json({ quiz, questions });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 module.exports = router;

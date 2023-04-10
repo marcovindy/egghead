@@ -83,7 +83,7 @@ router.get("/byuserId/:id", async (req, res) => {
 router.get("/byquizId/:id", async (req, res) => {
   const id = req.params.id;
   const quiz = await Quizzes.findByPk(id);
-  console.log(quiz);
+  // console.log(quiz);
   res.json(quiz);
 });
 
