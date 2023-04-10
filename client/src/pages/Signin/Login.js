@@ -33,9 +33,12 @@ function Login() {
         setAuthState({
           username: response.data.username,
           id: response.data.id,
+          email: response.data.email,
+          experience: response.data.experience,
+          level: response.data.level,
           status: true,
         });
-        history.push("/");
+        history.push("/play");
       }
     });
   };

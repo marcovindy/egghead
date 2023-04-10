@@ -1,9 +1,10 @@
 import React from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, ProgressBar } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
 const PlayerBox = ({ name, level, avatar, experience }) => {
   const history = useHistory();
+  let maxExpProgress = level * experience;
 
   const handleClick = () => {
     history.push(`/profile/${name}`); // replace `name` with the appropriate id value
@@ -25,8 +26,9 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
           <Button variant="primary" onClick={handleClick}>Profile</Button>
         </div>
       </Card.Body>
-      <Card.Footer>
+      <Card.Footer className="p-0">
         <small className="text-muted">Experience: {experience}</small>
+        <ProgressBar now={experience} max={maxExpProgress} label={`${experience}%`} />
       </Card.Footer>
     </Card>
   );

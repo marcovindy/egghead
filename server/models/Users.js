@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    experience: {
+      type: DataTypes.NUMBER,
+      allowNull: true,
+    },
+    level: {
+      type: DataTypes.NUMBER,
+      allowNull: true,
+    },
   });
 
   Users.associate = (models) => {

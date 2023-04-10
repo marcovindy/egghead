@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
       { username: user.username, id: user.id },
       "importantsecret"
     );
-    res.json({ token: accessToken, username: username, id: user.id });
+    res.json({ token: accessToken, username: username, id: user.id, email: user.email, experience: user.experience, level: user.level});
   });
 });
 
