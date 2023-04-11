@@ -188,16 +188,6 @@ const GameMaster = ({ location }) => {
         }
     }, [timeLeft]);
 
-
-    // useEffect(() => {
-    //     socket.on('timer', (secs) => {
-    //         const elapsed = questionDuration - secs;
-    //         setTimeLeft(questionDuration - elapsed);
-    //         console.log(timeLeft);
-    //     });
-    // }, []);
-
-
     return (
         <Container>
             {gameStarted === true && gameEnded === false ? (
