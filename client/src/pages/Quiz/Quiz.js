@@ -6,6 +6,7 @@ import axios from "axios";
 import EditableTitle from "../../components/EditableTitle/EditableTitle";
 import AnimatedRadioCircle from "../../components/AnimatedRadioCircle/AnimatedRadioCircle";
 import Question from "../../components/Question/Question";
+import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 import "./Quiz.css";
 import * as Yup from "yup";
 import { toast } from 'react-toastify';
@@ -20,8 +21,8 @@ function Quiz() {
     const { id } = useParams();
     const [quizInfo, setQuizInfo] = useState({});
     const [questions, setQuestions] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSaved, setIsSaved] = useState(false); 
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaved, setIsSaved] = useState(true);
 
     const handleBeforeUnload = (event) => {
         if (!isSaved) { // only prevent unload if questions are not saved
@@ -48,7 +49,7 @@ function Quiz() {
 
 
     useEffect(() => {
-        setIsSaved(true); 
+        setIsSaved(true);
         axios
             .get(`${API_URL}/questions/byquizId/${id}`)
             .then((response) => {
@@ -112,7 +113,7 @@ function Quiz() {
             ]);
             actions.resetForm();
             toast.success("Question has been created successfully.");
-            setIsSaved(false); 
+            setIsSaved(false);
         } else {
             toast.error("Please select a correct answer");
         }
@@ -149,8 +150,22 @@ function Quiz() {
         setIsSaved(false);
     };
 
+    const handleQuestionEdit = (index, newQuestion) => {
+        if (!newQuestion) {
+            return;
+        }
+        console.log(newQuestion);
+        console.log(index);
+        const newQuestions = [...questions];
+        newQuestions[index].question = newQuestion;
+        setQuestions(newQuestions);
+        setIsSaved(false);
+    };
+
+
     const handleQuizSave = () => {
         window.removeEventListener('beforeunload', handleBeforeUnload);
+        setIsLoading(true);
         // Delete all questions and answers associated with the quiz ID
         axios
             .delete(`${API_URL}/questions/byquizId/${id}`)
@@ -171,6 +186,8 @@ function Quiz() {
                     .then((response) => {
                         console.log(response.data);
                         toast.success("Quiz questions have been saved successfully.");
+                        setIsSaved(true);
+                        setIsLoading(false);
                     })
                     .catch((error) => console.log(error));
             })
@@ -333,6 +350,7 @@ function Quiz() {
                             question={question}
                             onQuestionDelete={handleQuestionDelete}
                             onAnswerEdit={handleAnswerEdit}
+                            onQuestionEdit={handleQuestionEdit}
                         />
                     </Row>
                     <hr />
@@ -348,6 +366,8 @@ function Quiz() {
             >
                 {t("saveButton")}
             </Button>
+            <LoadingOverlay isLoading={isLoading} />
+
         </Container>
 
     );

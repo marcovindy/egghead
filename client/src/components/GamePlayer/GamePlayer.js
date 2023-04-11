@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { useHistory, Link  } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { Container, ProgressBar, Row, Col, Button, Table } from 'react-bootstrap';
 import io from 'socket.io-client';
 import Messages from '../Messages/Messages';
@@ -186,31 +186,33 @@ const GamePlayer = ({ location }) => {
                     </div>
                 )
                 }
-
-
-
-                <div className="players-container">
-                    {playersInRoom.length > 0 ? (
-                        <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Player name</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {playersInRoom.map((playerInfo, index) =>
-                                <tr key={index}>
-                                    <td>{playerInfo.username}</td>
-                                    <td>{playerInfo.score}</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </Table>
-                    ) : (
-                        <p>No players in the room yet...</p>
-                    )}
-                </div>
+                {gameEnd === false ? (
+                    <div className="players-container">
+                        {playersInRoom.length > 0 ? (
+                            <Table striped bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th>Player name</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {playersInRoom.map((playerInfo, index) =>
+                                        <tr key={index}>
+                                            <td>{playerInfo.username}</td>
+                                            <td>{playerInfo.score}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </Table>
+                        ) : (
+                            <p>No players in the room yet...</p>
+                        )}
+                    </div>
+                ) : (
+                    ""
+                )
+                }
 
             </div>
 

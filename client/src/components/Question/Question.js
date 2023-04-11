@@ -8,7 +8,7 @@ import AnimatedRadioCircle from "../AnimatedRadioCircle/AnimatedRadioCircle";
 import EditableTitle from "../EditableTitle/EditableTitle";
 import t from "../../i18nProvider/translate";
 
-function Question({ question, index, onQuestionDelete, onAnswerEdit }) {
+function Question({ question, index, onQuestionDelete, onAnswerEdit, onQuestionEdit }) {
     const validationSchema = Yup.object().shape({
         text: Yup.string().required("Answer text is required"),
     });
@@ -21,6 +21,10 @@ function Question({ question, index, onQuestionDelete, onAnswerEdit }) {
             console.log(newTitle, answerIndex);
         }
     };
+
+    const handleQuestionEdit = (newTitle) => {
+        onQuestionEdit(index, newTitle);
+      };
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -41,7 +45,7 @@ function Question({ question, index, onQuestionDelete, onAnswerEdit }) {
         <>
             <Row>
                 <Col>
-                    <h4>Question {index + 1}</h4>
+                    <h4>Q{index + 1}:</h4>
                 </Col>
                 <Col>
                     <button className="btn btn-sm btn-danger m-1" onClick={handleDeleteClick}><Trash /></button>
@@ -49,7 +53,7 @@ function Question({ question, index, onQuestionDelete, onAnswerEdit }) {
             </Row>
             <Row>
                 <Col className="mb-4">
-                    <h4> {question.question}</h4>
+                    <h4><EditableTitle title={question.question} onTitleSave={handleQuestionEdit} /></h4>
                 </Col>
             </Row>
             <Row>
