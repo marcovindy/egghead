@@ -105,7 +105,7 @@ function Profile() {
               {" "}
               <h1> Username: {username} </h1>
               {authState.username === username && (
-                <button
+                <button className="a-button"
                   onClick={() => {
                     history.push("/changepassword");
                   }}

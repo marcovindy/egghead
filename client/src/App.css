@@ -127,21 +127,36 @@ code {
   border: none;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 
 /* FROM */
         
 button, .a-button  {
   border-radius: 20px;
-  border: 1px solid #ff4b2b;
-  background: #ff445c;
+ 
+  border: 0 solid #0d6efd;
+  background: #0d6efd;
   color: #fff !important;
   text-decoration: none;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: normal;
   padding: 12px 45px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: transform 80ms ease-in;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+ 
+  max-width: 200px;
+}
+
+button:hover, .a-button:hover  {
+  background: #0b5ed7;
+  font-weight: normal;
+  text-transform: uppercase;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+ 
   max-width: 200px;
 }
 

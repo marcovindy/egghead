@@ -27,14 +27,15 @@ const LandingPage = () => {
                     <Col md={6} xs={12} className="d-flex flex-column justify-content-center">
                         <h1>{t("landingpage-title")}</h1>
                         <p className='landing-page-description'>{t("landingpage-description")}</p>
-                        <Link className="mr-3" to="/play">
-                            <Button variant='dark' size="lg">
+                        <Link className="mr-3 d-flex justify-content-center" to="/play">
+                            {/* <Button variant='dark' size="lg">
                                 {t("Play")}
-                            </Button>
+                            </Button> */}
+                            <button class="button-perspective" role="button"> {t("Play")}</button>
                         </Link>
                         {!currentUser && (
-                            <Link to="/registration">
-                                <Button variant='dark' size="lg">
+                            <Link className="m-2" to="/registration">
+                                <Button variant='primary' size="lg">
                                     {t("Sign up")}
                                 </Button>
                             </Link>
