@@ -214,6 +214,18 @@ input[type="radio"] {
   max-width: 100%;
 }
 
+.shape-blob.three{
+	height: 350px;
+	width: 350px;
+  max-width: 100%;
+	left: 0%;
+	top: -80%;
+	transform: rotate(-160deg);
+	animation: transform 25s ease-in-out infinite both alternate, movement_one 60s ease-in-out infinite both;
+  /* background-color: #012F94; */
+  max-width: 100%;
+}
+
 @keyframes transform
 {
     0%,
