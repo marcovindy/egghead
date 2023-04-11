@@ -212,7 +212,7 @@ function Quiz() {
             </Row>
             <Row className="mb-4">
                 <Col>
-                    <Button onClick={handleButtonClick}>{t("addQuestion")}</Button>
+                    <Button onClick={handleButtonClick}> {showForm ? "Close Form" : t("addQuestion")}</Button>
                 </Col>
             </Row>
             {showForm && (

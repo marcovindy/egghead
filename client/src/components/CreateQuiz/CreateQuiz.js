@@ -62,7 +62,7 @@ function CreateQuiz() {
             })
             .then((response) => {
                 toast.success(t("createquiz-success"));
-                history.push('/');
+                history.push(`/customgame`);
             })
             .catch((error) => {
                 console.error(error);

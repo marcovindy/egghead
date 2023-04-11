@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo, useRef  } from "react";
+import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
@@ -218,6 +218,7 @@ const Dashboard = () => {
       <Row>
 
         <h2 className="mt-4">{t('customGameTitle')}</h2>
+       
         <Card className="my-4 p-3">
           <div className="d-flex col-12 flex-wrap-reverse justify-content-between align-items-center">
             <Col xs={12} lg={6} className="d-flex flex-column justify-content-center align-items-center">
@@ -262,7 +263,9 @@ const Dashboard = () => {
             </CSSTransition>
           </Col>
         </Card>
-
+        <div className="d-flex justify-content-center">
+          <Button className="a-button" href="/createquiz">Create Quiz</Button>
+        </div>
         {filteredQuizzes.map((value, key) => {
           return (
             <Col className="card-col" key={key}>
