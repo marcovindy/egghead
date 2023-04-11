@@ -21,6 +21,23 @@ function Quiz() {
     const [quizInfo, setQuizInfo] = useState({});
     const [questions, setQuestions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSaved, setIsSaved] = useState(false); 
+
+    const handleBeforeUnload = (event) => {
+        if (!isSaved) { // only prevent unload if questions are not saved
+            event.preventDefault();
+            event.returnValue = '';
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            if (!isSaved) {
+                window.removeEventListener('beforeunload', handleBeforeUnload);
+            }
+        }
+    }, [isSaved]);
 
     useEffect(() => {
         axios
@@ -31,7 +48,7 @@ function Quiz() {
 
 
     useEffect(() => {
-        setIsLoading(true);
+        setIsSaved(true); 
         axios
             .get(`${API_URL}/questions/byquizId/${id}`)
             .then((response) => {
@@ -46,7 +63,6 @@ function Quiz() {
                     };
                 });
                 setQuestions(formattedQuestions);
-                console.log(formattedQuestions);
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -96,6 +112,7 @@ function Quiz() {
             ]);
             actions.resetForm();
             toast.success("Question has been created successfully.");
+            setIsSaved(false); 
         } else {
             toast.error("Please select a correct answer");
         }
@@ -128,11 +145,12 @@ function Quiz() {
                 return answer;
             }
         });
-        console.log(newQuestions);
         setQuestions(newQuestions);
+        setIsSaved(false);
     };
 
     const handleQuizSave = () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
         // Delete all questions and answers associated with the quiz ID
         axios
             .delete(`${API_URL}/questions/byquizId/${id}`)
