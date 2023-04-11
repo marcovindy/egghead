@@ -78,69 +78,6 @@ io.on('connection', (socket) => {
         // implementace funkce startGame
     }
 
-
-    socket.on('createRoom', (roomName) => {
-        const roomId = Math.random().toString(36).substr(2, 8);
-        rooms[roomId] = {
-            name: roomName,
-            host: socket.id,
-            players: [socket.id],
-            gameStarted: false,
-            gameData: {},
-            results: {},
-            playersReady: [], // pole pro ukládání ID hráčů, kteří jsou připraveni hrát
-        };
-        socket.join(roomId);
-        socket.emit('roomCreated', roomId);
-        console.log(`New room created: ${roomId}`);
-    });
-
-    socket.on('joinRoom', (roomId) => {
-        if (roomId in rooms) {
-            const room = rooms[roomId];
-            if (room.gameStarted) {
-                socket.emit('errorMessage', 'Game already started.');
-            } else if (room.players.includes(socket.id)) {
-                console.log(`Player ${socket.id} is already in room ${roomId}`);
-            } else {
-                if (room.players.length < 4) {
-                    room.players.push(socket.id);
-                    socket.join(roomId);
-                    console.log(`Player ${socket.id} joined room ${roomId}`);
-                    io.to(roomId).emit('playerJoined', room.players);
-
-                    if (room.players.length === 4 && !room.gameStarted) {
-                        // Pokud máme dostatek hráčů pro spuštění hry a hra ještě nezačala, spustíme hru.
-                        room.gameStarted = true;
-                        startGameSpecific(roomId);
-                    }
-                } else {
-                    socket.emit('errorMessage', 'Room is full.');
-                }
-            }
-        } else {
-            socket.emit('errorMessage', 'Room does not exist.');
-        }
-    });
-
-    socket.on('playerReady', (roomId, playerId) => {
-        const room = rooms[roomId];
-        room.playersReady.push(playerId);
-        io.to(roomId).emit('playerReady', playerId);
-
-        if (room.playersReady.length === room.players.length) {
-            // Pokud jsou všichni hráči připraveni, spustíme hru.
-            room.gameStarted = true;
-            startGameSpecific(roomId);
-        }
-    });
-
-    function startGameSpecific(roomId) {
-        // Nastavte herní logiku pro herní místnost.
-        const room = rooms[roomId];
-        // ...
-        io.to(roomId).emit('gameStarted');
-    }
 });
 
 module.exports = server;
