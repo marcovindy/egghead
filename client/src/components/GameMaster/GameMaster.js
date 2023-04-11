@@ -145,7 +145,9 @@ const GameMaster = ({ location }) => {
             if (gameRound === round) {
                 if (playerChoice === decodeURIComponent(correctAnswer)) {
                     console.log(playerName, 'has answered CORRECTLY:', playerChoice);
-                    socket.emit('updateScore', playerName);
+                    const timeElapsed = questionDuration - timeLeft;
+                    console.log(timeElapsed);
+                    socket.emit('updateScore', playerName, timeElapsed);
                 };
                 socket.emit('correctAnswer', correctAnswer, playerName);
             };
