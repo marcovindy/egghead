@@ -358,8 +358,9 @@ function Quiz() {
             ))}
 
 
-            <Button
+            <Button className={isSaved ? 'disabled' : 'pulse'} 
                 style={{ position: "fixed", bottom: 20, right: 20 }}
+                
                 onClick={() => {
                     handleQuizSave();
                 }}

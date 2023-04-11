@@ -35,15 +35,15 @@ const PlayModeChooser = () => {
   };
 
   return (
-    <Container className="d-flex flex-column align-items-center justify-content-center">
-      <Row>
-        <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
-          <Col lg={10}>
+    <>
+      <Row className='p-0 d-flex'>
+        <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
+          <Col lg={11} className="d-flex justify-content-center">  
              <Button className="w-100" block="true" onClick={() => handleButtonClick('rankedgame')}>
               Ranked Game
             </Button>
           </Col>
-          <Col lg={2} className="d-flex flex-column align-items-center justify-content-center">
+          <Col lg={1} className="d-flex flex-column align-items-center justify-content-center">
             <InfoCircleFill
               size={20}
               className="info-icon"
@@ -56,13 +56,13 @@ const PlayModeChooser = () => {
             />
           </Col>
         </Col>
-        <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
-          <Col lg={10}>
+        <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
+          <Col lg={11} className="d-flex justify-content-center">
              <Button className="w-100" block="true" onClick={() => handleButtonClick('customgame')}>
               Custom Game
             </Button>
           </Col>
-          <Col lg={2} className="d-flex flex-column align-items-center justify-content-center">
+          <Col lg={1} className="d-flex flex-column align-items-center justify-content-center">
             <InfoCircleFill
               size={20}
               className="info-icon"
@@ -75,13 +75,13 @@ const PlayModeChooser = () => {
             />
           </Col>
         </Col>
-        <Col xs={12} md={12} lg={12} className="mb-4 d-flex">
-          <Col lg={10}>
+        <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
+          <Col lg={11} className="d-flex justify-content-center">
              <Button className="w-100" block="true" onClick={() => handleButtonClick('randomgame')}>
               Random Game with Friends
             </Button>
           </Col>
-          <Col lg={2} className="d-flex flex-column align-items-center justify-content-center">
+          <Col lg={1} className="flex-column align-items-center justify-content-center">
             <InfoCircleFill
               size={20}
               className="info-icon"
@@ -104,7 +104,7 @@ const PlayModeChooser = () => {
           <p>{selectedModeDescription}</p>
         </Modal.Body>
       </Modal>
-    </Container>
+      </>
   );
 };
 
