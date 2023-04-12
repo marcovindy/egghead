@@ -267,7 +267,17 @@ input[type="radio"] {
    50% { transform: translate(50%, 20%) rotate(-200deg) scale(1.2);}
 }
 
+.text-color-red {
+  color: #c90000 !important;
+}
 
+.ml-1 {
+  margin-left: 1rem !important;
+}
+
+.ml-2 {
+  margin-left: 2rem !important;
+}
 
 .btn-primary {
   /* background-color: #4D6DB4;

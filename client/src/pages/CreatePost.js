@@ -45,7 +45,7 @@ function CreatePost() {
       >
         <Form className="formContainer">
           <label>Title: </label>
-          <ErrorMessage name="title" component="span" />
+          <ErrorMessage className="ml-1   text-color-red" name="title" component="span" />
           <Field
             autocomplete="off"
             id="inputCreatePost"
@@ -53,7 +53,7 @@ function CreatePost() {
             placeholder="(Ex. Title...)"
           />
           <label>Post: </label>
-          <ErrorMessage name="postText" component="span" />
+          <ErrorMessage className="ml-1   text-color-red" name="postText" component="span" />
           <Field
             autocomplete="off"
             id="inputCreatePost"

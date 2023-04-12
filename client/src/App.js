@@ -33,6 +33,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import './assets/styles/Navigation/Navigation.css';
 import './assets/styles/Progress/Progress.css';
+import './assets/styles/Forms/Forms.css';
 
 import { I18nPropvider, LOCALES } from './i18nProvider';
 import t from "./i18nProvider/translate";

@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import * as Yup from "yup";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { toast } from 'react-toastify';
 import { AuthContext } from "../../helpers/AuthContext";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
-
-import { toast } from 'react-toastify';
 
 import t from "../../i18nProvider/translate";
 
@@ -44,7 +43,7 @@ function CreateQuiz() {
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("You must input a title!"),
         categories: Yup.array().min(1, "You must select at least one category!"),
-        description: Yup.string().required("You must input a description!"),
+        // description: Yup.string().required("You must input a description!"),
     });
 
 
@@ -85,7 +84,7 @@ function CreateQuiz() {
                     >
                         <Form className="formContainer">
                             <label>Title: </label>
-                            <ErrorMessage name="title" component="span" />
+                            <ErrorMessage className="ml-1   text-color-red" name="title" component="span" />
                             <Field
                                 autoComplete="off"
                                 id="inputCreateQuizTitle"
@@ -94,7 +93,7 @@ function CreateQuiz() {
                             />
                             <div className="categories-group p-5">
                                 <label>Categories: </label>
-                                <ErrorMessage name="categories" component="span" />
+                                <ErrorMessage className="ml-1   text-color-red" name="categories" component="span" />
                                 <div className="d-flex flex-wrap">
                                     <CheckboxGroup
                                         name="categories"
@@ -107,7 +106,7 @@ function CreateQuiz() {
 
                                 {error && <span className="error">{error}</span>}
                                 <label>Description: </label>
-                                <ErrorMessage name="description" component="span" />
+                                <ErrorMessage className="ml-1   text-color-red" name="description" component="span" />
                                 <Field
                                     autoComplete="off"
                                     id="inputCreateQuizDescription"
@@ -116,8 +115,9 @@ function CreateQuiz() {
                                     as="textarea"
                                     rows="5"
                                 />
-
-                                <button type="submit"> Create Quiz</button>
+                                <div className="d-flex justify-content-center">
+                                    <Button type="submit" > Create Quiz</Button>
+                                </div>
                             </div>
                         </Form>
                     </Formik>

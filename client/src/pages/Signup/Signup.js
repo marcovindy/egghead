@@ -81,7 +81,7 @@ function Signup() {
                             <div className="social-container">
                             </div>
                             <label>Username: </label>
-                            <ErrorMessage name="username" component="span" />
+                            <ErrorMessage className="ml-1   text-color-red" name="username" component="span" />
                             <Field
                                 autoComplete="off"
                                 id="inputCreatePost"
@@ -90,7 +90,7 @@ function Signup() {
                             />
 
                             <label>Email: </label>
-                            <ErrorMessage name="email" component="span" />
+                            <ErrorMessage className="ml-1   text-color-red" name="email" component="span" />
                             <Field
                                 autoComplete="off"
                                 id="inputCreatePost"
@@ -99,7 +99,7 @@ function Signup() {
                             />
 
                             <label>Password: </label>
-                            <ErrorMessage name="password" component="span" />
+                            <ErrorMessage className="ml-1   text-color-red" name="password" component="span" />
                             <Field
                                 autoComplete="off"
                                 type="password"

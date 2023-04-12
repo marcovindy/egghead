@@ -237,7 +237,7 @@ function Quiz() {
                                             <label htmlFor="question">{t("questionLabel")}</label>
                                             <Field type="text" name="question" className="form-control" />
                                             <div className="text-danger">
-                                                <ErrorMessage name="question" />
+                                                <ErrorMessage className="ml-1   text-color-red" name="question" />
                                             </div>
                                         </Col>
                                     </Row>
@@ -247,7 +247,7 @@ function Quiz() {
                                                 <label htmlFor="answer1">{t("answer1Label")}</label>
                                                 <Field type="text" name="answer1" className="form-control" />
                                                 <div className="text-danger">
-                                                    <ErrorMessage name="answer1" />
+                                                    <ErrorMessage className="ml-1   text-color-red" name="answer1" />
                                                 </div>
                                             </div>
                                             <label>
@@ -267,7 +267,7 @@ function Quiz() {
                                                 <label htmlFor="answer2">{t("answer2Label")}</label>
                                                 <Field type="text" name="answer2" className="form-control" />
                                                 <div className="text-danger">
-                                                    <ErrorMessage name="answer2" />
+                                                    <ErrorMessage className="ml-1   text-color-red" name="answer2" />
                                                 </div>
                                             </div>
                                             <label>
