@@ -17,7 +17,6 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
         </Col>
         <Col lg={4} xs={12} className="p-1">
           <h3 className="mb-0">{name}</h3>
-
         </Col>
         <Col lg={4} xs={12} className="p-1">
           <Button variant="primary" onClick={handleClick}>Profile</Button>

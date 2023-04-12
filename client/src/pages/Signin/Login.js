@@ -65,7 +65,7 @@ function Login() {
               }}
             />
 
-            <button onClick={login}> {t('Log in')}</button>
+            <Button onClick={login}> {t('Log in')}</Button>
           </div>
         </Col>
         <Col md={6} xs={12} className="background p-5 col-right">

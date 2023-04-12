@@ -107,7 +107,7 @@ function Signup() {
                                 name="password"
                                 placeholder="Your Password..."
                             />
-                            <button type="submit"> {t('Sign up')}</button>
+                            <Button type="submit"> {t('Sign up')}</Button>
                         </Form>
                     </Formik>
                 </Col>
