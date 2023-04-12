@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import EditableTitle from "../../components/EditableTitle/EditableTitle";
 import AnimatedRadioCircle from "../../components/AnimatedRadioCircle/AnimatedRadioCircle";
@@ -11,6 +11,7 @@ import "./Quiz.css";
 import * as Yup from "yup";
 import { toast } from 'react-toastify';
 import t from "../../i18nProvider/translate";
+import { Trash } from 'react-bootstrap-icons';
 
 function Quiz() {
     const API_URL =
@@ -23,6 +24,20 @@ function Quiz() {
     const [questions, setQuestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaved, setIsSaved] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+    const history = useHistory();
+
+
+    const handleQuizDelete = () => {
+        axios
+            .delete(`${API_URL}/quizzes/delete/byquizId/${id}`)
+            .then((response) => {
+                console.log(response.data);
+                toast.success("Quiz has been deleted successfully.");
+                history.push("/customgame");
+            })
+            .catch((error) => console.log(error));
+    };
 
     const handleBeforeUnload = (event) => {
         if (!isSaved) { // only prevent unload if questions are not saved
@@ -235,7 +250,12 @@ function Quiz() {
                                     <Row className="mb-3">
                                         <Col>
                                             <label htmlFor="question">{t("questionLabel")}</label>
-                                            <Field type="text" name="question" className="form-control" />
+                                            <Field type="text" name="question"
+                                                placeholder="What's your question?"
+                                                as="textarea"
+                                                rows="5"
+                                                autocomplete="off"
+                                            />
                                             <div className="text-danger">
                                                 <ErrorMessage className="ml-1   text-color-red" name="question" />
                                             </div>
@@ -245,7 +265,7 @@ function Quiz() {
                                         <Col xs={12} lg={6}>
                                             <div>
                                                 <label htmlFor="answer1">{t("answer1Label")}</label>
-                                                <Field type="text" name="answer1" className="form-control" />
+                                                <Field type="text" name="answer1" />
                                                 <div className="text-danger">
                                                     <ErrorMessage className="ml-1   text-color-red" name="answer1" />
                                                 </div>
@@ -256,6 +276,7 @@ function Quiz() {
                                                     type="radio"
                                                     name="correctAnswer"
                                                     value="answer1"
+                                                    id="answer1"
                                                     onChange={() => setFieldValue("correctAnswer", "answer1")}
                                                     checked={values.correctAnswer === "answer1"}
                                                 />
@@ -265,7 +286,7 @@ function Quiz() {
                                         <Col xs={12} lg={6}>
                                             <div>
                                                 <label htmlFor="answer2">{t("answer2Label")}</label>
-                                                <Field type="text" name="answer2" className="form-control" />
+                                                <Field type="text" name="answer2" />
                                                 <div className="text-danger">
                                                     <ErrorMessage className="ml-1   text-color-red" name="answer2" />
                                                 </div>
@@ -276,6 +297,7 @@ function Quiz() {
                                                     type="radio"
                                                     name="correctAnswer"
                                                     value="answer2"
+                                                    id="answer2"
                                                     onChange={() => setFieldValue("correctAnswer", "answer2")}
                                                     checked={values.correctAnswer === "answer2"}
                                                 />
@@ -287,8 +309,8 @@ function Quiz() {
                                                 <label htmlFor="answer3">{t("answer3Label")}</label>
                                                 <Field
                                                     type="text"
+                                                    id="answer3"
                                                     name="answer3"
-                                                    className="form-control"
                                                     disabled={!values.answer1 || !values.answer2}
                                                 />
                                             </div>
@@ -309,7 +331,8 @@ function Quiz() {
                                         <Col xs={12} lg={6}>
                                             <div>
                                                 <label htmlFor="answer4">{t("answer4Label")}</label>
-                                                <Field type="text" name="answer4" className="form-control"
+                                                <Field type="text" name="answer4"
+                                                    id="answer4"
                                                     disabled={!values.answer1 || !values.answer2}
                                                 />
                                             </div>
@@ -356,11 +379,15 @@ function Quiz() {
                     <hr />
                 </div>
             ))}
+            <Button variant="danger"
+                style={{ position: "fixed", bottom: 20, left: 20 }}
+                onClick={() => setShowModal(true)}
+            >
+                <Trash />
+            </Button>
 
-
-            <Button className={isSaved ? 'disabled' : 'pulse'} 
+            <Button className={isSaved ? 'disabled' : 'pulse'}
                 style={{ position: "fixed", bottom: 20, right: 20 }}
-                
                 onClick={() => {
                     handleQuizSave();
                 }}
@@ -368,7 +395,22 @@ function Quiz() {
                 {t("saveButton")}
             </Button>
             <LoadingOverlay isLoading={isLoading} />
-
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Smazat kvíz</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Opravdu chcete smazat tento kvíz?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Zrušit
+                    </Button>
+                    <Button variant="danger" onClick={handleQuizDelete}>
+                        Smazat
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
 
     );

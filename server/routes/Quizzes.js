@@ -87,6 +87,27 @@ router.get("/byquizId/:id", async (req, res) => {
   res.json(quiz);
 });
 
+router.delete("/delete/byquizId/:id", async (req, res) => {
+  console.log("delete");
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const quiz = await Quizzes.findByPk(id);
+    console.log(quiz);
+    if (!quiz) {
+      console.log(quiz);
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+    quiz.destroy();
+    return res.status(200).json({ message: "Quiz has been deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+
+});
+
+
 router.delete("/:quizId", validateToken, async (req, res) => {
   const quizId = req.params.quizId;
   await Quizzes.destroy({
