@@ -6,7 +6,7 @@ const { validateToken } = require("../middlewares/AuthMiddleware");
 router.get("/:postId", async (req, res) => {
   const postId = req.params.postId;
   const comments = await Comments.findAll({ where: { PostId: postId } });
-  res.json(comments);
+  return res.json(comments);
 });
 
 router.post("/", validateToken, async (req, res) => {
@@ -14,7 +14,7 @@ router.post("/", validateToken, async (req, res) => {
   const username = req.user.username;
   comment.username = username;
   await Comments.create(comment);
-  res.json(comment);
+  return res.json(comment);
 });
 
 router.delete("/:commentId", validateToken, async (req, res) => {
@@ -26,7 +26,7 @@ router.delete("/:commentId", validateToken, async (req, res) => {
     },
   });
 
-  res.json("DELETED SUCCESSFULLY");
+  return res.json("DELETED SUCCESSFULLY");
 });
 
 module.exports = router;

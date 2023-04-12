@@ -50,7 +50,7 @@ router.get("/", validateToken, async (req, res) => {
         },
       ],
     });
-    res.json({ quizzes });
+    return res.json({ quizzes });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error" });
@@ -73,7 +73,7 @@ router.get("/byuserId/:id", async (req, res) => {
       ],
       where: { userId: id },
     });
-    res.json({ quizzes });
+    return res.json({ quizzes });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error" });
@@ -84,7 +84,7 @@ router.get("/byquizId/:id", async (req, res) => {
   const id = req.params.id;
   const quiz = await Quizzes.findByPk(id);
   // console.log(quiz);
-  res.json(quiz);
+  return res.json(quiz);
 });
 
 router.delete("/delete/byquizId/:id", async (req, res) => {
@@ -116,7 +116,7 @@ router.delete("/:quizId", validateToken, async (req, res) => {
     },
   });
 
-  res.json("DELETED SUCCESSFULLY");
+  return res.json("DELETED SUCCESSFULLY");
 });
 
 
@@ -130,7 +130,7 @@ router.put('/title/byquizId/:id', validateToken, async (req, res) => {
     quiz.title = title;
     await quiz.save();
 
-    res.json({ message: 'Quiz title updated successfully', quiz });
+    return res.json({ message: 'Quiz title updated successfully', quiz });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to update quiz title' });

@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     Score.find()
         .sort({score: -1}) // sort by highest score, desc
         .limit(20)
-        .then(scores => res.json(scores));
+        .then(scores => return res.json(scores));
 });
 
 // POST api/score
@@ -17,14 +17,14 @@ router.post('/save', (req, res) => {
         username: req.body.username,
         score: req.body.score
     });
-    newScore.save().then(score => res.json(score));
+    newScore.save().then(score => return res.json(score));
 });
 
 router.put('/update/:username', (req, res) => {
     const { username } = req.params;
     Score.updateOne({username: username}, {$set:{username: req.body.username}}, (err) => {
         if(!err){
-            return res.json({ message: `success, username updated to ${req.body.username}` })
+            return return res.json({ message: `success, username updated to ${req.body.username}` })
         }
     });
 });
@@ -34,7 +34,7 @@ router.delete('/delete/:username', (req, res) => {
     Score.findOneAndDelete({username: username}, 
         (err, result) => {
             if(err) { return res.send(500, err) };
-            res.json({ message: `success, user with username: "${username}" got deleted` });
+            return res.json({ message: `success, user with username: "${username}" got deleted` });
         });
 });
 
