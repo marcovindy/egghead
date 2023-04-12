@@ -1,0 +1,20 @@
+.player-box-info {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.player-box-exp .progress {
+  height: 1rem;
+}
+
+@media (min-width: 992px) {
+  .player-box-info {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+  }
+}
+/*# sourceMappingURL=PlayerBox.css.map */

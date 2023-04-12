@@ -1,36 +1,37 @@
 import React from "react";
-import { Card, Button, ProgressBar } from "react-bootstrap";
+import { Card, Button, ProgressBar, Col } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import './PlayerBox.css';
 
 const PlayerBox = ({ name, level, avatar, experience }) => {
   const history = useHistory();
-  let maxExpProgress = level * experience;
-
   const handleClick = () => {
     history.push(`/profile/${name}`); // replace `name` with the appropriate id value
   };
 
   return (
-    <Card className="w-100 mb-4">
-      <Card.Body className="d-flex align-items-center justify-content-between">
-        <div className="d-flex align-items-center">
-          <div className="mr-3">
-            <img src={avatar} alt="avatar" className="rounded-circle" />
-          </div>
-          <div>
-            <Card.Title className="mb-0">{name}</Card.Title>
-            <Card.Subtitle className="text-muted">Level {level}</Card.Subtitle>
-          </div>
-        </div>
-        <div>
+    <div className="w-100 mb-4 player-box">
+      <div className="d-flex align-items-center justify-content-between player-box-info mb-3">
+        <Col lg={4} xs={12} className="p-1">
+          <img src={avatar} alt="avatar" />
+        </Col>
+        <Col lg={4} xs={12} className="p-1">
+          <h3 className="mb-0">{name}</h3>
+
+        </Col>
+        <Col lg={4} xs={12} className="p-1">
           <Button variant="primary" onClick={handleClick}>Profile</Button>
+        </Col>
+
+      </div>
+      <div className="p-0 player-box-exp">
+        <div className="d-flex justify-content-center">
+          <div className="text-muted">Level {level}</div>
+          <div className="text-muted ml-1">Experience: {experience}</div>
         </div>
-      </Card.Body>
-      <Card.Footer className="p-0">
-        <small className="text-muted">Experience: {experience}</small>
-        <ProgressBar now={experience} max={maxExpProgress} label={`${experience}%`} />
-      </Card.Footer>
-    </Card>
+        <ProgressBar now={experience} max={100} />
+      </div>
+    </div>
   );
 };
 

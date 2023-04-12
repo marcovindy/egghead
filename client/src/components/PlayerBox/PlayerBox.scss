@@ -1,0 +1,22 @@
+.player-box {
+    &-info {
+        flex-direction: column;
+    }
+    &-exp {
+        .progress {
+            height: 1rem;
+        }
+    }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { 
+    .player-box {
+        &-info {
+            flex-direction: row;
+        }
+        &-exp {
+          
+        }
+    }
+ }
