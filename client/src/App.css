@@ -13,6 +13,7 @@ body {
 
 footer {
   margin-top: auto !important;
+  width: 100%;
 }
 
 code {
@@ -22,7 +23,7 @@ code {
 
 .App {
   text-align: center;
-  display: flex;
+  display: grid;
   min-height: 100vh;
   flex-direction: column;
 }
