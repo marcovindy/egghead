@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, ProgressBar, Col } from "react-bootstrap";
+import { Card, Button, ProgressBar, Col, Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import './PlayerBox.css';
 
@@ -13,7 +13,7 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
     <div className="w-100 mb-4 player-box">
       <div className="d-flex align-items-center justify-content-between player-box-info mb-3">
         <Col lg={4} xs={12} className="p-1">
-          <img src={avatar} alt="avatar" />
+          {avatar && <Image src={require(`../../assets/images/userAvatars/${avatar}`)} alt={avatar} width='100px' />}
         </Col>
         <Col lg={4} xs={12} className="p-1">
           <h3 className="mb-0">{name}</h3>

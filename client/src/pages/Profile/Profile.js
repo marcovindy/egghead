@@ -11,6 +11,13 @@ import imgUrl from "../../assets/images/egg2.png";
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
+const initialUserState = {
+  id: "",
+  avatar: "default-avatar.png",
+  username: "",
+  email: "",
+};
+
 function Profile() {
   const IS_PROD = process.env.NODE_ENV === "development";
   const URL0 = IS_PROD ? "http://localhost:5000/auth/basicinfo/" : "https://testing-egg.herokuapp.com/auth/basicinfo/";
@@ -23,6 +30,8 @@ function Profile() {
   const [id, setId] = useState("");
   const [listOfPosts, setListOfPosts] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
+  
+  const [user, setUser] = useState(initialUserState);
   const { authState } = useContext(AuthContext);
   useEffect(() => {
     console.log('UserName from URL: ', id);
@@ -31,7 +40,8 @@ function Profile() {
     axios.get(`${URL1}${username}`, { cancelToken: source.token })
       .then((response) => {
         setId(response.data.id);
-        console.log(response);
+        console.log(response.data);
+        setUser(response.data);
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
@@ -96,7 +106,8 @@ function Profile() {
 
           <Col>
             <div className="avatarBox">
-              <Image width='300px' src={imgUrl}></Image>
+              {console.log(user.avatar)}
+              <Image src={require(`../../assets/images/userAvatars/${user.avatar}`)}  alt={user.avatar} width='200px'/>
             </div>
           </Col>
           <Col>
