@@ -3,7 +3,7 @@ import { Container, Row, Col, Image, Button } from "react-bootstrap";
 import { useParams, useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../helpers/AuthContext";
-
+import Achievements from "../../components/Achievements/Achievements";
 import Card from 'react-bootstrap/Card';
 import { PlayCircleFill, HeartFill } from 'react-bootstrap-icons';
 
@@ -208,6 +208,9 @@ function Profile() {
               </Col>
             );
           })}
+        </Row>
+        <Row>
+          <Achievements/>
         </Row>
       </div>
 

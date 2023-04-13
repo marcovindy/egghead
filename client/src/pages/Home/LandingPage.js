@@ -9,6 +9,9 @@ import { FaDiscord } from 'react-icons/fa';
 import t from "../../i18nProvider/translate";
 import { AuthContext } from '../../helpers/AuthContext';
 
+import { PlayFill } from 'react-bootstrap-icons';
+
+
 const LandingPage = () => {
     const { authState } = React.useContext(AuthContext);
     const currentUser = authState.status;
@@ -28,10 +31,9 @@ const LandingPage = () => {
                         <h1>{t("landingpage-title")}</h1>
                         <p className='landing-page-description'>{t("landingpage-description")}</p>
                         <Link className="mr-3 d-flex justify-content-center" to="/play">
-                            {/* <Button variant='dark' size="lg">
-                                {t("Play")}
-                            </Button> */}
-                            <button class="button-perspective" role="button"> {t("Play")}</button>
+                            <button class="button-perspective" role="button">
+                                {t("Play")} <PlayFill size={32} color="white" />
+                            </button>
                         </Link>
                         {!currentUser && (
                             <Link className="m-2" to="/registration">
@@ -63,7 +65,7 @@ const LandingPage = () => {
                         </p>
                     </Col>
                 </Row>
-               
+
             </Container>
         </div>
     );

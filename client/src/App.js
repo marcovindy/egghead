@@ -150,7 +150,7 @@ function App() {
                               <Col>
                                 <DropdownButton id="dropdown-basic-button" title={`${authState.username}`}>
                                   <Dropdown.Item href={`/profile/${authState.username}`}>{t("Profile")}</Dropdown.Item>
-                                  <Dropdown.Item onClick={logout} href="#/action-2">{t("Logout")}</Dropdown.Item>
+                                  <Dropdown.Item onClick={logout} href="#">{t("Logout")}</Dropdown.Item>
                                   <Dropdown.Item href="#/action-3">{t("Report bug")}</Dropdown.Item>
                                 </DropdownButton>
                               </Col>
