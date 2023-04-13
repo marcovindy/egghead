@@ -360,7 +360,9 @@ input[type="radio"] {
 }
 
 
-
+.m-w-100 {
+  min-width: 100%;
+}
 
 
 @media (max-width: 767px) {
@@ -368,6 +370,9 @@ input[type="radio"] {
     padding: 1rem !important;
   }
   .mobile-column {
-    flex-direction: column;
+    flex-direction: column !important;
+  }
+  .mobile-justify-content-center {
+    justify-content: center !important;
   }
 }
