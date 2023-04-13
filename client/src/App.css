@@ -358,3 +358,16 @@ input[type="radio"] {
     transform: scale(1);
   }
 }
+
+
+
+
+
+@media (max-width: 767px) {
+  .padding-mobile-1 {
+    padding: 1rem !important;
+  }
+  .mobile-column {
+    flex-direction: column;
+  }
+}
