@@ -132,6 +132,7 @@ const GamePlayer = ({ location }) => {
             setTimerStarted(true);
         });
     }, []);
+ 
 
 
     return (
