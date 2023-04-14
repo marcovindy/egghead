@@ -10,6 +10,9 @@ import EndGame from '../EndGame/EndGame';
 import Scoreboard from '../Scoreboard/Scoreboard';
 
 
+import { TransitionGroup, Transition } from 'react-transition-group';
+import './GamePlayer.css';
+
 let socket;
 
 const GamePlayer = ({ location }) => {
@@ -132,7 +135,7 @@ const GamePlayer = ({ location }) => {
             setTimerStarted(true);
         });
     }, []);
- 
+
 
 
     return (
@@ -202,32 +205,11 @@ const GamePlayer = ({ location }) => {
                 )
                 }
                 {gameEnd === false ? (
-                    <div className="players-container">
-                        {playersInRoom.length > 0 ? (
-                            <Table striped bordered hover>
-                                <thead>
-                                    <tr>
-                                        <th>Player name</th>
-                                        <th>Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {playersInRoom.map((playerInfo, index) =>
-                                        <tr key={index}>
-                                            <td>{playerInfo.username}</td>
-                                            <td>{playerInfo.score}</td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </Table>
-                        ) : (
-                            <p>No players in the room yet...</p>
-                        )}
-                    </div>
+                   <ListOfPlayers playersInRoom={playersInRoom}/>
                 ) : (
                     ""
-                )
-                }
+                )}
+
 
             </div>
 
