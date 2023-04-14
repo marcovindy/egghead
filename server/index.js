@@ -82,12 +82,13 @@ io.on('connect', (socket) => {
 
   socket.on('showActiveRooms', (sendActiveRooms));
 
-  socket.on('createRoom', ({ roomName, masterName }, callback) => {
+  socket.on('createRoom', ({ roomName, masterName, quizId }, callback) => {
     if (rooms[roomName]) {
       return callback({ error: "Room already exists with that name, try another!" });
     };
     const room = {
       id: uuidv1(),
+      quizId: quizId,
       name: roomName,
       sockets: [],
       players: []
@@ -140,7 +141,7 @@ io.on('connect', (socket) => {
   };
 
   socket.on('ready', (callback) => {
-    const room = rooms[socket.roomName];
+    const room = rooms[socket.roomName]; 
     if (room.sockets.length > 2) {
       for (const client of room.sockets) {
         client.emit('initGame');

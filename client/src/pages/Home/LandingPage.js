@@ -31,7 +31,7 @@ const LandingPage = () => {
                         <h1>{t("landingpage-title")}</h1>
                         <p className='landing-page-description'>{t("landingpage-description")}</p>
                         <Link className="mr-3 d-flex justify-content-center" to="/play">
-                            <button class="button-perspective" role="button">
+                            <button className="button-perspective" role="button">
                                 {t("Play")} <PlayFill size={32} color="white" />
                             </button>
                         </Link>

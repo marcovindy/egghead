@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, ProgressBar, Row } from 'react-bootstrap';
+import { useLocation } from "react-router-dom";
 import io from 'socket.io-client';
 import queryString from 'query-string';
 import { toast } from 'react-toastify';
@@ -8,17 +9,18 @@ import EndGame from '../EndGame/EndGame';
 import GameQuestion from '../GameQuestion/GameQuestion';
 import Messages from '../Messages/Messages';
 import t from "../../i18nProvider/translate";
+import axios from 'axios';
 
 
 let socket;     // Proměnná pro ukládání instance soketu pro komunikaci s ostatními hráči
 
 
 
-const GameMaster = ({ location }) => {
+const GameMaster = () => {
 
     const IS_PROD = process.env.NODE_ENV === "development";
-    const URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
-    const server = URL;
+    const API_URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
+    const server = API_URL;
     const [roomName, setRoomName] = useState('');
     const [masterName, setMasterName] = useState('');
 
@@ -43,16 +45,25 @@ const GameMaster = ({ location }) => {
     const [timeLeft, setTimeLeft] = useState(questionDuration); // Nastavíme 20 sekund do další otázky
     const [isGameRunning, setIsGameRunning] = useState(false);
 
+    const location = useLocation();
+
 
     useEffect(() => {
-        const { roomName, masterName } = queryString.parse(location.search);
+        const searchParams = new URLSearchParams(location.search);
+        const roomName = searchParams.get("roomName");
+        const quizId = roomName.split("-")[1];
+        const masterName = searchParams.get("masterName");
+        console.log("id:", quizId, "roomName:", roomName, "masterName:", masterName);
+
+        // const { roomName, masterName } = queryString.parse(location.search);
+        console.log("location: ", location);
         socket = io.connect(server);
         setRoomName(roomName);
         setMasterName(masterName);
 
 
 
-        socket.emit('createRoom', { roomName, masterName }, (error) => {
+        socket.emit('createRoom', { roomName, masterName, quizId }, (error) => {
             if (error) {
                 setError(true);
                 setErrorMsg(error);
@@ -69,7 +80,7 @@ const GameMaster = ({ location }) => {
             socket.emit('disconnect');
             socket.disconnect();
         };
-    }, [server, location.search]);
+    }, [server, location]);
 
     useEffect(() => {
         socket.on('message', (text) => {
@@ -101,8 +112,14 @@ const GameMaster = ({ location }) => {
                     setQuestions(res.results);
                     sendQuestion(res.results);
                     console.log("Created");
+                    console.log(res.results);
 
                 });
+
+
+
+
+
         });
     }, []);
 

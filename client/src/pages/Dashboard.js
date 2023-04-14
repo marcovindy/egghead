@@ -47,7 +47,7 @@ const Dashboard = () => {
   const createRoomName = useMemo(() => {
     const uniqueId = uuid();
     const shortId = uuid().slice(0, 6);
-    return (quizTitle) => `${quizTitle}-${shortId}`;
+    return (quizTitle, quizId) => `${quizTitle}-${quizId}-${shortId}`;
   }, []);
 
   const onFilterApply = (filterValues) => {
@@ -289,8 +289,10 @@ const Dashboard = () => {
                     </Button>
                     <Button
                       onClick={() => {
+                        const quizId = value.id;
                         const quizTitle = value.title;
-                        const roomName = createRoomName(quizTitle); // Generate random room name
+                        const roomName = createRoomName(quizTitle, quizId); // Generate random room name
+                        console.log(roomName);
                         const masterName = value.User.username;
                         history.push(`/gamemaster?roomName=${roomName}&masterName=${masterName}`);
                       }}
