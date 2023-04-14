@@ -130,15 +130,6 @@ const GameMaster = () => {
         socket.on('initGame', () => {
             if (questions.length > 0) {
                 setRound(0);
-                // const response = fetch(`https://opentdb.com/api.php?amount=4&type=multiple&encode=url3986`)
-                //     .then(response => response.json())
-                //     .then(res => {
-                //         setQuestions(res.results);
-                //         sendQuestion(res.results);
-                //         console.log("Created");
-                //         // console.log(res.results);
-
-                //     });
                 console.log("Action 1 = Game Created.");
                 sendQuestion(questions);
             }
