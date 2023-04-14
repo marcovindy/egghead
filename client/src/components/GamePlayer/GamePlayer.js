@@ -101,8 +101,6 @@ const GamePlayer = ({ location }) => {
         setClickActivated(val);
     };
 
-
-
     useEffect(() => {
         socket.on('correctAnswer', (correctAnswer) => {
             setCorrectAnswer(correctAnswer);
