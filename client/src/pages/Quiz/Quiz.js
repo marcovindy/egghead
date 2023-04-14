@@ -68,6 +68,7 @@ function Quiz() {
         axios
             .get(`${API_URL}/questions/byquizId/${id}`)
             .then((response) => {
+                console.log(response);
                 const formattedQuestions = response.data.questions.map(question => {
                     const formattedAnswers = question.Answers.map(answer => ({
                         text: answer.answer,
@@ -254,7 +255,7 @@ function Quiz() {
                                                 placeholder="What's your question?"
                                                 as="textarea"
                                                 rows="5"
-                                                autocomplete="off"
+                                                autoComplete="off"
                                             />
                                             <div className="text-danger">
                                                 <ErrorMessage className="ml-1   text-color-red" name="question" />

@@ -45,7 +45,6 @@ const Dashboard = () => {
   });
 
   const createRoomName = useMemo(() => {
-    const uniqueId = uuid();
     const shortId = uuid().slice(0, 6);
     return (quizTitle, quizId) => `${quizTitle}-${quizId}-${shortId}`;
   }, []);
@@ -124,16 +123,6 @@ const Dashboard = () => {
     setIsFilterOpen(!isFilterOpen);
   }
 
-  // useEffect(() => {
-  //   console.log("Applying filter Final: ", filterValues);
-  // }, [filterValues]);
-
-  // useEffect(() => {
-  //   useDebugValue(filteredQuizzes);
-  //   useDebugValue(listOfQuizzes);
-
-  // }, [filteredQuizzes, listOfQuizzes]);
-
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -147,7 +136,7 @@ const Dashboard = () => {
           headers: { accessToken },
         });
         setCategories(response.data.listOfCategories);
-        console.log("categories response.data: ", response.data.listOfCategories);
+        // console.log("categories response.data: ", response.data.listOfCategories);
       } catch (error) {
         console.log('Error:', error);
       }
@@ -192,11 +181,13 @@ const Dashboard = () => {
             {activeRooms.length > 0 ? (
               activeRooms.map((room, index) => (
                 <div key={index} className="d-flex">
+                  {  console.log(room)}
                   <Button
                     className="m-2"
                     onClick={() => {
                       const roomName = room.name;
                       const playerName = authState.username;
+                    
                       history.push(`/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`);
                     }}
                   >
@@ -292,8 +283,8 @@ const Dashboard = () => {
                         const quizId = value.id;
                         const quizTitle = value.title;
                         const roomName = createRoomName(quizTitle, quizId); // Generate random room name
-                        console.log(roomName);
                         const masterName = value.User.username;
+                        // console.log(masterName, roomName, value.User.username, value.title, value.id);
                         history.push(`/gamemaster?roomName=${roomName}&masterName=${masterName}`);
                       }}
                     >

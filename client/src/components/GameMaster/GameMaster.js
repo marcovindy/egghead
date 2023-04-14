@@ -22,6 +22,7 @@ const GameMaster = () => {
     const API_URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
     const server = API_URL;
     const [roomName, setRoomName] = useState('');
+    const [id, setId] = useState(114); // Quiz ID
     const [masterName, setMasterName] = useState('');
 
     const [serverResMsg, setServerResMsg] = useState({ res: 'When at least 2 players are in the room, click Start Game' });
@@ -45,15 +46,17 @@ const GameMaster = () => {
     const [timeLeft, setTimeLeft] = useState(questionDuration); // Nastavíme 20 sekund do další otázky
     const [isGameRunning, setIsGameRunning] = useState(false);
 
+    const [questionsAreLoading, setQuestionsAreLoading] = useState(true);
+
     const location = useLocation();
 
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const roomName = searchParams.get("roomName");
-        const quizId = roomName.split("-")[1];
+        setId(roomName.split("-")[1]);
         const masterName = searchParams.get("masterName");
-        console.log("id:", quizId, "roomName:", roomName, "masterName:", masterName);
+        console.log("id:", id, "roomName:", roomName, "masterName:", masterName);
 
         // const { roomName, masterName } = queryString.parse(location.search);
         console.log("location: ", location);
@@ -63,7 +66,7 @@ const GameMaster = () => {
 
 
 
-        socket.emit('createRoom', { roomName, masterName, quizId }, (error) => {
+        socket.emit('createRoom', { roomName, masterName }, (error) => {
             if (error) {
                 setError(true);
                 setErrorMsg(error);
@@ -104,25 +107,47 @@ const GameMaster = () => {
     };
 
     useEffect(() => {
+        axios
+            .get(`${API_URL}questions/byquizId/${id}`)
+            .then((response) => {
+                const formattedQuestions = response.data.questions.map(question => {
+                    const formattedAnswers = question.Answers.map(answer => ({
+                        text: answer.answer,
+                        isCorrect: answer.isCorrect,
+                    }));
+                    return {
+                        question: question.question,
+                        answers: formattedAnswers,
+                    };
+                });
+                setQuestions(formattedQuestions);
+                setQuestionsAreLoading(false);
+            })
+            .catch((error) => {
+                console.log(error);
+                setQuestionsAreLoading(false);
+            });
+
+
+    }, [API_URL, id]);
+
+    useEffect(() => {
         socket.on('initGame', () => {
             setRound(0);
-            const response = fetch(`https://opentdb.com/api.php?amount=4&type=multiple&encode=url3986`)
-                .then(response => response.json())
-                .then(res => {
-                    setQuestions(res.results);
-                    sendQuestion(res.results);
-                    console.log("Created");
-                    console.log(res.results);
+            // const response = fetch(`https://opentdb.com/api.php?amount=4&type=multiple&encode=url3986`)
+            //     .then(response => response.json())
+            //     .then(res => {
+            //         setQuestions(res.results);
+            //         sendQuestion(res.results);
+            //         console.log("Created");
+            //         // console.log(res.results);
 
-                });
-
-
-
-
-
+            //     });
+            console.log(questions);
         });
-    }, []);
-
+        console.log(questions);
+    }, [questions]);
+    
     // Funkce pro odeslání otázky všem hráčům a uložení správné odpovědi
 
     const sendQuestion = (questionObj) => {

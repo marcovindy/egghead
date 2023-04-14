@@ -34,6 +34,7 @@ router.post("/save", async (req, res) => {
 router.get('/byquizId/:id', async (req, res) => {
   try {
     const quizId = req.params.id;
+    console.log("====================== quizId================",quizId);
     const quiz = await Quizzes.findByPk(quizId);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
