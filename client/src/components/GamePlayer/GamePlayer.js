@@ -48,6 +48,7 @@ const GamePlayer = ({ location }) => {
     const [timeLeft, setTimeLeft] = useState(0);
     const questionDuration = 20;
     const progress = 100 - ((questionDuration - timeLeft) / questionDuration) * 100;
+    const [timerStarted, setTimerStarted] = useState(false);
 
     useEffect(() => {
         const { joinRoomName, playerName } = queryString.parse(location.search);
@@ -130,6 +131,7 @@ const GamePlayer = ({ location }) => {
         socket.on('timer', (secs) => {
             const elapsed = questionDuration - secs;
             setTimeLeft(questionDuration - elapsed);
+            setTimerStarted(true);
         });
     }, []);
 
@@ -148,22 +150,35 @@ const GamePlayer = ({ location }) => {
                 ) : (
                     <div>
                         {gameStart === false ? (
-                            <div>
-                                <h2>Hello, Game player {playerName}!</h2>
-                                <p><strong>Waiting for Game Master to start the game...</strong></p>
+                            <>
+                                {timerStarted === true ? (
+                                    <div>
+                                        <h3>Game will be started: {timeLeft}</h3>
+                                        <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                                    </div>
+                                ) : (
+                                    ""
+                                )}
+                                <div>
+                                    <h2>Hello, Game player {playerName}!</h2>
+                                    <p><strong>Waiting for Game Master to start the game...</strong></p>
 
-                                <div className="messages-container">
-                                    <h3>Activity</h3>
-                                    <hr />
-                                    <Messages messages={messages} />
+                                    <div className="messages-container">
+                                        <h3>Activity</h3>
+                                        <hr />
+                                        <Messages messages={messages} />
+                                    </div>
+                                    <a href="/lobby">Leave room</a>
                                 </div>
-                                <a href="/lobby">Leave room</a>
-                            </div>
+                            </>
                         ) : (
                             <div>
+
+
+
                                 {gameEnd === false ? (
                                     <div>
-                                        <h3>Time Left: {timeLeft}</h3>
+                                        <h3>Time left: {timeLeft}</h3>
                                         <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
                                         <GameQuestion
                                             currentQuestion={currentQuestion}

@@ -143,7 +143,7 @@ const GameMaster = () => {
                 sendQuestion(questions);
             }
         });
-    }, [questionsAreLoading]);
+    }, [!questionsAreLoading]);
 
     // Funkce pro odeslání otázky všem hráčům a uložení správné odpovědi
 
@@ -189,7 +189,7 @@ const GameMaster = () => {
                 if (playerChoice === decodeURIComponent(correctAnswer)) {
                     console.log(playerName, 'has answered CORRECTLY:', playerChoice);
                     const timeElapsed = questionDuration - timeLeft;
-                    console.log(timeElapsed);
+                    console.log(timeElapsed, " = ", questionDuration, " - ", timeLeft);
                     socket.emit('updateScore', playerName, timeElapsed);
                 };
                 socket.emit('correctAnswer', correctAnswer, playerName);
@@ -226,10 +226,16 @@ const GameMaster = () => {
                 startTimer(); // reset the timer
                 NextQuestion(); // get the next question
                 socket.emit('startTimer');
-                console.log(timeLeft);
             }
         }
     }, [timeLeft]);
+
+    useEffect(() => {
+        console.log("STOP");
+        socket.on('stopTime', () => {
+           console.log("STOP from server");          
+        });
+    }, []);
 
     return (
         <Container>

@@ -186,6 +186,7 @@ io.on('connect', (socket) => {
     const room = rooms[socket.roomName];
     res = Object.values(room.players); // send array with keys that has objects as values
     io.to(room.id).emit('scores', res);
+    socket.broadcast.to(socket.roomId).emit('stopTime');
 
     // send individual score to each client
     for (const client of res) {
@@ -247,6 +248,7 @@ io.on('connect', (socket) => {
         const room = rooms[socket.roomName];
         console.log(room.sockets[0].username, 'has left');
         socket.broadcast.to(socket.roomId).emit('message', { text: `The gamemaster ${room.sockets[0].username} has left the game! Please leave the room.` });
+        socket.broadcast.to(socket.roomId).emit('stopTime');
         delete rooms[room.name];
       };
     };
