@@ -56,15 +56,12 @@ const GameMaster = () => {
         const roomName = searchParams.get("roomName");
         setId(roomName.split("-")[1]);
         const masterName = searchParams.get("masterName");
-        console.log("id:", id, "roomName:", roomName, "masterName:", masterName);
+        // console.log("id:", id, "roomName:", roomName, "masterName:", masterName);
 
-        // const { roomName, masterName } = queryString.parse(location.search);
-        console.log("location: ", location);
+        // console.log("location: ", location);
         socket = io.connect(server);
         setRoomName(roomName);
         setMasterName(masterName);
-
-
 
         socket.emit('createRoom', { roomName, masterName }, (error) => {
             if (error) {
@@ -125,46 +122,50 @@ const GameMaster = () => {
             })
             .catch((error) => {
                 console.log(error);
-                setQuestionsAreLoading(false);
             });
-
 
     }, [API_URL, id]);
 
     useEffect(() => {
         socket.on('initGame', () => {
-            setRound(0);
-            // const response = fetch(`https://opentdb.com/api.php?amount=4&type=multiple&encode=url3986`)
-            //     .then(response => response.json())
-            //     .then(res => {
-            //         setQuestions(res.results);
-            //         sendQuestion(res.results);
-            //         console.log("Created");
-            //         // console.log(res.results);
+            if (questions.length > 0) {
+                setRound(0);
+                // const response = fetch(`https://opentdb.com/api.php?amount=4&type=multiple&encode=url3986`)
+                //     .then(response => response.json())
+                //     .then(res => {
+                //         setQuestions(res.results);
+                //         sendQuestion(res.results);
+                //         console.log("Created");
+                //         // console.log(res.results);
 
-            //     });
-            console.log(questions);
+                //     });
+                console.log("Action 1 = Game Created.");
+                sendQuestion(questions);
+            }
         });
-        console.log(questions);
-    }, [questions]);
-    
+    }, [questionsAreLoading]);
+
     // Funkce pro odeslání otázky všem hráčům a uložení správné odpovědi
 
     const sendQuestion = (questionObj) => {
-        const gameQuestion = questionObj[round].question;
-        const incorrectOptions = questionObj[round].incorrect_answers;
-        const correctOption = questionObj[round].correct_answer;
-
-        const gameOptionsArray = [...incorrectOptions];
-        const randomNumber = Math.random() * 3;
-        const position = Math.floor(randomNumber) + 1;
-        gameOptionsArray.splice(position - 1, 0, correctOption); // startpos: 0, delete 0, add
-        setCorrectAnswer(correctOption);
-
-        setRound(prevRound => { return prevRound + 1 }); // setRound for next render, prevRound: holds the round number
-
-        const gameRound = round + 1;
-        socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound });
+        if (round <= questionObj.length) {
+            console.log(questionObj);
+            const gameQuestion = questionObj[round].question;
+            const answers = questionObj[round].answers;
+            const correctAnswer = answers.find(answer => answer.isCorrect).text;
+            const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
+            const gameOptionsArray = [
+                ...incorrectAnswers.map(answer => answer.text)
+            ];
+            const randomNumber = Math.random() * 3;
+            const position = Math.floor(randomNumber) + 1;
+            gameOptionsArray.splice(position - 1, 0, correctAnswer); // startpos: 0, delete 0, add
+            setCorrectAnswer(correctAnswer);
+            setRound(prevRound => { return prevRound + 1 });
+            const gameRound = round + 1;
+            console.log(gameOptionsArray);
+            socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound });
+        }
     };
 
     // Funkce pro přechod na další otázku a odeslání informace o všech hráčích na server

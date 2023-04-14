@@ -181,7 +181,6 @@ const Dashboard = () => {
             {activeRooms.length > 0 ? (
               activeRooms.map((room, index) => (
                 <div key={index} className="d-flex">
-                  {  console.log(room)}
                   <Button
                     className="m-2"
                     onClick={() => {

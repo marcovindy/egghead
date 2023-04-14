@@ -44,7 +44,7 @@ const GameQuestion = ({ currentQuestion, currentOptions, currentRound, playerNam
                 // Zobrazení zvolené volby a správné odpovědi na otázku
                 <div>
                     <h3 className="h3-chosen-option">You chose: {playerChoice}</h3>
-                    <p className="correct-answer">Correct answer is: {decodeURIComponent(correctAnswer)}</p>
+                    <h3 className="correct-answer">Correct answer is: {decodeURIComponent(correctAnswer)}</h3>
                 </div>
             )
             }

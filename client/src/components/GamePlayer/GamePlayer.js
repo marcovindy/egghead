@@ -105,6 +105,7 @@ const GamePlayer = ({ location }) => {
     useEffect(() => {
         socket.on('correctAnswer', (correctAnswer) => {
             setCorrectAnswer(correctAnswer);
+            console.log('Action 2 correctAnswer');
         });
     }, []);
 

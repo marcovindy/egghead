@@ -155,7 +155,7 @@ io.on('connect', (socket) => {
     socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound);
     const room = rooms[socket.roomName];
     res = Object.values(room.players);
-
+    console.log("Action 2 = show question (server)");
     for (const client of res) {
       socket.to(client.id).emit('getRoomPlayers', Object.values(room.players));
     };
@@ -179,6 +179,7 @@ io.on('connect', (socket) => {
   socket.on('correctAnswer', (correctAnswer, playerName) => {
     const room = rooms[socket.roomName];
     socket.to(room.players[playerName].id).emit('correctAnswer', correctAnswer);
+    console.log('correctAnswer', correctAnswer);
   });
 
   socket.on('endGame', () => {
