@@ -73,10 +73,7 @@ io.on('connect', (socket) => {
 
   // Send list of active rooms to client whenever a new room is created or a player joins a room
   const sendActiveRooms = () => {
-    const activeRooms = Object.values(rooms).map(room => {
-      return { id: room.id, name: room.name, players: Object.values(room.players) }
-    });
-    console.log(activeRooms);
+    const activeRooms = Object.values(rooms).map(({id, name, players}) => ({ id, name, players: Object.values(players) }));
     io.emit('activeRooms', activeRooms);
   }
 
@@ -153,8 +150,6 @@ io.on('connect', (socket) => {
 
   socket.on('showQuestion', ({ gameQuestion, gameOptionsArray, gameRound }) => {
     socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound);
-    const room = rooms[socket.roomName];
-    res = Object.values(room.players);
   });
 
   socket.on('playerChoice', ({ playerName, choice, gameRound }) => {
