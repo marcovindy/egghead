@@ -6,6 +6,7 @@ import t from "../../i18nProvider/translate";
 import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 import MultiRangeSlider from "multi-range-slider-react";
 import '../../assets/styles/MultiRangeSlider/MultiRangeSlider.css';
+import './FilterBox.css';
 
 const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
     const [minValue, setMinValue] = useState(0);
@@ -124,7 +125,7 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
                             )}
                         </Col>
                     </Row>
-                    <Row className="p-0">
+                    <Row className="p-0 justify-content-center">
                         <Button size="md" type="submit">{t('Apply Filter')}</Button>
                     </Row>
                 </Form>

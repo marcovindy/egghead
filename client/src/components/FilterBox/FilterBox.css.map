@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,MAAM,EAAE,IAAI,EAAE,YAAY,CAAC;EACvB,SAAS,EAAE,gBAAgB;CAC9B",
+    "sources": [
+        "FilterBox.scss"
+    ],
+    "names": [],
+    "file": "FilterBox.css"
+}
