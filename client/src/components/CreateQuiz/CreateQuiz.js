@@ -22,7 +22,9 @@ function CreateQuiz() {
     let history = useHistory();
     const initialValues = {
         title: "",
+        language: "",
         description: "",
+        categories: [],
     };
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
@@ -43,7 +45,6 @@ function CreateQuiz() {
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("You must input a title!"),
         categories: Yup.array().min(1, "You must select at least one category!"),
-        // description: Yup.string().required("You must input a description!"),
     });
 
 
@@ -54,6 +55,7 @@ function CreateQuiz() {
         axios
             .post(`${URL}/quizzes/create`, {
                 title: data.title,
+                language: data.language,
                 description: data.description,
                 categoryIds
             }, {
@@ -91,6 +93,15 @@ function CreateQuiz() {
                                 name="title"
                                 placeholder="(Ex. Quiz Title...)"
                             />
+                            <div className="d-flex flex-column">
+                                <label>Language: </label>
+                                <ErrorMessage className="ml-1 text-color-red" name="language" component="span" />
+                                <Field as="select" name="language">
+                                    <option value="English" label="English" />
+                                    <option value="Czech" label="Czech" />
+                                    <option value="French" label="French" />
+                                </Field>
+                            </div>
                             <div className="categories-group p-5">
                                 <label>Categories: </label>
                                 <ErrorMessage className="ml-1   text-color-red" name="categories" component="span" />

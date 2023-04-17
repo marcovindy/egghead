@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
+import React, { useEffect, useState, useContext, useMemo, useRef, useCallback } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { PlayCircleFill, HeartFill, EyeFill } from 'react-bootstrap-icons';
@@ -35,6 +35,7 @@ const Dashboard = () => {
     { value: 'German', label: 'German' },
     ]
   );
+  const [isMounted, setIsMounted] = useState(true);
 
 
   let history = useHistory();
@@ -49,7 +50,7 @@ const Dashboard = () => {
     return (quizTitle, quizId) => `${quizTitle}-${quizId}-${shortId}`;
   }, []);
 
-  const onFilterApply = (filterValues) => {
+  const onFilterApply = useCallback((filterValues) => {
     if (filterValues.categories.length === 0) {
       const categoryNames = categories.map((c) => c.name);
       setFilterValues({ ...filterValues, categories: categoryNames });
@@ -59,13 +60,10 @@ const Dashboard = () => {
 
     // Filter the quizzes based on the filter values
     const newQuizzes = listOfQuizzes.filter((quiz) => {
-      console.log("filterValues: ", filterValues);
-      console.log("quiz: ", quiz);
       // Filter by language
-      if (filterValues.language && quiz.language !== filterValues.language.value) {
+      if (filterValues.language && quiz.language !== filterValues.language) {
         return false;
       }
-
       // Filter by categories
       if (filterValues.categories.length > 0) {
         const quizCategories = quiz.Categories.map((c) => c.name);
@@ -73,25 +71,19 @@ const Dashboard = () => {
           return false;
         }
       }
-
-
-
       // Filter by number of questions
       if (filterValues.length) {
         const [min, max] = filterValues.length;
-        console.log(quiz.Questions.length. min, max);
         if (quiz.Questions.length < min || quiz.Questions.length > max) {
-         
           return false;
         }
       }
-
-
       return true;
     });
-    console.log("newQuizzes", newQuizzes);
-    setFilteredQuizzes(newQuizzes);
-  };
+    if (isMounted) {
+      setFilteredQuizzes(newQuizzes);
+    }
+  }, [listOfQuizzes, isMounted]);
 
   const createFilterMessage = () => {
     const { language, categories, length } = filterValues;
@@ -172,14 +164,14 @@ const Dashboard = () => {
 
     socket.emit("showActiveRooms");
 
-    fetchCategories();
     fetchQuizzes();
+    fetchCategories();
 
     return () => {
+      setIsMounted(false);
       socket.disconnect();
     };
   }, []);
-
 
   return (
     <div>

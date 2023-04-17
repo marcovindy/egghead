@@ -5,11 +5,13 @@ const { Quizzes, Categories, Users, Answers, Questions } = require('../models');
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 router.post('/create', validateToken, async (req, res) => {
-  const { title, description, categoryIds } = req.body;
+  const { title, language, description, categoryIds } = req.body;
   const userId = req.user.id;
 
+  if (!description) description = "";
+
   // Validate the data
-  if (!title || !description || categoryIds.length === 0) {
+  if (!title || !description || categoryIds.length === 0 || !language) {
     return res.status(400).json({ message: 'Invalid data' });
   }
 
@@ -17,6 +19,7 @@ router.post('/create', validateToken, async (req, res) => {
     // Create a new quiz object
     const quiz = await Quizzes.create({
       title,
+      language,
       description,
       userId,
     });
