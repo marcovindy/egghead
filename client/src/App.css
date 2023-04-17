@@ -376,3 +376,17 @@ input[type="radio"] {
     justify-content: center !important;
   }
 }
+
+.thumb-card {
+  list-style: none;
+  padding: 3px 6px;
+  color: #fff;
+  background-color: rgba(8, 8, 8, 0.4);
+  margin: 3px;
+  border-radius: 5px;
+  min-width: 30px;
+  max-width: 150px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

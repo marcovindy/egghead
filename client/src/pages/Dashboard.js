@@ -262,6 +262,7 @@ const Dashboard = () => {
             <Col className="card-col" key={key}>
               <Card className="h-100">
                 <Card.Body className="d-flex flex-column">
+                  <div class="thumb-card">{value.Questions.length} Questions</div>
                   <Card.Img
                     className="cursor-pointer"
                     onClick={() => {
@@ -279,12 +280,12 @@ const Dashboard = () => {
                       <HeartFill size={24} />
                     </Button>
                     <Button
+                      disabled={value.Questions.length <= 0}
                       onClick={() => {
                         const quizId = value.id;
                         const quizTitle = value.title;
                         const roomName = createRoomName(quizTitle, quizId); // Generate random room name
                         const masterName = value.User.username;
-                        // console.log(masterName, roomName, value.User.username, value.title, value.id);
                         history.push(`/gamemaster?roomName=${roomName}&masterName=${masterName}`);
                       }}
                     >
