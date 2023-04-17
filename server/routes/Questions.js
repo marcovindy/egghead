@@ -55,6 +55,26 @@ router.get('/byquizId/:id', async (req, res) => {
   }
 });
 
+
+router.get('/length/byquizId/:id', async (req, res) => {
+  try {
+    const quizId = req.params.id;
+    console.log("====================== quizId================",quizId);
+    const quiz = await Quizzes.findByPk(quizId);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+    const questions = await Questions.findAll({
+      where: { quizId },
+    });
+    return res.json({ quiz, questions });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 router.delete('/byquizId/:quizId', async (req, res) => {
   try {
     const quizId = req.params.quizId;

@@ -59,6 +59,8 @@ const Dashboard = () => {
 
     // Filter the quizzes based on the filter values
     const newQuizzes = listOfQuizzes.filter((quiz) => {
+      console.log("filterValues: ", filterValues);
+      console.log("quiz: ", quiz);
       // Filter by language
       if (filterValues.language && quiz.language !== filterValues.language.value) {
         return false;
@@ -72,14 +74,22 @@ const Dashboard = () => {
         }
       }
 
-      // // Filter by length
-      // if (filterValues.length && quiz.questions.length !== filterValues.length.value) {
-      //   return false;
-      // }
+
+
+      // Filter by number of questions
+      if (filterValues.length) {
+        const [min, max] = filterValues.length;
+        console.log(quiz.Questions.length. min, max);
+        if (quiz.Questions.length < min || quiz.Questions.length > max) {
+         
+          return false;
+        }
+      }
+
 
       return true;
     });
-
+    console.log("newQuizzes", newQuizzes);
     setFilteredQuizzes(newQuizzes);
   };
 
@@ -171,7 +181,6 @@ const Dashboard = () => {
   }, []);
 
 
-
   return (
     <div>
       <Row>
@@ -186,7 +195,7 @@ const Dashboard = () => {
                     onClick={() => {
                       const roomName = room.name;
                       const playerName = authState.username;
-                    
+
                       history.push(`/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`);
                     }}
                   >
@@ -208,7 +217,7 @@ const Dashboard = () => {
       <Row>
 
         <h2 className="mt-4">{t('customGameTitle')}</h2>
-       
+
         <Card className="my-4 p-3">
           <div className="d-flex col-12 flex-wrap-reverse justify-content-between align-items-center">
             <Col xs={12} lg={6} className="d-flex flex-column justify-content-center align-items-center">

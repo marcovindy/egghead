@@ -21,6 +21,15 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       onDelete: "CASCADE",
     });
+
+    // Associate with Questions
+    Quizzes.hasMany(models.Questions, {
+      onDelete: "CASCADE",
+      foreignKey: {
+        allowNull: false,
+        name: "quizId"
+      }
+    });
   };
 
   return Quizzes;

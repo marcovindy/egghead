@@ -38,6 +38,7 @@ router.post('/create', validateToken, async (req, res) => {
 
 router.get("/", validateToken, async (req, res) => {
   try {
+   
     const quizzes = await Quizzes.findAll({
       include: [
         {
@@ -47,6 +48,9 @@ router.get("/", validateToken, async (req, res) => {
         },
         {
           model: Users,
+        },
+        {
+          model: Questions,
         },
       ],
     });
