@@ -178,11 +178,6 @@ input {
   width: 100%;
 }
 
-input[type="radio"] {
-  
-}
-
-
 /* BLOBs */
 .blob-container {
   max-width: 100%;
@@ -277,11 +272,6 @@ input[type="radio"] {
 
 .ml-2 {
   margin-left: 2rem !important;
-}
-
-.btn-primary {
-  /* background-color: #4D6DB4;
-  border-color: #4D6DB4; */
 }
 
 .cursor-pointer {
