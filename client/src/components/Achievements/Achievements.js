@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AchievementCard from './AchievementCard/AchievementCard';
+import { Trophy } from 'react-bootstrap-icons';
+import './Achievements.css';
 
-
-const Achievements = () => {
+const Achievements = ({preview}) => {
   const achievements = [
     {
       title: 'First Achievement',
@@ -21,18 +22,46 @@ const Achievements = () => {
     },
   ];
 
+  const [hoveredIndex, setHoveredIndex] = useState(-1);
+
+
   return (
     <div>
-      <h2>Achievements</h2>
-      {achievements.map((achievement) => (
-        <AchievementCard
-          key={achievement.title}
-          title={achievement.title}
-          description={achievement.description}
-          unlocked={achievement.unlocked}
-        />
-      ))}
+
+      {preview ? (
+        <div className='achievement'>
+          {achievements.map((achievement, index) => (
+            <div className="achievement-preview"
+              key={achievement.title}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(-1)}
+            >
+              <Trophy size={35} />
+              {hoveredIndex === index && (
+                <div className="achievement-preview-tooltip">
+                  <p className='small'>{achievement.title}</p>
+                  {/* <p>{achievement.description}</p> */}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          <h2>Achievements</h2>
+          {achievements.map((achievement) => (
+            <AchievementCard
+              key={achievement.title}
+              title={achievement.title}
+              description={achievement.description}
+              unlocked={achievement.unlocked}
+            />
+
+          ))}
+        </>
+      )}
     </div>
+
   );
 };
 

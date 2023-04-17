@@ -1,22 +1,61 @@
 .player-box {
     &-info {
         flex-direction: column;
+   
     }
     &-exp {
         .progress {
             height: 1rem;
         }
     }
+    &-avatar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        border-radius: 5px 5px 0px 0px;
+        height: 170px;
+        border-bottom: 0.5px solid grey;
+        .rs-progress-circle {
+            transform: rotate(180deg);
+        }
+        &-content {
+            overflow: hidden;
+            position: relative;
+            border-radius: 100%;
+            border: 3px solid #eee;
+            margin: auto;
+        }
+        &-level {
+            position: absolute;
+            left: 34%;
+            top: 90px;
+            background: #bdb623;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            display: block;
+            width: 28px;
+            height: 28px;
+            border: 2px solid #fff;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 50%;
+            z-index: 10;
+        }
+    }
 }
 
 // Large devices (desktops, 992px and up)
-@media (min-width: 992px) { 
+@media (max-width: 992px) {
     .player-box {
         &-info {
             flex-direction: row;
         }
         &-exp {
-          
+        }
+        &-avatar {
+            flex-direction: column;
         }
     }
- }
+}

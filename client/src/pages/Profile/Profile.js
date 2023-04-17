@@ -210,7 +210,7 @@ function Profile() {
           })}
         </Row>
         <Row>
-          <Achievements/>
+          <Achievements preview={false}/>
         </Row>
       </div>
 

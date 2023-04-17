@@ -9,12 +9,66 @@
   height: 1rem;
 }
 
-@media (min-width: 992px) {
+.player-box-avatar {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  border-radius: 5px 5px 0px 0px;
+  height: 170px;
+  border-bottom: 0.5px solid grey;
+}
+
+.player-box-avatar .rs-progress-circle {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.player-box-avatar-content {
+  overflow: hidden;
+  position: relative;
+  border-radius: 100%;
+  border: 3px solid #eee;
+  margin: auto;
+}
+
+.player-box-avatar-level {
+  position: absolute;
+  left: 34%;
+  top: 90px;
+  background: #bdb623;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  display: block;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #fff;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+@media (max-width: 992px) {
   .player-box-info {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
         -ms-flex-direction: row;
             flex-direction: row;
+  }
+  .player-box-avatar {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 }
 /*# sourceMappingURL=PlayerBox.css.map */
