@@ -179,7 +179,6 @@ io.on('connect', (socket) => {
     res = Object.values(room.players); // send array with keys that has objects as values
     io.to(room.id).emit('scores', res);
     socket.broadcast.to(socket.roomId).emit('stopTime');
-
     // send individual score to each client
     for (const client of res) {
       socket.to(client.id).emit('finalPlayerInfo', client);
@@ -189,7 +188,6 @@ io.on('connect', (socket) => {
   socket.on('playerBoard', () => {
     const room = rooms[socket.roomName];
     res = Object.values(room.players); // send array with keys that has objects as values
-
     // send individual score to each client
     for (const client of res) {
       socket.to(client.id).emit('finalPlayerInfo', client);
@@ -199,19 +197,15 @@ io.on('connect', (socket) => {
   socket.on('startTimer', () => {
     const room = rooms[socket.roomName];
     const players = Object.values(room.players);
-    let timeLeft = questionDuration;
+    const timeLeft = questionDuration;
     console.log('Start timer', timeLeft);
     const timerInterval = setInterval(() => {
       timeLeft--;
       rooms[socket.roomName].timeLeft--;
-      // console.log('Start timer', timeLeft);
-
       if (timeLeft === 0) {
         clearInterval(timerInterval);
       }
-
       rooms[socket.roomName].timeLeft = timeLeft;
-
       for (const player of players) {
         socket.to(player.id).emit('timer', timeLeft, player);
       }
