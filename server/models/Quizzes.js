@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    language: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     description: {
       type: DataTypes.STRING,
       allowNull: false,
