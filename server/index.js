@@ -73,7 +73,7 @@ io.on('connect', (socket) => {
 
   // Send list of active rooms to client whenever a new room is created or a player joins a room
   const sendActiveRooms = () => {
-    const activeRooms = Object.values(rooms).map(({id, name, players}) => ({ id, name, players: Object.values(players) }));
+    const activeRooms = Object.values(rooms).map(({ id, name, players }) => ({ id, name, players: Object.values(players) }));
     io.emit('activeRooms', activeRooms);
   }
 
@@ -137,7 +137,7 @@ io.on('connect', (socket) => {
   };
 
   socket.on('ready', (callback) => {
-    const room = rooms[socket.roomName]; 
+    const room = rooms[socket.roomName];
     if (room.sockets.length > 2) {
       for (const client of room.sockets) {
         client.emit('initGame');
@@ -155,12 +155,13 @@ io.on('connect', (socket) => {
   socket.on('playerChoice', ({ playerName, choice, gameRound }) => {
     const room = rooms[socket.roomName];
     room.sockets[0].emit('playerChoice', playerName, choice, gameRound); // first socket is game master
+    res = Object.values(room.players);
   });
 
   socket.on('updateScore', (playerName) => {
     const room = rooms[socket.roomName];
     const remainingTime = room.timeLeft;
-    const remainingPercentage = remainingTime  / 20;
+    const remainingPercentage = remainingTime / 20;
     room.players[playerName].score += 1000 + 1000 * remainingPercentage;
     for (const client of res) {
       socket.to(client.id).emit('getRoomPlayers', Object.values(room.players));
@@ -179,6 +180,7 @@ io.on('connect', (socket) => {
     res = Object.values(room.players); // send array with keys that has objects as values
     io.to(room.id).emit('scores', res);
     socket.broadcast.to(socket.roomId).emit('stopTime');
+
     // send individual score to each client
     for (const client of res) {
       socket.to(client.id).emit('finalPlayerInfo', client);
@@ -187,25 +189,31 @@ io.on('connect', (socket) => {
 
   socket.on('playerBoard', () => {
     const room = rooms[socket.roomName];
-    res = Object.values(room.players); // send array with keys that has objects as values
-    // send individual score to each client
-    for (const client of res) {
-      socket.to(client.id).emit('finalPlayerInfo', client);
-    };
+    if (room.players) {
+      res = Object.values(room.players); // send array with keys that has objects as values
+
+      // send individual score to each client
+      for (const client of res) {
+        socket.to(client.id).emit('finalPlayerInfo', client);
+      };
+    }
   });
 
   socket.on('startTimer', () => {
     const room = rooms[socket.roomName];
     const players = Object.values(room.players);
-    const timeLeft = questionDuration;
+    let timeLeft = questionDuration;
     console.log('Start timer', timeLeft);
     const timerInterval = setInterval(() => {
       timeLeft--;
       rooms[socket.roomName].timeLeft--;
+
       if (timeLeft === 0) {
         clearInterval(timerInterval);
       }
+
       rooms[socket.roomName].timeLeft = timeLeft;
+
       for (const player of players) {
         socket.to(player.id).emit('timer', timeLeft, player);
       }

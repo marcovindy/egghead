@@ -138,7 +138,6 @@ const Dashboard = () => {
           headers: { accessToken },
         });
         setCategories(response.data.listOfCategories);
-        // console.log("categories response.data: ", response.data.listOfCategories);
       } catch (error) {
         console.log('Error:', error);
       }

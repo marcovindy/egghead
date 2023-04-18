@@ -40,6 +40,8 @@ const GamePlayer = ({ location }) => {
     const questionDuration = 20;
     const progress = 100 - ((questionDuration - timeLeft) / questionDuration) * 100;
     const [timerStarted, setTimerStarted] = useState(false);
+    const [totalQuestionsNum, setTotalQuestionsNum] = useState(0);
+    const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
 
     const history = useHistory();
 
@@ -78,6 +80,7 @@ const GamePlayer = ({ location }) => {
             setCurrentQuestion(gameQuestion);
             setCurrentOptions(gameOptionsArray);
             setCurrentRound(gameRound);
+            setCurrentQuestionNum(gameRound);
             setCorrectAnswer('');
             setGameStart(true);
             setGameEnd(false);
@@ -131,58 +134,70 @@ const GamePlayer = ({ location }) => {
 
     return (
         <Container>
-            {error && (
+            {error ? (
                 <div className="errorMsg">
                     <p>{errorMsg.error}</p>
                     <Link to="/customgame">Go back</Link>
                 </div>
-            )}
-            {!gameStart && (
+            ) : (
                 <>
-                    {timerStarted ? (
-                        <div>
-                            <h3>Game will be started: {timeLeft}</h3>
-                            <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
-                        </div>
-                    ) : (
-                        <div>
-                        <h2>Hello, Game player {playerName}!</h2>
-                        <p><strong>Waiting for Game Master to start the game...</strong></p>
-                        <div className="messages-container">
-                            <h3>Activity</h3>
-                            <hr />
-                            <Messages messages={messages} />
-                        </div>
-                        <a href="/lobby">Leave room</a>
-                    </div>
+
+
+                    {!gameStart && (
+                        <>
+                            <div>
+                                <h3>Num of questions: {totalQuestionsNum}</h3>
+                            </div>
+                            {timerStarted ? (
+                                <div>
+                                    <h3>Game will be started: {timeLeft}</h3>
+                                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                                </div>
+                            ) : (
+                                <div>
+                                    <h2>Hello, Game player {playerName}!</h2>
+                                    <p><strong>Waiting for Game Master to start the game...</strong></p>
+                                    <div className="messages-container">
+                                        <h3>Activity</h3>
+                                        <hr />
+                                        <Messages messages={messages} />
+                                    </div>
+                                    <a href="/lobby">Leave room</a>
+                                </div>
+                            )}
+                        </>
                     )}
-                </>
-            )}
-            {gameStart && (
-                <>
+                    {gameStart && (
+                        <>
+                            <div>
+                                <h3>Num of questions: {totalQuestionsNum}</h3>
+                                <ProgressBar className='num-of-questions-bar' max={totalQuestionsNum} now={currentQuestionNum} label={`${currentQuestionNum}/${totalQuestionsNum} questions`} />
+                            </div>
+                            {!gameEnd && (
+                                <div>
+                                    <h3>Time left: {timeLeft}</h3>
+                                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                                    <GameQuestion
+                                        currentQuestion={currentQuestion}
+                                        currentOptions={currentOptions}
+                                        currentRound={currentRound}
+                                        playerName={playerName}
+                                        socket={socket}
+                                        clickStatus={clickActivated}
+                                        onClickChange={handleClickChange}
+                                        correctAnswer={correctAnswer}
+                                    />
+                                </div>
+                            )}
+                            {gameEnd && (
+                                <EndGame players={players} player={player} />
+                            )}
+                        </>
+                    )}
                     {!gameEnd && (
-                        <div>
-                            <h3>Time left: {timeLeft}</h3>
-                            <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
-                            <GameQuestion
-                                currentQuestion={currentQuestion}
-                                currentOptions={currentOptions}
-                                currentRound={currentRound}
-                                playerName={playerName}
-                                socket={socket}
-                                clickStatus={clickActivated}
-                                onClickChange={handleClickChange}
-                                correctAnswer={correctAnswer}
-                            />
-                        </div>
-                    )}
-                    {gameEnd && (
-                        <EndGame players={players} player={player} />
+                        <ListOfPlayers playersInRoom={playersInRoom} />
                     )}
                 </>
-            )}
-            {!gameEnd && (
-                <ListOfPlayers playersInRoom={playersInRoom} />
             )}
         </Container>
     );

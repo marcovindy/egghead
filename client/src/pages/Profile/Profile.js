@@ -34,8 +34,6 @@ function Profile() {
   const [user, setUser] = useState(initialUserState);
   const { authState } = useContext(AuthContext);
   useEffect(() => {
-    console.log('UserName from URL: ', id);
-    console.log('UserName from URL: ', username);
     const source = axios.CancelToken.source();
     axios.get(`${URL1}${username}`, { cancelToken: source.token })
       .then((response) => {

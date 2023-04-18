@@ -48,6 +48,11 @@ const GameMaster = () => {
 
     const [questionsAreLoading, setQuestionsAreLoading] = useState(true);
 
+    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [totalQuestions, setTotalQuestions] = useState(0);
+
+
+
     const location = useLocation();
 
 
@@ -118,6 +123,7 @@ const GameMaster = () => {
                     };
                 });
                 setQuestions(formattedQuestions);
+                setTotalQuestions(formattedQuestions.length);
                 setQuestionsAreLoading(false);
             })
             .catch((error) => {
@@ -140,7 +146,6 @@ const GameMaster = () => {
 
     const sendQuestion = (questionObj) => {
         if (round <= questionObj.length) {
-            console.log(questionObj);
             const gameQuestion = questionObj[round].question;
             const answers = questionObj[round].answers;
             const correctAnswer = answers.find(answer => answer.isCorrect).text;
@@ -154,7 +159,7 @@ const GameMaster = () => {
             setCorrectAnswer(correctAnswer);
             setRound(prevRound => { return prevRound + 1 });
             const gameRound = round + 1;
-            console.log(gameOptionsArray);
+            setCurrentQuestion(round + 1);
             socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound });
         }
     };
@@ -222,12 +227,14 @@ const GameMaster = () => {
     useEffect(() => {
         console.log("STOP");
         socket.on('stopTime', () => {
-           console.log("STOP from server");          
+            console.log("STOP from server");
         });
     }, []);
 
+
     return (
         <Container>
+
             {gameStarted === true && gameEnded === false ? (
                 <div>
                     <h3>Time Left: {timeLeft}</h3>
@@ -293,7 +300,11 @@ const GameMaster = () => {
                             )
                             }
 
+                        </div> <div>
+                            <h3>Number of questions: {totalQuestions}</h3>
+                            <ProgressBar className='num-of-questions-bar' max={totalQuestions} now={currentQuestion} label={`${currentQuestion}/${totalQuestions} Questions`} />
                         </div>
+
                         <div className="players-container">
                             <h3>Players in room: {playerCount}</h3>
                             <hr />

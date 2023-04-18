@@ -3,4 +3,15 @@
   width: 100%;
   font-size: 18px;
 }
+
+.progress.num-of-questions-bar {
+  height: 20px;
+  width: 100%;
+  font-size: 18px;
+  background-color: #a2e7c7;
+}
+
+.progress.num-of-questions-bar .progress-bar {
+  background-color: #4981ab;
+}
 /*# sourceMappingURL=Progress.css.map */
