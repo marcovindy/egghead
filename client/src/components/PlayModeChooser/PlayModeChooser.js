@@ -25,9 +25,11 @@ const PlayModeChooser = () => {
     setSelectedModeDescription(null);
     setSelectedMode(null);
   };
-  
+
   const handleButtonClick = (gamemode) => {
     if (gamemode === 'customgame') {
+      history.push(`/${gamemode}`);
+    } else if (gamemode === 'rankedgame') {
       history.push(`/${gamemode}`);
     } else {
       toast.warning(t('featureInDevelopment'));
@@ -38,8 +40,8 @@ const PlayModeChooser = () => {
     <>
       <Row className='p-0 d-flex'>
         <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
-          <Col lg={11} className="d-flex justify-content-center">  
-             <Button className="w-100" block="true" onClick={() => handleButtonClick('rankedgame')}>
+          <Col lg={11} className="d-flex justify-content-center">
+            <Button className="w-100" block="true" onClick={() => handleButtonClick('rankedgame')}>
               Ranked Game
             </Button>
           </Col>
@@ -58,7 +60,7 @@ const PlayModeChooser = () => {
         </Col>
         <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
           <Col lg={11} className="d-flex justify-content-center">
-             <Button className="w-100" block="true" onClick={() => handleButtonClick('customgame')}>
+            <Button className="w-100" block="true" onClick={() => handleButtonClick('customgame')}>
               Custom Game
             </Button>
           </Col>
@@ -77,7 +79,7 @@ const PlayModeChooser = () => {
         </Col>
         <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
           <Col lg={11} className="d-flex justify-content-center">
-             <Button className="w-100" block="true" onClick={() => handleButtonClick('randomgame')}>
+            <Button className="w-100" block="true" onClick={() => handleButtonClick('randomgame')}>
               Random Game with Friends
             </Button>
           </Col>
@@ -104,7 +106,7 @@ const PlayModeChooser = () => {
           <p>{selectedModeDescription}</p>
         </Modal.Body>
       </Modal>
-      </>
+    </>
   );
 };
 

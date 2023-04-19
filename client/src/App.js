@@ -15,6 +15,7 @@ import Profile from "./pages/Profile/Profile";
 import ChangePassword from "./pages/ChangePassword";
 import Signup from "./pages/Signup/Signup";
 import LandingPage from './pages/Home/LandingPage';
+import RankedGame from './pages/RankedGame/RankedGame';
 import Quiz from './pages/Quiz/Quiz';
 import Play from './pages/Play/Play';
 import JoinGame from './components/JoinGame/JoinGame';
@@ -169,6 +170,7 @@ function App() {
               <Route path="/" exact component={LandingPage} />
               <Route path="/createquiz" exact component={CreateQuiz} />
               <Route path="/customgame" exact component={Dashboard} />
+              <Route path="/rankedgame" exact component={RankedGame} />
               <Route path="/lobby" exact component={JoinGame} />
               <Route path="/createpost" exact component={CreatePost} />
               <Route path="/post/:id" exact component={Post} />
