@@ -63,7 +63,51 @@ app.get("*", (req, res) => {
 });
 
 // SOCKET
-rooms = [];
+const rooms = [];
+
+function joinRoom(socket, room, playerName) {
+  socket.join(room.id, () => {
+    room.sockets.push(socket);
+    socket.roomId = room.id;
+    socket.roomName = room.name;
+    socket.username = playerName;
+
+    if (room.sockets.length !== 1) {
+      const player = { id: socket.id, username: playerName, score: 0 };
+      room.players[playerName] = player;
+    }
+
+    socket.emit('message', { text: `Welcome ${playerName} to the game in ${room.name}.` });
+    socket.broadcast.to(room.id).emit('message', { text: `${playerName} has joined the game!` });
+
+    const allPlayersInRoom = Object.values(room.players);
+    io.to(room.id).emit('playerData', allPlayersInRoom);
+  });
+}
+// Funkce pro odeslání seznamu aktivních místností
+const sendActiveRoomsToAll = () => {
+  const activeRooms = Object.values(rooms).map(({ id, name, players }) => ({ id, name, players: Object.values(players) }));
+  io.emit('activeRooms', activeRooms);
+};
+
+const createNewRoom = (roomName, masterName, socket) => {
+  if (rooms[roomName]) {
+    return socket.emit('createRoomError', { message: 'Error: Room already exists with that name, try another!' });
+  }
+
+  const room = {
+    id: uuidv1(),
+    name: roomName,
+    sockets: [],
+    players: {}
+  };
+
+  rooms[roomName] = room;
+
+  joinRoom(socket, room, masterName);
+
+  sendActiveRoomsToAll();
+};
 
 // Create new room
 io.on('connect', (socket) => {
@@ -71,39 +115,19 @@ io.on('connect', (socket) => {
 
   socket.emit('newConn', { msg: 'welcome' });
 
-  // Send list of active rooms to client whenever a new room is created or a player joins a room
-  const sendActiveRooms = () => {
-    const activeRooms = Object.values(rooms).map(({ id, name, players }) => ({ id, name, players: Object.values(players) }));
-    io.emit('activeRooms', activeRooms);
-  }
-
-  socket.on('showActiveRooms', (sendActiveRooms));
+  socket.on('showActiveRooms', (sendActiveRoomsToAll));
 
   socket.on('createRoom', ({ roomName, masterName }, callback) => {
-    if (rooms[roomName]) {
-      return callback({ error: "Room already exists with that name, try another!" });
-    };
-    const room = {
-      id: uuidv1(),
-      name: roomName,
-      sockets: [],
-      players: []
-    };
-    rooms[roomName] = room;
-
-    joinRoom(socket, room, masterName);
-
-    // Send updated list of active rooms to all clients
-    sendActiveRooms();
+    createNewRoom(roomName, masterName, socket);
   });
 
   // Join existing room
   socket.on('joinRoom', ({ joinRoomName, playerName }, callback) => {
     const room = rooms[joinRoomName];
-    if (typeof room === 'undefined') {
+    if (!room) {
       return callback({ error: "No rooms created with that name" });
     };
-    if (playerName === '') {
+    if (!playerName) {
       return callback({ error: "You have to fill out player name" });
     };
     if (room.players[playerName]) {
@@ -112,29 +136,8 @@ io.on('connect', (socket) => {
     joinRoom(socket, room, playerName);
 
     // Send updated list of active rooms to all clients
-    sendActiveRooms();
+    sendActiveRoomsToAll();
   });
-
-  // Join existing room
-  const joinRoom = (socket, room, playerName) => {
-    socket.join(room.id, () => {
-      room.sockets.push(socket);
-      socket.roomId = room.id;
-      socket.roomName = room.name;
-      socket.username = playerName;
-
-      if (room.sockets.length !== 1) {
-        const player = { id: socket.id, username: playerName, score: 0 }
-        rooms[socket.roomName].players[playerName] = player;
-      };
-
-      socket.emit('message', { text: `Welcome ${playerName} to the game in ${room.name}.` });
-      socket.broadcast.to(room.id).emit('message', { text: `${playerName} has joined the game!` });
-
-      allPlayersInRoom = Object.values(room.players); // send key/value obj in socket
-      io.to(room.id).emit('playerData', allPlayersInRoom); // io, to everyone including sender
-    });
-  };
 
   socket.on('ready', (callback) => {
     const room = rooms[socket.roomName];
