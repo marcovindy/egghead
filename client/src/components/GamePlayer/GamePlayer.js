@@ -88,10 +88,6 @@ const GamePlayer = ({ location }) => {
             setClickActivated(true);
         });
 
-        // socket.on('correctAnswer', (correctAnswer) => {
-        //     setCorrectAnswer(correctAnswer);
-        // });
-
         socket.on('scores', (players) => {
             setPlayers(players);
             setGameEnd(true);
@@ -147,8 +143,6 @@ const GamePlayer = ({ location }) => {
                 </div>
             ) : (
                 <>
-
-
                     {!gameStart && (
                         <>
                             <div>
