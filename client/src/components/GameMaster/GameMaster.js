@@ -40,6 +40,7 @@ const GameMaster = () => {
     const [playerCount, setPlayerCount] = useState([]);
 
     const [gameStarted, setGameStarted] = useState(false);
+    const [gameReady, setGameReady] = useState(false);
     const [gameEnded, setGameEnded] = useState(false);
 
     const questionDuration = 20;
@@ -50,6 +51,7 @@ const GameMaster = () => {
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [totalQuestions, setTotalQuestions] = useState(0);
+    const [quizInfo, setQuizInfo] = useState({});
 
 
 
@@ -102,18 +104,27 @@ const GameMaster = () => {
     const InitGame = () => {
         socket.emit('ready', (res) => {
             setServerResMsg(res);
-            setGameStarted(true);
             setGameEnded(false);
-
+            setGameStarted(true);
         });
     };
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}questions/byquizId/${id}`)
-            .then((response) => {
-                const formattedQuestions = response.data.questions.map(question => {
-                    const formattedAnswers = question.Answers.map(answer => ({
+        const fetchQuizInfo = async () => {
+            try {
+                const response = await axios.get(`${API_URL}quizzes/byquizId/${id}`);
+                setQuizInfo(response.data);
+                socket.emit('sendQuizInfo', response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        const fetchQuestions = async () => {
+            try {
+                const response = await axios.get(`${API_URL}questions/byquizId/${id}`);
+                const quiz = response.data.quiz;
+                const formattedQuestions = response.data.questions.map((question) => {
+                    const formattedAnswers = question.Answers.map((answer) => ({
                         text: answer.answer,
                         isCorrect: answer.isCorrect,
                     }));
@@ -125,111 +136,89 @@ const GameMaster = () => {
                 setQuestions(formattedQuestions);
                 setTotalQuestions(formattedQuestions.length);
                 setQuestionsAreLoading(false);
-            })
-            .catch((error) => {
+                socket.emit('sendQuestionsToServerTest', formattedQuestions);
+            } catch (error) {
                 console.log(error);
-            });
-
+            }
+        };
+        fetchQuizInfo();
+        fetchQuestions();
     }, [API_URL, id]);
 
     useEffect(() => {
-        socket.on('initGame', () => {
-            if (questions.length > 0) {
-                setRound(0);
-                console.log("Action 1 = Game Created.");
-                sendQuestion(questions);
-            }
-        });
-    }, [!questionsAreLoading]);
+        const startGame = async () => {
+            setGameReady(true);
+            await new Promise((resolve) => {
+                socket.on('initGame', resolve);
+            });
+            socket.emit('startTimerTest');
+            socket.on('timerTick', (timeLeftTest) => {
+                console.log('timerTick: ', timeLeftTest);
+                setTimeLeft(timeLeftTest);
+            });
+            socket.on('nextQuestion', () => {
+                console.log('nextQuestion has been sent ');
+            });
+        };
+        if (!gameReady) {
+            startGame();
+        }
+    }, [socket]);
+
+
 
     // Funkce pro odeslání otázky všem hráčům a uložení správné odpovědi
 
-    const sendQuestion = (questionObj) => {
-        if (round <= questionObj.length) {
-            const gameQuestion = questionObj[round].question;
-            const answers = questionObj[round].answers;
-            const correctAnswer = answers.find(answer => answer.isCorrect).text;
-            const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
-            const gameOptionsArray = [
-                ...incorrectAnswers.map(answer => answer.text)
-            ];
-            const randomNumber = Math.random() * 3;
-            const position = Math.floor(randomNumber) + 1;
-            gameOptionsArray.splice(position - 1, 0, correctAnswer); // startpos: 0, delete 0, add
-            setCorrectAnswer(correctAnswer);
-            setRound(prevRound => { return prevRound + 1 });
-            const gameRound = round + 1;
-            setCurrentQuestion(round + 1);
-            socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound });
-        }
-    };
+    // const sendQuestion = (questionObj) => {
+    //     if (round <= questionObj.length) {
+    //         const gameQuestion = questionObj[round].question;
+    //         const answers = questionObj[round].answers;
+    //         const correctAnswer = answers.find(answer => answer.isCorrect).text;
+    //         const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
+    //         const gameOptionsArray = [
+    //             ...incorrectAnswers.map(answer => answer.text)
+    //         ];
+    //         const randomNumber = Math.random() * 3;
+    //         const position = Math.floor(randomNumber) + 1;
+    //         gameOptionsArray.splice(position - 1, 0, correctAnswer); // startpos: 0, delete 0, add
+    //         setCorrectAnswer(correctAnswer);
+    //         setRound(prevRound => { return prevRound + 1 });
+    //         const gameRound = round + 1;
+    //         setCurrentQuestion(round + 1);
+    //         socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound });
+    //     }
+    // };
 
     // Funkce pro přechod na další otázku a odeslání informace o všech hráčích na server
 
-    const NextQuestion = () => {
-        if (round !== questions.length) {
-            sendQuestion(questions);
-            socket.emit('playerBoard');
-        } else {
-            setIsGameRunning(false);
-            socket.emit('endGame');
-            socket.emit('playerBoard');
-            setServerResMsg({ res: 'The game has ended! You can play again if there are enough players.' });
-            setGameEnded(true);
-        };
-    };
+    // const NextQuestion = () => {
+    //     if (round !== questions.length) {
+    //         sendQuestion(questions);
+    //         socket.emit('playerBoard');
+    //     } else {
+    //         setIsGameRunning(false);
+    //         socket.emit('endGame');
+    //         socket.emit('playerBoard');
+    //         setServerResMsg({ res: 'The game has ended! You can play again if there are enough players.' });
+    //         setGameEnded(true);
+    //     };
+    // };
 
-    useEffect(() => {
-        socket.on('playerChoice', (playerName, playerChoice, gameRound) => {
-            if (gameRound === round) {
-                if (playerChoice === decodeURIComponent(correctAnswer)) {
-                    console.log(playerName, 'has answered CORRECTLY:', playerChoice);
-                    socket.emit('updateScore', playerName);
-                };
-                socket.emit('correctAnswer', correctAnswer, playerName);
-            };
-            setServerResMsg({ res: 'When all players have answered, click Next question' });
-        });
-    }, [round]);
+    // useEffect(() => {
+    //     socket.on('playerChoice', (playerName, playerChoice, gameRound,  correctAnswer) => {
+    //         if (gameRound === round) {
+    //             if (playerChoice === decodeURIComponent(correctAnswer)) {
+    //                 console.log(playerName, 'has answered CORRECTLY:', playerChoice);
+    //                 socket.emit('updateScore', playerName);
+    //             };
+    //             socket.emit('correctAnswer', correctAnswer, playerName);
+    //         };
+    //         setServerResMsg({ res: 'When all players have answered, click Next question' });
+    //     });
+    // }, [round]);
 
-    // Funkce pro spuštění Timeru
-    const startTimer = () => {
-        setTimeLeft(questionDuration); // reset the timer
-    };
-
-    // Efekt pro spuštění Timeru, když hra začíná a když skončí, tak se vypne
-    useEffect(() => {
-        if (gameStarted && !gameEnded) {
-            setIsGameRunning(true);
-            socket.emit('startTimer');
-            const intervalId = setInterval(() => {
-                setTimeLeft(prevTime => prevTime - 1);
-            }, 1000);
-
-            return () => clearInterval(intervalId);
-        }
-    }, [gameStarted]);
 
     const progress = 100 - ((questionDuration - timeLeft) / questionDuration) * 100;
-
-
-    // Efekt pro získání další otázky, když časovač dosáhne nuly
-    useEffect(() => {
-        if (timeLeft === 0) {
-            if (!gameEnded) {
-                startTimer(); // reset the timer
-                NextQuestion(); // get the next question
-                socket.emit('startTimer');
-            }
-        }
-    }, [timeLeft]);
-
-    useEffect(() => {
-        console.log("STOP");
-        socket.on('stopTime', () => {
-            console.log("STOP from server");
-        });
-    }, []);
 
 
     return (

@@ -89,10 +89,18 @@ router.get("/byuserId/:id", async (req, res) => {
 
 router.get("/byquizId/:id", async (req, res) => {
   const id = req.params.id;
-  const quiz = await Quizzes.findByPk(id);
-  // console.log(quiz);
+  const quiz = await Quizzes.findByPk(id, {
+    include: [
+      {
+        model: Categories,
+        through: "quiz_categories",
+        as: "Categories",
+      },
+    ],
+  });
   return res.json(quiz);
 });
+
 
 router.delete("/delete/byquizId/:id", async (req, res) => {
   console.log("delete");

@@ -10,7 +10,7 @@ const GameQuestion = ({ currentQuestion, currentOptions, currentRound, playerNam
         const choice = event.target.innerText; // Získání textu vybrané volby
         const gameRound = currentRound; // Uložení aktuálního kola do proměnné
         // Odeslání volby hráče serveru pomocí socketu
-        socket.emit('playerChoice', { playerName, choice, gameRound }, () => {
+        socket.emit('playerChoice', { playerName, choice, gameRound, }, correctAnswer, () => {
             console.log('player name', playerName, 'choice', playerChoice);
         });
         setPlayerChoice(choice); // Uložení volby hráče do stavu

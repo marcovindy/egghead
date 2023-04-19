@@ -158,6 +158,7 @@ const Dashboard = () => {
     const socket = io(API_URL);
 
     socket.on("activeRooms", (rooms) => {
+      console.log('activeRooms', rooms);
       setActiveRooms(rooms);
     });
 
@@ -176,26 +177,43 @@ const Dashboard = () => {
     <div>
       <Row>
         <h2>{t('activeRoomsTitle')}</h2>
-        <Col span={8}>
+        <Col span={8} className="card-col">
           <Card title={t('activeRoomsTitle')}>
             {activeRooms.length > 0 ? (
               activeRooms.map((room, index) => (
-                <div key={index} className="d-flex">
-                  <Button
-                    className="m-2"
-                    onClick={() => {
-                      const roomName = room.name;
-                      const playerName = authState.username;
+                room.round === 0 ? (
 
-                      history.push(`/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`);
-                    }}
-                  >
-                    <PlayCircleFill size={24} />
-                  </Button>
-                  <h3 className="m-2" key={room.id}>
-                    {room.name}
-                  </h3>
-                </div>
+
+                  <div key={index} className="d-flex justify-content-between">
+                    <Button
+                      className="m-2"
+                      onClick={() => {
+                        const roomName = room.name;
+                        const playerName = authState.username;
+
+                        history.push(`/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`);
+                      }}
+                    >
+                      <PlayCircleFill size={24} />
+                    </Button>
+                    <h3 className="m-2" key={room.id}>
+                      {room.name}
+                    </h3>
+                    <ul>
+                      {console.log(room)}
+                      {room.categories && room.categories.map((category, index) => (
+                        <li key={index} className="d-flex flex-column justify-content-center">
+                          <span>
+                            {category.name}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  ""
+                )
+
               ))
             ) : (
               <div className="text-center p-5">
@@ -261,7 +279,7 @@ const Dashboard = () => {
             <Col className="card-col" key={key}>
               <Card className="h-100">
                 <Card.Body className="d-flex flex-column">
-                  <div class="thumb-card">{value.Questions.length} Questions</div>
+                  <div className="thumb-card">{value.Questions.length} Questions</div>
                   <Card.Img
                     className="cursor-pointer"
                     onClick={() => {

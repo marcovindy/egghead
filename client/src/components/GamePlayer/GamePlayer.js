@@ -37,8 +37,8 @@ const GamePlayer = ({ location }) => {
     const [playersScore, setPlayersScore] = useState([]);
     const [score, setScore] = useState([]);
     const [timeLeft, setTimeLeft] = useState(0);
-    const questionDuration = 20;
-    const progress = 100 - ((questionDuration - timeLeft) / questionDuration) * 100;
+    const [duration, setDuration] = useState(10);
+    const progress = 100 - ((duration - timeLeft) / duration) * 100;
     const [timerStarted, setTimerStarted] = useState(false);
     const [totalQuestionsNum, setTotalQuestionsNum] = useState(0);
     const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
@@ -76,26 +76,25 @@ const GamePlayer = ({ location }) => {
     }, [messages]);
 
     useEffect(() => {
-        socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound) => {
+        socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound, correctAnswer) => {
+            console.log("correct answer (current round): ", correctAnswer);
+            setCorrectAnswer(correctAnswer);
             setCurrentQuestion(gameQuestion);
             setCurrentOptions(gameOptionsArray);
             setCurrentRound(gameRound);
             setCurrentQuestionNum(gameRound);
-            setCorrectAnswer('');
             setGameStart(true);
             setGameEnd(false);
             setClickActivated(true);
         });
 
-        socket.on('correctAnswer', (correctAnswer) => {
-            setCorrectAnswer(correctAnswer);
-            console.log('Action 2 correctAnswer');
-        });
+        // socket.on('correctAnswer', (correctAnswer) => {
+        //     setCorrectAnswer(correctAnswer);
+        // });
 
         socket.on('scores', (players) => {
             setPlayers(players);
             setGameEnd(true);
-            console.log('score na konci')
         });
 
         socket.on("getRoomPlayers", (ps) => {
@@ -106,12 +105,19 @@ const GamePlayer = ({ location }) => {
             setPlayer(client);
         });
 
-        socket.on('timer', (secs) => {
-            const elapsed = questionDuration - secs;
+        socket.on('timerTick', (timeLeftTest, questionDuration) => {
+            setDuration(questionDuration);
+            console.log('timerTick: ', timeLeftTest);
+            const elapsed = questionDuration - timeLeftTest;
             setTimeLeft(questionDuration - elapsed);
+            console.log(questionDuration-elapsed);
             setTimerStarted(true);
         });
-    }, [questionDuration]);
+
+        socket.on('nextQuestion', () => {
+            console.log('nextQuestion has been sent ');
+        });
+    }, [duration]);
 
     const handleLeaveRoom = () => {
         socket.emit("leaveRoom", playerName);

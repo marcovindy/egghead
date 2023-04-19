@@ -6,7 +6,7 @@ const http = require('http');
 const path = require('path');
 const uuidv1 = require('uuid/v1');
 
-questionDuration = 20;
+questionDuration = 10;
 
 const PORT = process.env.PORT || 5000;
 
@@ -82,12 +82,22 @@ function joinRoom(socket, room, playerName) {
 
     const allPlayersInRoom = Object.values(room.players);
     io.to(room.id).emit('playerData', allPlayersInRoom);
+
+    // Update activeRooms list
+    sendActiveRoomsToAll();
   });
 }
 // Funkce pro odeslání seznamu aktivních místností
 const sendActiveRoomsToAll = () => {
-  const activeRooms = Object.values(rooms).map(({ id, name, players }) => ({ id, name, players: Object.values(players) }));
-  io.emit('activeRooms', activeRooms);
+  console.log('rooms', Object.values(rooms))
+  const activeRooms = Object.values(rooms).map(({ id, name, players, categories, round }) => ({
+    id,
+    name,
+    players: Object.values(players),
+    categories: categories || [], // sets categories to an empty array if it's undefined
+    round: round || 0,
+  }));
+   io.emit('activeRooms', activeRooms);
 };
 
 const createNewRoom = (roomName, masterName, socket) => {
@@ -106,8 +116,74 @@ const createNewRoom = (roomName, masterName, socket) => {
 
   joinRoom(socket, room, masterName);
 
+  // Update activeRooms list
   sendActiveRoomsToAll();
 };
+
+const nextQuestion = (socket, round, questions) => {
+  const room = rooms[socket.roomName];
+  console.log("round: ", round);
+  const gameQuestion = room.questions[round - 1].question;
+  const answers = room.questions[round - 1].answers;
+  const correctAnswer = answers.find(answer => answer.isCorrect).text;
+  const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
+  const gameOptionsArray = [
+    ...incorrectAnswers.map(answer => answer.text)
+  ];
+  const randomNumber = Math.random() * 3;
+  const position = Math.floor(randomNumber) + 1;
+  gameOptionsArray.splice(position - 1, 0, correctAnswer);
+  const gameRound = round;
+  // socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound, correctAnswer });
+  socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer);
+  console.log(gameQuestion, gameOptionsArray, gameRound, correctAnswer);
+     // Update activeRooms list
+     sendActiveRoomsToAll();
+};
+
+const startTimerTest = (socket) => {
+  const room = rooms[socket.roomName];
+  const players = Object.values(room.players);
+  const questions = room.questions;
+  var timeLeftTest = questionDuration;
+  console.log(timeLeftTest);
+
+  const timerInterval = setInterval(() => {
+    res = Object.values(room.players);
+    timeLeftTest--;
+    room.timeLeft = timeLeftTest;
+    for (const player of players) {
+      socket.to(player.id).emit('timerTick', timeLeftTest, questionDuration, player);
+    }
+    if (timeLeftTest === 0) {
+      clearInterval(timerInterval);
+
+      if (room.round < 3) {
+        room.round++;
+        const round = room.round;
+        timeLeftTest = questionDuration;
+        nextQuestion(socket, round, questions);
+        startTimerTest(socket);
+      } else {
+        console.log("Game Ended! (Timer)")
+      }
+    }
+  }, 1000);
+}
+
+const updateScore = (socket, playerName) => {
+  const room = rooms[socket.roomName];
+  const remainingTime = room.timeLeft;
+  const remainingPercentage = remainingTime / 20;
+  room.players[playerName].score += 1000 + 1000 * remainingPercentage;
+  res = Object.values(room.players);
+  console.log("res: ", res);
+  socket.emit('getRoomPlayers', res);
+  for (const client of res) {
+    socket.to(client.id).emit('getRoomPlayers', res);
+  };
+  console.log("Points: ", room.players[playerName].score, " Name: ", room.players[playerName].username);
+}
 
 // Create new room
 io.on('connect', (socket) => {
@@ -151,32 +227,64 @@ io.on('connect', (socket) => {
     }
   });
 
-  socket.on('showQuestion', ({ gameQuestion, gameOptionsArray, gameRound }) => {
-    socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound);
+  // socket.on('showQuestion', ({ gameQuestion, gameOptionsArray, gameRound }) => {
+  //   socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound);
+  // });
+
+  socket.on('sendQuizInfo', (quizInfo) => {
+    const room = rooms[socket.roomName];
+    if (quizInfo && quizInfo.Categories) {
+      const categories = quizInfo.Categories.map((category) => {
+        return {
+          id: category.id,
+          name: category.name,
+        };
+      });
+      room.categories = categories;
+    }
+    // Update activeRooms list
+    sendActiveRoomsToAll();
   });
 
-  socket.on('playerChoice', ({ playerName, choice, gameRound }) => {
+  socket.on('sendQuestionsToServerTest', (questions) => {
     const room = rooms[socket.roomName];
-    room.sockets[0].emit('playerChoice', playerName, choice, gameRound); // first socket is game master
-    res = Object.values(room.players);
+    const round = 0;
+    room.questions = questions;
+    room.round = round;
+
+    // Update activeRooms list
+    sendActiveRoomsToAll();
   });
 
-  socket.on('updateScore', (playerName) => {
-    const room = rooms[socket.roomName];
-    const remainingTime = room.timeLeft;
-    const remainingPercentage = remainingTime / 20;
-    room.players[playerName].score += 1000 + 1000 * remainingPercentage;
-    for (const client of res) {
-      socket.to(client.id).emit('getRoomPlayers', Object.values(room.players));
-    };
-    console.log("Points: ", room.players[playerName].score, " Name: ", room.players[playerName].username);
+  socket.on('startTimerTest', () => {
+    startTimerTest(socket);
+    console.log("startTimerTest");
   });
 
-  socket.on('correctAnswer', (correctAnswer, playerName) => {
+  socket.on('playerChoice', ({ playerName, choice, gameRound }, correctAnswer) => {
     const room = rooms[socket.roomName];
-    socket.to(room.players[playerName].id).emit('correctAnswer', correctAnswer);
-    console.log('correctAnswer', correctAnswer);
+    room.sockets[0].emit('playerChoice', playerName, choice, gameRound, correctAnswer); // first socket is game master
+    if (choice === correctAnswer) {
+      updateScore(socket, playerName);
+    }
+    // res = Object.values(room.players);
   });
+
+  // socket.on('updateScore', (playerName) => {
+  //   const room = rooms[socket.roomName];
+  //   const remainingTime = room.timeLeft;
+  //   const remainingPercentage = remainingTime / 20;
+  //   room.players[playerName].score += 1000 + 1000 * remainingPercentage;
+  //   for (const client of res) {
+  //     socket.to(client.id).emit('getRoomPlayers', Object.values(room.players));
+  //   };
+  // });
+
+  // socket.on('correctAnswer', (correctAnswer, playerName) => {
+  //   const room = rooms[socket.roomName];
+  //   socket.to(room.players[playerName].id).emit('correctAnswer', correctAnswer);
+  //   console.log('correctAnswer', correctAnswer);
+  // });
 
   socket.on('endGame', () => {
     const room = rooms[socket.roomName];
@@ -201,28 +309,6 @@ io.on('connect', (socket) => {
       };
     }
   });
-
-  socket.on('startTimer', () => {
-    const room = rooms[socket.roomName];
-    const players = Object.values(room.players);
-    let timeLeft = questionDuration;
-    console.log('Start timer', timeLeft);
-    const timerInterval = setInterval(() => {
-      timeLeft--;
-      rooms[socket.roomName].timeLeft--;
-
-      if (timeLeft === 0) {
-        clearInterval(timerInterval);
-      }
-
-      rooms[socket.roomName].timeLeft = timeLeft;
-
-      for (const player of players) {
-        socket.to(player.id).emit('timer', timeLeft, player);
-      }
-    }, 1000);
-  });
-
 
   socket.on('disconnect', () => {
     console.log('User left with socket id', socket.id);
