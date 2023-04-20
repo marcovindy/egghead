@@ -51,24 +51,20 @@ const RankedGame = () => {
 
         socket.on('gameReady.RankedGame', (roomName, playerName) => {
             console.log("gameReady.RankedGame", roomName, playerName);
-            if (playerName === authState.username) {
-                const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`;
-                setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
-                console.log("Hra", roomName, " vytvořena, hráči", playerName, url);
-                let countdown = 15;
-                const timer = setInterval(() => {
-                    console.log(`Přesměrování za ${countdown} sekund.`);
-                    setTime(countdown);
-                    countdown--;
-                    if (countdown === 0) {
-                        clearInterval(timer);
-                        history.push(url);
-                    }
-                }, 1000);
-            } else {
-                setServerResMsg("Někde se stala chyba.");
-                console.log("Někde se stala chyba.");
-            }
+            const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`;
+            setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
+            console.log("Hra", roomName, " vytvořena, hráči", playerName, url);
+            let countdown = 15;
+            const timer = setInterval(() => {
+                console.log(`Přesměrování za ${countdown} sekund.`);
+                setTime(countdown);
+                countdown--;
+                if (countdown === 0) {
+                    clearInterval(timer);
+                    history.push(url);
+                }
+            }, 1000);
+
         });
 
         socket.on('queueUpdate.RankedGame', (queueLength) => {
@@ -109,8 +105,8 @@ const RankedGame = () => {
                 </Modal.Header>
                 <Modal.Body>
                     {serverResMsg ? serverResMsg.toString() : ''} Hráčů ve frontě {numOfPlayersInQueue}.
-                    {time ? (<h2>Přesměrování do hry proběhne za {time}</h2>):("")}
-                    </Modal.Body>
+                    {time ? (<h2>Přesměrování do hry proběhne za {time}</h2>) : ("")}
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Zavřít
