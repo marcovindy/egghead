@@ -333,26 +333,27 @@ io.on('connect', (socket) => {
     socket.username = username; // uložení jména hráče do objektu socketu
     queue.push(socket);
     io.emit('queueUpdate.RankedGame', queue.length);
-    // console.log(queue);
     if (queue.length === 2) {
       const players = queue.splice(0, 4);
-
-      // players.forEach((player) => {
-      //   player.join(roomId);
-      // });
+      io.emit('queueUpdate.RankedGame', queue.length);
       masterName = players[1].username;
       console.log("\n\n\n\n\n\n -------------", masterName, "-------------\n\n\n\n\n\n ");
       const roomName = "Seriózní Testovací Kvíz-124-x0x0x0";
       createNewRoom(roomName, masterName, socket);
       console.log(rooms);
       console.log("\n-------- Room ", roomName, "  Created--------\n");
+      // players.forEach((player) => {
+      //   console.log("pridani hrace \n");
+      //   const playerName = player.username;
+      //   const playerSocket = player;
+      //   console.log(playerName);
+      //   joinRoom(playerSocket, rooms[roomName], playerName);
+      //   // playerSocket.emit('message', { text: `Hra byla vytvořena. Přesměrovávám vás na stránku s hrou...` });
+      //   playerSocket.emit('gameReady.RankedGame', roomName, playerName);
+      // });
       players.forEach((player) => {
-        console.log("pridani hrace \n");
         const playerName = player.username;
         const playerSocket = player;
-        console.log(playerName);
-        joinRoom(playerSocket, rooms[roomName], playerName);
-        // playerSocket.emit('message', { text: `Hra byla vytvořena. Přesměrovávám vás na stránku s hrou...` });
         playerSocket.emit('gameReady.RankedGame', roomName, playerName);
       });
 

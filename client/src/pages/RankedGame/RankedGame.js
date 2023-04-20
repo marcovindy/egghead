@@ -20,6 +20,7 @@ const RankedGame = () => {
     const { authState } = useContext(AuthContext);
     let history = useHistory();
 
+    const [time, setTime] = useState();
     const [serverResMsg, setServerResMsg] = useState('');
     const [isInQueue, setIsInQueue] = useState(false);
     const [numOfPlayersInQueue, setNumOfPlayersInQueue] = useState(0);
@@ -42,7 +43,7 @@ const RankedGame = () => {
         console.log("UseEffect 1x");
         console.log("socket: ", socket);
 
-        
+
         socket.on('message', (text) => {
             setServerResMsg(text.text);
             console.log("message", text.text);
@@ -51,11 +52,19 @@ const RankedGame = () => {
         socket.on('gameReady.RankedGame', (roomName, playerName) => {
             console.log("gameReady.RankedGame", roomName, playerName);
             if (playerName === authState.username) {
-                playerName = authState.username;
                 const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`;
-                // history.push(url);
-                setServerResMsg("Hra",roomName," vytvořena, hráči", playerName, url);
-                console.log("Hra",roomName," vytvořena, hráči", playerName, url);
+                setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
+                console.log("Hra", roomName, " vytvořena, hráči", playerName, url);
+                let countdown = 15;
+                const timer = setInterval(() => {
+                    console.log(`Přesměrování za ${countdown} sekund.`);
+                    setTime(countdown);
+                    countdown--;
+                    if (countdown === 0) {
+                        clearInterval(timer);
+                        history.push(url);
+                    }
+                }, 1000);
             } else {
                 setServerResMsg("Někde se stala chyba.");
                 console.log("Někde se stala chyba.");
@@ -74,18 +83,16 @@ const RankedGame = () => {
         };
     }, [API_URL]);
 
-    
+
     const joinQueue = () => {
-        console.log("Klik na joinQueue 1x");
         socket.emit('joinQueue.RankedGame', authState.username, (res) => {
-            console.log("Pripojeni 1x");
             setServerResMsg(res.res);
             setIsInQueue(true);
             setShowModal(true);
             console.log(res);
         });
     };
-   
+
     const handleCloseModal = () => {
         setShowModal(false);
         setIsInQueue(false);
@@ -100,7 +107,10 @@ const RankedGame = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Vyhledávání hry</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{serverResMsg ? serverResMsg.toString() : ''} Hráčů ve frontě {numOfPlayersInQueue}.</Modal.Body>
+                <Modal.Body>
+                    {serverResMsg ? serverResMsg.toString() : ''} Hráčů ve frontě {numOfPlayersInQueue}.
+                    {time ? (<h2>Přesměrování do hry proběhne za {time}</h2>):("")}
+                    </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Zavřít
