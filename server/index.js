@@ -336,34 +336,52 @@ io.on('connect', (socket) => {
     // console.log(queue);
     if (queue.length === 2) {
       const players = queue.splice(0, 4);
-      
+
       // players.forEach((player) => {
       //   player.join(roomId);
       // });
-      masterName = players[0].username;
-      // console.log("\n\n\n\n\n\n -------------", masterName, "-------------\n\n\n\n\n\n ");
+      masterName = players[1].username;
+      console.log("\n\n\n\n\n\n -------------", masterName, "-------------\n\n\n\n\n\n ");
       const roomName = "Seriózní Testovací Kvíz-124-x0x0x0";
       createNewRoom(roomName, masterName, socket);
-      console.log(rooms)
-      // io.to(roomId).emit('gameReady.RankedGame', roomId, players.map((player) => player.username));
+      console.log(rooms);
+      console.log("\n-------- Room ", roomName, "  Created--------\n");
+      players.forEach((player) => {
+        console.log("pridani hrace \n");
+        const playerName = player.username;
+        const playerSocket = player;
+        console.log(playerName);
+        joinRoom(playerSocket, rooms[roomName], playerName);
+        // playerSocket.emit('message', { text: `Hra byla vytvořena. Přesměrovávám vás na stránku s hrou...` });
+        playerSocket.emit('gameReady.RankedGame', roomName, playerName);
+      });
+
+
+      console.log(rooms);
+
       callback({ res: `Hra nalezena.` });
       return;
     } else {
       callback({ res: `Hledám hru, prosím čekejte.` });
       return;
     }
-});
-
-  
-socket.on('leaveQueue.RankedGame', () => {
-  const index = queue.indexOf(socket);
-  if (index !== -1) {
-    queue.splice(index, 1);
-    io.emit('queueUpdate.RankedGame', queue.length);
-  }
-});
+  });
 
 
+  socket.on('leaveQueue.RankedGame', () => {
+    const index = queue.indexOf(socket);
+    if (index !== -1) {
+      queue.splice(index, 1);
+      io.emit('queueUpdate.RankedGame', queue.length);
+    }
+  });
+
+
+
+  // // Přesměruje hráče na stránku s hrou
+  // players.forEach((player) => {
+  //   player.socket.emit('redirect', { url: `/game/${roomId}` });
+  // });
 
 
 

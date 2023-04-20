@@ -42,9 +42,23 @@ const RankedGame = () => {
         console.log("UseEffect 1x");
         console.log("socket: ", socket);
 
+        
+        socket.on('message', (text) => {
+            setServerResMsg(text.text);
+            console.log("message", text.text);
+        });
 
-        socket.on('gameReady.RankedGame', (roomId, players) => {
-            console.log("gameReady.RankedGame");
+        socket.on('gameReady.RankedGame', (roomName, playerName) => {
+            console.log("gameReady.RankedGame", roomName, playerName);
+            if (playerName === authState.username) {
+                playerName = authState.username;
+                const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`;
+                // history.push(url);
+                setServerResMsg("Hra",roomName," vytvořena, hráči", playerName, url);
+                console.log("Hra",roomName," vytvořena, hráči", playerName, url);
+            } else {
+                setServerResMsg("Někde se stala chyba.");
+            }
         });
 
         socket.on('queueUpdate.RankedGame', (queueLength) => {
