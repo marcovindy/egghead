@@ -7,7 +7,6 @@ const { validateToken } = require("../middlewares/AuthMiddleware");
 router.get("/", async (req, res) => {
     const listOfCategories = await Categories.findAll();
     return res.json({ listOfCategories: listOfCategories});
-    console.log("List of categories in routes: " , listOfCategories);
 });
 
 module.exports = router;

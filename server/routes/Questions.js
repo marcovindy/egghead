@@ -34,9 +34,7 @@ router.post("/save", async (req, res) => {
 router.get('/byquizId/:id', async (req, res) => {
   try {
     const quizId = req.params.id;
-    console.log("====================== quizId================",quizId);
     const quiz = await Quizzes.findByPk(quizId);
-    console.log("====================== few fwe few ", quiz);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
@@ -79,7 +77,6 @@ router.delete('/byquizId/:quizId', async (req, res) => {
   try {
     const quizId = req.params.quizId;
     const quiz = await Quizzes.findByPk(quizId);
-    console.log(quiz);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }

@@ -64,8 +64,11 @@ app.get("*", (req, res) => {
 
 // SOCKET
 const rooms = [];
+const queue = []; // fronta hráčů
+const playersInQueue = {}; // objekt s uloženými hráči v frontě a jejich jmény
 
 function joinRoom(socket, room, playerName) {
+
   socket.join(room.id, () => {
     room.sockets.push(socket);
     socket.roomId = room.id;
@@ -89,7 +92,6 @@ function joinRoom(socket, room, playerName) {
 }
 // Funkce pro odeslání seznamu aktivních místností
 const sendActiveRoomsToAll = () => {
-  console.log('rooms', Object.values(rooms))
   const activeRooms = Object.values(rooms).map(({ id, name, players, categories, round }) => ({
     id,
     name,
@@ -97,7 +99,7 @@ const sendActiveRoomsToAll = () => {
     categories: categories || [], // sets categories to an empty array if it's undefined
     round: round || 0,
   }));
-   io.emit('activeRooms', activeRooms);
+  io.emit('activeRooms', activeRooms);
 };
 
 const createNewRoom = (roomName, masterName, socket) => {
@@ -122,7 +124,6 @@ const createNewRoom = (roomName, masterName, socket) => {
 
 const nextQuestion = (socket, round, questions) => {
   const room = rooms[socket.roomName];
-  console.log("round: ", round);
   const gameQuestion = room.questions[round - 1].question;
   const answers = room.questions[round - 1].answers;
   const correctAnswer = answers.find(answer => answer.isCorrect).text;
@@ -136,9 +137,8 @@ const nextQuestion = (socket, round, questions) => {
   const gameRound = round;
   // socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound, correctAnswer });
   socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer);
-  console.log(gameQuestion, gameOptionsArray, gameRound, correctAnswer);
-     // Update activeRooms list
-     sendActiveRoomsToAll();
+  // Update activeRooms list
+  sendActiveRoomsToAll();
 };
 
 const startTimerTest = (socket) => {
@@ -146,7 +146,6 @@ const startTimerTest = (socket) => {
   const players = Object.values(room.players);
   const questions = room.questions;
   var timeLeftTest = questionDuration;
-  console.log(timeLeftTest);
 
   const timerInterval = setInterval(() => {
     res = Object.values(room.players);
@@ -177,16 +176,15 @@ const updateScore = (socket, playerName) => {
   const remainingPercentage = remainingTime / 20;
   room.players[playerName].score += 1000 + 1000 * remainingPercentage;
   res = Object.values(room.players);
-  console.log("res: ", res);
   socket.emit('getRoomPlayers', res);
   for (const client of res) {
     socket.to(client.id).emit('getRoomPlayers', res);
   };
-  console.log("Points: ", room.players[playerName].score, " Name: ", room.players[playerName].username);
 }
 
 // Create new room
 io.on('connect', (socket) => {
+  console.log("'--------------------------------'");
   console.log('new connection', socket.id);
 
   socket.emit('newConn', { msg: 'welcome' });
@@ -267,24 +265,7 @@ io.on('connect', (socket) => {
     if (choice === correctAnswer) {
       updateScore(socket, playerName);
     }
-    // res = Object.values(room.players);
   });
-
-  // socket.on('updateScore', (playerName) => {
-  //   const room = rooms[socket.roomName];
-  //   const remainingTime = room.timeLeft;
-  //   const remainingPercentage = remainingTime / 20;
-  //   room.players[playerName].score += 1000 + 1000 * remainingPercentage;
-  //   for (const client of res) {
-  //     socket.to(client.id).emit('getRoomPlayers', Object.values(room.players));
-  //   };
-  // });
-
-  // socket.on('correctAnswer', (correctAnswer, playerName) => {
-  //   const room = rooms[socket.roomName];
-  //   socket.to(room.players[playerName].id).emit('correctAnswer', correctAnswer);
-  //   console.log('correctAnswer', correctAnswer);
-  // });
 
   socket.on('endGame', () => {
     const room = rooms[socket.roomName];
@@ -311,6 +292,8 @@ io.on('connect', (socket) => {
   });
 
   socket.on('disconnect', () => {
+    console.log("ROOOOOOOOMS: ", rooms);
+    console.log("QUEUEEE: ", queue);
     console.log('User left with socket id', socket.id);
     const room = rooms[socket.roomName];
     // if room has been deleted when master leaving the game
@@ -337,6 +320,49 @@ io.on('connect', (socket) => {
       };
     };
   });
+
+
+
+
+  socket.on('joinQueue.RankedGame', (username, callback) => {
+    const existingPlayer = queue.find((player) => player.username === username);
+    if (existingPlayer) {
+      callback({ res: `Hráč ${username} již čeká ve frontě.` });
+      return;
+    }
+    socket.username = username; // uložení jména hráče do objektu socketu
+    queue.push(socket);
+    io.emit('queueUpdate.RankedGame', queue.length);
+    console.log(queue);
+    if (queue.length === 4) {
+      const players = queue.splice(0, 4);
+      const roomId = Math.random().toString(36).substr(2, 9);
+      players.forEach((player) => {
+        player.join(roomId);
+      });
+      io.to(roomId).emit('gameReady.RankedGame', roomId, players.map((player) => player.username));
+      callback({ res: `Hra nalezena.` });
+      return;
+    } else {
+      callback({ res: `Hledám hru, prosím čekejte.` });
+      return;
+    }
+});
+
+  
+socket.on('leaveQueue.RankedGame', () => {
+  const index = queue.indexOf(socket);
+  if (index !== -1) {
+    queue.splice(index, 1);
+    io.emit('queueUpdate.RankedGame', queue.length);
+  }
+});
+
+
+
+
+
+
 });
 
 server.listen(PORT, () => {

@@ -27,9 +27,7 @@ const GameMaster = () => {
     const [serverResMsg, setServerResMsg] = useState({ res: 'When at least 2 players are in the room, click Start Game' });
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-
     const [questions, setQuestions] = useState([]);
-    const [correctAnswer, setCorrectAnswer] = useState('');
     const [round, setRound] = useState(0);
 
     const [error, setError] = useState(false);
@@ -56,6 +54,8 @@ const GameMaster = () => {
 
     const location = useLocation();
 
+
+    
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -87,12 +87,10 @@ const GameMaster = () => {
     useEffect(() => {
         socket.on('message', (text) => {
             setMessage(text);
-        });
-
-        socket.on('message', (message) => {
-            setMessages([...messages, message]);
+            setMessages([...messages, text]);
         });
     }, [messages]);
+
 
     // Funkce pro spuštění hry a odeslání signálu všem hráčům
 

@@ -103,14 +103,10 @@ router.get("/byquizId/:id", async (req, res) => {
 
 
 router.delete("/delete/byquizId/:id", async (req, res) => {
-  console.log("delete");
   try {
     const id = req.params.id;
-    console.log(id);
     const quiz = await Quizzes.findByPk(id);
-    console.log(quiz);
     if (!quiz) {
-      console.log(quiz);
       return res.status(404).json({ message: "Quiz not found" });
     }
     quiz.destroy();
