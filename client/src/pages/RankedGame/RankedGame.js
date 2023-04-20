@@ -58,6 +58,7 @@ const RankedGame = () => {
                 console.log("Hra",roomName," vytvořena, hráči", playerName, url);
             } else {
                 setServerResMsg("Někde se stala chyba.");
+                console.log("Někde se stala chyba.");
             }
         });
 
@@ -65,10 +66,6 @@ const RankedGame = () => {
             console.log("Players in queue: ", queueLength);
             setNumOfPlayersInQueue(queueLength);
         });
-
-        // socket.on('disconnect.RankedGame', () => {
-        //     setServerResMsg('Odpojil jste se od serveru.');
-        // });
 
         // Odpojení socketu, pokud uživatel opustil stránku RankedGame
         return () => {
