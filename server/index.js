@@ -65,7 +65,6 @@ app.get("*", (req, res) => {
 // SOCKET
 const rooms = [];
 const queue = []; // fronta hráčů
-const playersInQueue = {}; // objekt s uloženými hráči v frontě a jejich jmény
 
 function joinRoom(socket, room, playerName) {
 
@@ -192,6 +191,7 @@ io.on('connect', (socket) => {
   socket.on('showActiveRooms', (sendActiveRoomsToAll));
 
   socket.on('createRoom', ({ roomName, masterName }, callback) => {
+    console.log('createRoom custom game emit from master, roomName = ', roomName, 'masterName = ', masterName);
     createNewRoom(roomName, masterName, socket);
   });
 
@@ -292,8 +292,8 @@ io.on('connect', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log("ROOOOOOOOMS: ", rooms);
-    console.log("QUEUEEE: ", queue);
+    // console.log("ROOOOOOOOMS: ", rooms);
+    // console.log("QUEUEEE: ", queue);
     console.log('User left with socket id', socket.id);
     const room = rooms[socket.roomName];
     // if room has been deleted when master leaving the game
@@ -333,14 +333,19 @@ io.on('connect', (socket) => {
     socket.username = username; // uložení jména hráče do objektu socketu
     queue.push(socket);
     io.emit('queueUpdate.RankedGame', queue.length);
-    console.log(queue);
-    if (queue.length === 4) {
+    // console.log(queue);
+    if (queue.length === 2) {
       const players = queue.splice(0, 4);
-      const roomId = Math.random().toString(36).substr(2, 9);
-      players.forEach((player) => {
-        player.join(roomId);
-      });
-      io.to(roomId).emit('gameReady.RankedGame', roomId, players.map((player) => player.username));
+      
+      // players.forEach((player) => {
+      //   player.join(roomId);
+      // });
+      masterName = players[0].username;
+      // console.log("\n\n\n\n\n\n -------------", masterName, "-------------\n\n\n\n\n\n ");
+      const roomName = "Seriózní Testovací Kvíz-124-x0x0x0";
+      createNewRoom(roomName, masterName, socket);
+      console.log(rooms)
+      // io.to(roomId).emit('gameReady.RankedGame', roomId, players.map((player) => player.username));
       callback({ res: `Hra nalezena.` });
       return;
     } else {
