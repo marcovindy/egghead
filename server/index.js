@@ -22,8 +22,9 @@ const io = socketio(server, {
 });
 
 
+
 app.use(express.json());
-const whitelist = ['https://testing-egg.herokuapp.com', 'https://testing-egg.herokuapp.com/auth', 'http://localhost:5000/auth', 'http://localhost:3000', 'http://localhost:5000', 'http://localhost:5000', 'http://localhost:5000/auth/auth']
+const whitelist = ['https://testing-egg.herokuapp.com', 'https://testing-egg.herokuapp.com/auth', 'http://testing-egg.herokuapp.com', 'http://localhost:5000/auth', 'http://localhost:3000', 'http://localhost:5000', 'http://localhost:5000', 'http://localhost:5000/auth/auth']
 const corsOptions = {
   origin: function (origin, callback) {
     console.log("** Origin of request " + origin)
@@ -36,7 +37,7 @@ const corsOptions = {
     }
   }
 }
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
 const db = require("./models");
 
