@@ -42,13 +42,15 @@ const GamePlayer = ({ location }) => {
     const [timerStarted, setTimerStarted] = useState(false);
     const [totalQuestionsNum, setTotalQuestionsNum] = useState(0);
     const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
+    const [gameMode, setGameMode] = useState('');
 
     const history = useHistory();
 
     useEffect(() => {
-        const { joinRoomName, playerName } = queryString.parse(location.search);
+        const { joinRoomName, playerName, gameMode } = queryString.parse(location.search);
         setJoinRoomName(joinRoomName);
         setPlayerName(playerName);
+        setGameMode(gameMode);
         socket = io.connect(URL);
 
         window.addEventListener('beforeunload', () => {
@@ -69,6 +71,10 @@ const GamePlayer = ({ location }) => {
             setPlayerCount(allPlayersInRoom.length);
         });
 
+        if (gameMode === 'ranked') {
+            socket.emit('start.RankedGame', joinRoomName);
+        }
+
         return () => {
             socket.emit('disconnect');
             socket.disconnect();
@@ -81,7 +87,7 @@ const GamePlayer = ({ location }) => {
     }, [messages]);
 
     useEffect(() => {
-        socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound, correctAnswer) => {
+        socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum) => {
             console.log("correct answer (current round): ", correctAnswer);
             setCorrectAnswer(correctAnswer);
             setCurrentQuestion(gameQuestion);
@@ -90,16 +96,17 @@ const GamePlayer = ({ location }) => {
             setCurrentQuestionNum(gameRound);
             setGameStart(true);
             setGameEnd(false);
+            setTotalQuestionsNum(totalQuestionsNum);
             setClickActivated(true);
         });
 
-        socket.on('scores', (players) => {
-            setPlayers(players);
+        socket.on('gameEnded', (res) => {
+            setPlayers(res);
             setGameEnd(true);
         });
 
-        socket.on("getRoomPlayers", (ps) => {
-            setPlayersInRoom(ps);
+        socket.on("getRoomPlayers", (res) => {
+            setPlayersInRoom(res);
         });
 
         socket.on('finalPlayerInfo', (client) => {
@@ -146,14 +153,17 @@ const GamePlayer = ({ location }) => {
                 <>
                     {!gameStart && (
                         <>
-                            <div>
-                                <h3>Num of questions: {totalQuestionsNum}</h3>
-                            </div>
                             {timerStarted ? (
-                                <div>
-                                    <h3>Game will be started: {timeLeft}</h3>
-                                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
-                                </div>
+                                <>
+                                    <div>
+                                        <h3>Num of questions: {totalQuestionsNum}</h3>
+                                    </div>
+
+                                    <div>
+                                        <h3>Game will be started: {timeLeft}</h3>
+                                        <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                                    </div>
+                                </>
                             ) : (
                                 <div>
                                     <h2>Hello, Game player {playerName}!</h2>
@@ -170,25 +180,28 @@ const GamePlayer = ({ location }) => {
                     )}
                     {gameStart && (
                         <>
-                            <div>
-                                <h3>Num of questions: {totalQuestionsNum}</h3>
-                                <ProgressBar className='num-of-questions-bar' max={totalQuestionsNum} now={currentQuestionNum} label={`${currentQuestionNum}/${totalQuestionsNum} questions`} />
-                            </div>
                             {!gameEnd && (
-                                <div>
-                                    <h3>Time left: {timeLeft}</h3>
-                                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
-                                    <GameQuestion
-                                        currentQuestion={currentQuestion}
-                                        currentOptions={currentOptions}
-                                        currentRound={currentRound}
-                                        playerName={playerName}
-                                        socket={socket}
-                                        clickStatus={clickActivated}
-                                        onClickChange={handleClickChange}
-                                        correctAnswer={correctAnswer}
-                                    />
-                                </div>
+                                <>
+                                    <div>
+                                        <h3>Num of questions: {totalQuestionsNum}</h3>
+                                        <ProgressBar className='num-of-questions-bar' max={totalQuestionsNum} now={currentQuestionNum} label={`${currentQuestionNum}/${totalQuestionsNum} questions`} />
+                                    </div>
+
+                                    <div>
+                                        <h3>Time left: {timeLeft}</h3>
+                                        <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                                        <GameQuestion
+                                            currentQuestion={currentQuestion}
+                                            currentOptions={currentOptions}
+                                            currentRound={currentRound}
+                                            playerName={playerName}
+                                            socket={socket}
+                                            clickStatus={clickActivated}
+                                            onClickChange={handleClickChange}
+                                            correctAnswer={correctAnswer}
+                                        />
+                                    </div>
+                                </>
                             )}
                             {gameEnd && (
                                 <EndGame players={players} player={player} />

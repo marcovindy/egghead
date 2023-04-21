@@ -61,11 +61,12 @@ const GameMaster = () => {
         const searchParams = new URLSearchParams(location.search);
         const roomName = searchParams.get("roomName");
         setId(roomName.split("-")[1]);
+        const quizId = roomName.split("-")[2];
         const masterName = searchParams.get("masterName");
         socket = io.connect(API_URL);
         setRoomName(roomName);
         setMasterName(masterName);
-        socket.emit('createRoom', { roomName, masterName }, (error) => {
+        socket.emit('createRoom', { roomName, masterName, quizId }, (error) => {
             if (error) {
                 setError(true);
                 setErrorMsg(error);

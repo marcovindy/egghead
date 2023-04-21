@@ -5,6 +5,8 @@ const socketio = require('socket.io');
 const http = require('http');
 const path = require('path');
 const uuidv1 = require('uuid/v1');
+const axios = require('axios');
+const questionsApiUrl = 'http://localhost:5000/questions'; // Změňte na správnou adresu API, pokud je potřeba
 
 questionDuration = 10;
 
@@ -57,11 +59,35 @@ app.use("/quizzes", quizzesRouter);
 const questionsRouter = require("./routes/Questions");
 app.use("/questions", questionsRouter);
 
+
 // Serve any static files
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+
+async function fetchQuestionsForQuiz(quizId) {
+  try {
+    const response = await axios.get(`${questionsApiUrl}/byquizId/${quizId}`);
+    const quiz = response.data.quiz;
+    const questions = response.data.questions;
+    const formattedQuestions = questions.map((question) => {
+      const formattedAnswers = question.Answers.map((answer) => ({
+        text: answer.answer,
+        isCorrect: answer.isCorrect,
+      }));
+      return {
+        question: question.question,
+        answers: formattedAnswers,
+      };
+    });
+    console.log("fetched questions = ", formattedQuestions);
+    return { quiz, questions: formattedQuestions };
+  } catch (error) {
+    console.error('Error fetching quiz questions:', error);
+    throw error;
+  }
+}
 
 // SOCKET
 const rooms = [];
@@ -88,7 +114,7 @@ function joinRoom(socket, room, playerName) {
     const allPlayersInRoom = Object.values(room.players);
     io.to(room.id).emit('playerData', allPlayersInRoom);
 
-  
+
     // Update activeRooms list
     sendActiveRoomsToAll();
   });
@@ -105,20 +131,26 @@ const sendActiveRoomsToAll = () => {
   io.emit('activeRooms', activeRooms);
 };
 
-const createNewRoom = (roomName, masterName, socket) => {
+const createNewRoom = async (roomName, masterName, socket, quizId) => {
   if (rooms[roomName]) {
     return socket.emit('createRoomError', { message: 'Error: Room already exists with that name, try another!' });
   }
+
+  const { quiz, questions } = await fetchQuestionsForQuiz(quizId);
 
   const room = {
     id: uuidv1(),
     name: roomName,
     sockets: [],
     players: {},
-    activated: false
+    activated: false,
+    quiz: quiz,
+    questions: questions,
+    round: 0
   };
 
   rooms[roomName] = room;
+  console.log("new room " + roomName, "\n", room);
 
   joinRoom(socket, room, masterName);
 
@@ -139,15 +171,15 @@ const nextQuestion = (socket, round, questions) => {
   const position = Math.floor(randomNumber) + 1;
   gameOptionsArray.splice(position - 1, 0, correctAnswer);
   const gameRound = round;
-  // socket.emit('showQuestion', { gameQuestion, gameOptionsArray, gameRound, correctAnswer });
-  socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer);
+  const totalQuestionsNum = room.questions.length;
+
+  io.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum);
   // Update activeRooms list
   sendActiveRoomsToAll();
 };
 
 const startTimerTest = (socket) => {
   const room = rooms[socket.roomName];
-  room.activated = true;
   const players = Object.values(room.players);
   const questions = room.questions;
   var timeLeftTest = questionDuration;
@@ -156,8 +188,8 @@ const startTimerTest = (socket) => {
     res = Object.values(room.players);
     timeLeftTest--;
     room.timeLeft = timeLeftTest;
-    for (const player of players) {
-      socket.to(player.id).emit('timerTick', timeLeftTest, questionDuration, player);
+    for (const player of Object.values(room.players)) {
+      io.to(player.id).emit('timerTick', timeLeftTest, questionDuration, player);
     }
     if (timeLeftTest === 0) {
       clearInterval(timerInterval);
@@ -169,7 +201,9 @@ const startTimerTest = (socket) => {
         nextQuestion(socket, round, questions);
         startTimerTest(socket);
       } else {
-        console.log("Game Ended! (Timer)")
+        console.log("Game Ended! (Timer)");
+        res = Object.values(room.players);
+        io.to(socket.roomId).emit("gameEnded", res);
       }
     }
   }, 1000);
@@ -196,9 +230,9 @@ io.on('connect', (socket) => {
 
   socket.on('showActiveRooms', (sendActiveRoomsToAll));
 
-  socket.on('createRoom', ({ roomName, masterName }, callback) => {
-    console.log('createRoom custom game emit from master, roomName = ', roomName, 'masterName = ', masterName);
-    createNewRoom(roomName, masterName, socket);
+  socket.on('createRoom', ({ roomName, masterName, quizId }, callback) => {
+    console.log('createRoom custom game emit from master, roomName = ', roomName, 'masterName = ', masterName, 'quizId = ', quizId);
+    createNewRoom(roomName, masterName, socket, quizId);
   });
 
   // Join existing room
@@ -273,18 +307,6 @@ io.on('connect', (socket) => {
     }
   });
 
-  socket.on('endGame', () => {
-    const room = rooms[socket.roomName];
-    res = Object.values(room.players); // send array with keys that has objects as values
-    io.to(room.id).emit('scores', res);
-    socket.broadcast.to(socket.roomId).emit('stopTime');
-
-    // send individual score to each client
-    for (const client of res) {
-      socket.to(client.id).emit('finalPlayerInfo', client);
-    };
-  });
-
   socket.on('playerBoard', () => {
     const room = rooms[socket.roomName];
     if (room.players) {
@@ -319,7 +341,7 @@ io.on('connect', (socket) => {
         io.to(room.id).emit('playerData', allPlayersInRoom);
 
       }
-      console.log("Length", Object.keys(room.players).length , "room activated", room.activated);
+      console.log("Length", Object.keys(room.players).length, "room activated", room.activated);
       if (Object.keys(room.players).length === 0 && room.activated) {
         console.log('Room activated?', room.activated);
         console.log('No players in room, deleting room');
@@ -363,7 +385,8 @@ io.on('connect', (socket) => {
       io.emit('queueUpdate.RankedGame', queue.length);
       masterName = players[1].username;
       const roomName = "Seriózní Testovací Kvíz-124-x0x0x0";
-      createNewRoom(roomName, masterName, socket);
+      const quizId = 124;
+      createNewRoom(roomName, masterName, socket, quizId);
       players.forEach((player) => {
         const playerName = player.username;
         const playerSocket = player;
@@ -394,6 +417,15 @@ io.on('connect', (socket) => {
     console.log('userLeftForServer');
     io.emit('userLeft.RankedGame');
     delete rooms[nameOfRoom];
+  });
+
+  socket.on('start.RankedGame', (joinRoomName) => {
+    console.log('start.RankedGame by', socket.username);
+    console.log(rooms[joinRoomName]);
+    if (!rooms[joinRoomName].activated) {
+      rooms[joinRoomName].activated = true;
+      startTimerTest(socket);
+    }
   });
 
 

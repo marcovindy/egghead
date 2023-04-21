@@ -47,11 +47,11 @@ const RankedGame = () => {
 
         socket.on('gameReady.RankedGame', (roomName, playerName) => {
             console.log("gameReady.RankedGame", roomName, playerName);
-            const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`;
+            const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}&gameMode=ranked`;
             setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
             setNameOfRoom(roomName);
             console.log("Hra", roomName, " vytvořena, hráči", playerName, url);
-            let countdown = 15;
+            let countdown = 5;
             timerRef.current = setInterval(() => {
                 console.log(`Přesměrování za ${countdown} sekund.`);
                 setTime(countdown);
