@@ -88,7 +88,7 @@ function joinRoom(socket, room, playerName) {
     const allPlayersInRoom = Object.values(room.players);
     io.to(room.id).emit('playerData', allPlayersInRoom);
 
-    room.activated = true;
+  
     // Update activeRooms list
     sendActiveRoomsToAll();
   });
@@ -147,7 +147,7 @@ const nextQuestion = (socket, round, questions) => {
 
 const startTimerTest = (socket) => {
   const room = rooms[socket.roomName];
-  
+  room.activated = true;
   const players = Object.values(room.players);
   const questions = room.questions;
   var timeLeftTest = questionDuration;
