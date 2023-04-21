@@ -51,6 +51,11 @@ const GamePlayer = ({ location }) => {
         setPlayerName(playerName);
         socket = io.connect(URL);
 
+        window.addEventListener('beforeunload', () => {
+            socket.emit('disconnect');
+            socket.disconnect();
+        });
+
         socket.emit('joinRoom', { joinRoomName, playerName }, (error) => {
             if (error) {
                 setError(true);
@@ -106,7 +111,7 @@ const GamePlayer = ({ location }) => {
             console.log('timerTick: ', timeLeftTest);
             const elapsed = questionDuration - timeLeftTest;
             setTimeLeft(questionDuration - elapsed);
-            console.log(questionDuration-elapsed);
+            console.log(questionDuration - elapsed);
             setTimerStarted(true);
         });
 

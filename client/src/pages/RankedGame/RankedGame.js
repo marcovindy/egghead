@@ -27,8 +27,7 @@ const RankedGame = () => {
     const [showModal, setShowModal] = useState(false);
     const IS_PROD = process.env.NODE_ENV === "development";
     const API_URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
-
-
+    const timerRef = useRef(null);
 
 
     useEffect(() => {
@@ -55,16 +54,28 @@ const RankedGame = () => {
             setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
             console.log("Hra", roomName, " vytvořena, hráči", playerName, url);
             let countdown = 15;
-            const timer = setInterval(() => {
+            timerRef.current = setInterval(() => {
                 console.log(`Přesměrování za ${countdown} sekund.`);
                 setTime(countdown);
                 countdown--;
                 if (countdown === 0) {
-                    clearInterval(timer);
+                    clearInterval(timerRef.current);
                     history.push(url);
                 }
             }, 1000);
+        });
 
+
+
+        socket.on('userLeft.RankedGame', () => {
+            console.log('Uživatel odešel z čekací fronty, zastavujeme časovač.');
+            setServerResMsg('Uživatel odešel z čekací fronty, zastavujeme časovač.');
+            clearInterval(timerRef.current);
+            setTime(null);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            socket.emit('userLeftForServer.RankedGame');
         });
 
         socket.on('queueUpdate.RankedGame', (queueLength) => {
@@ -81,21 +92,28 @@ const RankedGame = () => {
 
 
     const joinQueue = () => {
-        socket.emit('joinQueue.RankedGame', authState.username, (res) => {
-            setServerResMsg(res.res);
-            setIsInQueue(true);
-            setShowModal(true);
-            console.log(res);
-        });
+        if (!isInQueue) {
+            socket.emit('joinQueue.RankedGame', authState.username, (res) => {
+                setServerResMsg(res.res);
+                setIsInQueue(true);
+                setShowModal(true);
+                console.log(res);
+            });
+        }
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
         setIsInQueue(false);
         setServerResMsg('');
+        // Zrušení časovače
+        clearInterval(timerRef.current);
+        setTime(null);
         // Odpojíme se z queue
         socket.emit('leaveQueue.RankedGame', authState.username);
     };
+
+
 
     return (
         <Container>
@@ -113,7 +131,7 @@ const RankedGame = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Button onClick={joinQueue}>Join Queue</Button>
+            <Button onClick={joinQueue} disabled={isInQueue}>Join Queue</Button>
         </Container>
     )
 };

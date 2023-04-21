@@ -74,7 +74,7 @@ function joinRoom(socket, room, playerName) {
     socket.roomId = room.id;
     socket.roomName = room.name;
     socket.username = playerName;
-    
+
 
     if (room.sockets.length !== 1) {
       const player = { id: socket.id, username: playerName, score: 0 };
@@ -87,7 +87,8 @@ function joinRoom(socket, room, playerName) {
 
     const allPlayersInRoom = Object.values(room.players);
     io.to(room.id).emit('playerData', allPlayersInRoom);
-
+    
+    room.activated = true;
     // Update activeRooms list
     sendActiveRoomsToAll();
   });
@@ -145,8 +146,8 @@ const nextQuestion = (socket, round, questions) => {
 };
 
 const startTimerTest = (socket) => {
-  room.activated = true;
   const room = rooms[socket.roomName];
+  
   const players = Object.values(room.players);
   const questions = room.questions;
   var timeLeftTest = questionDuration;
@@ -303,24 +304,29 @@ io.on('connect', (socket) => {
       console.log('Room does not exist, leave the room');
     } else {
       console.log(room.players[socket.username]);
-     
+
       if (Object.keys(room.players).length !== 0) {
         const room = rooms[socket.roomName];
-        console.log(room);
-        console.log(room.players[socket.username].username, 'has left');
-        socket.broadcast.to(socket.roomId).emit('message', { text: `${room.players[socket.username].username} has left the game!` });
+        // console.log(room);
+        if (room.players[socket.username]) {
+          console.log(room.players[socket.username].username, 'has left');
+          socket.broadcast.to(socket.roomId).emit('message', { text: `${room.players[socket.username].username} has left the game!` });
+        }
+        console.log(room.players[socket.username]);
         delete room.players[socket.username];
         // update room players array
         allPlayersInRoom = Object.values(room.players);
         io.to(room.id).emit('playerData', allPlayersInRoom);
-      }
 
+      }
+      console.log("Length", Object.keys(room.players).length , "room activated", room.activated);
       if (Object.keys(room.players).length === 0 && room.activated) {
         console.log('Room activated?', room.activated);
         console.log('No players in room, deleting room');
         socket.broadcast.to(socket.roomId).emit('message', { text: 'The game has been cancelled due to lack of players' });
         socket.broadcast.to(socket.roomId).emit('stopTime');
         delete rooms[socket.roomName];
+       
       }
 
       // // delete room if gamemaster left
@@ -331,12 +337,13 @@ io.on('connect', (socket) => {
       // delete rooms[room.name];
 
     };
-
-    if (room) {
-      // console.log("ROOM: ", room);
-      console.log(" \n\n ---- ", Object.values(room.players), "  ---- \n\n");
-      console.log(" \n\n ---- ", Object.keys(room.players).length, "  ---- \n\n");
-    }
+    // Update activeRooms list
+    sendActiveRoomsToAll();
+    // if (room) {
+    //   // console.log("ROOM: ", room);
+    //   console.log(" \n\n ---- ", Object.values(room.players), "  ---- \n\n");
+    //   console.log(" \n\n ---- ", Object.keys(room.players).length, "  ---- \n\n");
+    // }
 
   });
 
@@ -396,7 +403,10 @@ io.on('connect', (socket) => {
     }
   });
 
-
+  socket.on('userLeftForServer.RankedGame', () => {
+    console.log('userLeftForServer');
+    io.emit('userLeft.RankedGame');
+  });
 
   // // Přesměruje hráče na stránku s hrou
   // players.forEach((player) => {
