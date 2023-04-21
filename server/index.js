@@ -87,7 +87,7 @@ function joinRoom(socket, room, playerName) {
 
     const allPlayersInRoom = Object.values(room.players);
     io.to(room.id).emit('playerData', allPlayersInRoom);
-    
+
     room.activated = true;
     // Update activeRooms list
     sendActiveRoomsToAll();
@@ -326,7 +326,6 @@ io.on('connect', (socket) => {
         socket.broadcast.to(socket.roomId).emit('message', { text: 'The game has been cancelled due to lack of players' });
         socket.broadcast.to(socket.roomId).emit('stopTime');
         delete rooms[socket.roomName];
-       
       }
 
       // // delete room if gamemaster left
@@ -363,20 +362,8 @@ io.on('connect', (socket) => {
       const players = queue.splice(0, 4);
       io.emit('queueUpdate.RankedGame', queue.length);
       masterName = players[1].username;
-      console.log("\n\n\n\n\n\n -------------", masterName, "-------------\n\n\n\n\n\n ");
       const roomName = "Seriózní Testovací Kvíz-124-x0x0x0";
       createNewRoom(roomName, masterName, socket);
-      console.log(rooms);
-      console.log("\n-------- Room ", roomName, "  Created--------\n");
-      // players.forEach((player) => {
-      //   console.log("pridani hrace \n");
-      //   const playerName = player.username;
-      //   const playerSocket = player;
-      //   console.log(playerName);
-      //   joinRoom(playerSocket, rooms[roomName], playerName);
-      //   // playerSocket.emit('message', { text: `Hra byla vytvořena. Přesměrovávám vás na stránku s hrou...` });
-      //   playerSocket.emit('gameReady.RankedGame', roomName, playerName);
-      // });
       players.forEach((player) => {
         const playerName = player.username;
         const playerSocket = player;
@@ -403,15 +390,11 @@ io.on('connect', (socket) => {
     }
   });
 
-  socket.on('userLeftForServer.RankedGame', () => {
+  socket.on('userLeftForServer.RankedGame', (nameOfRoom) => {
     console.log('userLeftForServer');
     io.emit('userLeft.RankedGame');
+    delete rooms[nameOfRoom];
   });
-
-  // // Přesměruje hráče na stránku s hrou
-  // players.forEach((player) => {
-  //   player.socket.emit('redirect', { url: `/game/${roomId}` });
-  // });
 
 
 

@@ -120,10 +120,6 @@ const GamePlayer = ({ location }) => {
         });
     }, [duration]);
 
-    const handleLeaveRoom = () => {
-        socket.emit("leaveRoom", playerName);
-    };
-
     useEffect(() => {
         socket.on("errorMsg", (err) => {
             setError(true);

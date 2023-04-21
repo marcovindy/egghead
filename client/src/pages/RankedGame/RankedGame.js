@@ -23,6 +23,7 @@ const RankedGame = () => {
     const [time, setTime] = useState();
     const [serverResMsg, setServerResMsg] = useState('');
     const [isInQueue, setIsInQueue] = useState(false);
+    const [nameOfRoom, setNameOfRoom] = useState('');
     const [numOfPlayersInQueue, setNumOfPlayersInQueue] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const IS_PROD = process.env.NODE_ENV === "development";
@@ -39,10 +40,6 @@ const RankedGame = () => {
 
         socket = io(API_URL);
 
-        console.log("UseEffect 1x");
-        console.log("socket: ", socket);
-
-
         socket.on('message', (text) => {
             setServerResMsg(text.text);
             console.log("message", text.text);
@@ -52,6 +49,7 @@ const RankedGame = () => {
             console.log("gameReady.RankedGame", roomName, playerName);
             const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`;
             setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
+            setNameOfRoom(roomName);
             console.log("Hra", roomName, " vytvořena, hráči", playerName, url);
             let countdown = 15;
             timerRef.current = setInterval(() => {
@@ -68,14 +66,13 @@ const RankedGame = () => {
 
 
         socket.on('userLeft.RankedGame', () => {
-            console.log('Uživatel odešel z čekací fronty, zastavujeme časovač.');
-            setServerResMsg('Uživatel odešel z čekací fronty, zastavujeme časovač.');
+            setServerResMsg('Jiný hráč odešel z čekací fronty. Budete přepojen do nové fronty.');
             clearInterval(timerRef.current);
             setTime(null);
         });
 
         window.addEventListener('beforeunload', () => {
-            socket.emit('userLeftForServer.RankedGame');
+            socket.emit('userLeftForServer.RankedGame', nameOfRoom);
         });
 
         socket.on('queueUpdate.RankedGame', (queueLength) => {
@@ -111,6 +108,7 @@ const RankedGame = () => {
         setTime(null);
         // Odpojíme se z queue
         socket.emit('leaveQueue.RankedGame', authState.username);
+        socket.emit('userLeftForServer.RankedGame', nameOfRoom);
     };
 
 
@@ -131,6 +129,7 @@ const RankedGame = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+          
             <Button onClick={joinQueue} disabled={isInQueue}>Join Queue</Button>
         </Container>
     )
