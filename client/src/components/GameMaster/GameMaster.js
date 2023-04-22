@@ -53,7 +53,7 @@ const GameMaster = () => {
     const location = useLocation();
 
     const [currentRound, setCurrentRound] = useState(0);
-    const [duration, setDuration] = useState(20);
+    const [duration, setDuration] = useState(10);
     const [timerStarted, setTimerStarted] = useState(false);
     const [gameStart, setGameStart] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState('');
@@ -221,7 +221,9 @@ const GameMaster = () => {
         });
     }, [duration]);
 
-
+    const handleClickChange = (val) => {
+        setClickActivated(val);
+    };
 
     return (
         <Container>
@@ -229,7 +231,7 @@ const GameMaster = () => {
             {gameStarted === true && gameEnded === false ? (
                 <div>
                     <h3>Time Left: {timeLeft}</h3>
-                    <ProgressBar animated now={progress} max={duration} label={`${timeLeft} seconds left`} />
+                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
                 </div>
             ) : (
                 <div>
@@ -264,7 +266,20 @@ const GameMaster = () => {
 
                                         </div>
                                     ) : (
-                                        <div></div>
+                                        <div>
+                                        <h3>Time left: {timeLeft}</h3>
+                                        <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                                        <GameQuestion
+                                            currentQuestion={currentQuestion}
+                                            currentOptions={currentOptions}
+                                            currentRound={currentRound}
+                                            playerName={masterName}
+                                            socket={socket}
+                                            clickStatus={clickActivated}
+                                            onClickChange={handleClickChange}
+                                            correctAnswer={correctAnswer}
+                                        />
+                                        </div>
                                     )
                                     }
                                 </div>
