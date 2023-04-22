@@ -47,7 +47,7 @@ const RankedGame = () => {
 
         socket.on('gameReady.RankedGame', (roomName, playerName) => {
             console.log("gameReady.RankedGame", roomName, playerName);
-            const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}&gameMode=ranked`;
+            const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}&gameMode=RankedGame`;
             setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
             setNameOfRoom(roomName);
             console.log("Hra", roomName, " vytvořena, hráči", playerName, url);

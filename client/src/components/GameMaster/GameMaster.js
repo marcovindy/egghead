@@ -17,7 +17,7 @@ let socket;     // Proměnná pro ukládání instance soketu pro komunikaci s o
 
 
 const GameMaster = () => {
-
+   
     const IS_PROD = process.env.NODE_ENV === "development";
     const API_URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
     const [roomName, setRoomName] = useState('');
@@ -40,22 +40,32 @@ const GameMaster = () => {
     const [gameReady, setGameReady] = useState(false);
     const [gameEnded, setGameEnded] = useState(false);
 
-    const questionDuration = 20;
-    const [timeLeft, setTimeLeft] = useState(questionDuration); // Nastavíme 20 sekund do další otázky
+    const [timeLeft, setTimeLeft] = useState(0); // Nastavíme 20 sekund do další otázky
     const [isGameRunning, setIsGameRunning] = useState(false);
 
     const [questionsAreLoading, setQuestionsAreLoading] = useState(true);
 
-    const [currentQuestion, setCurrentQuestion] = useState(0);
     const [totalQuestions, setTotalQuestions] = useState(0);
     const [quizInfo, setQuizInfo] = useState({});
 
-
+    const [isRoomCreated, setIsRoomCreated] = useState(false);
 
     const location = useLocation();
 
-
-
+    const [currentRound, setCurrentRound] = useState(0);
+    const [duration, setDuration] = useState(20);
+    const [timerStarted, setTimerStarted] = useState(false);
+    const [gameStart, setGameStart] = useState(false);
+    const [currentQuestion, setCurrentQuestion] = useState('');
+    const [currentOptions, setCurrentOptions] = useState([]);
+    const [correctAnswer, setCorrectAnswer] = useState('');
+    const [clickActivated, setClickActivated] = useState(true);
+    const [totalQuestionsNum, setTotalQuestionsNum] = useState(0);
+    const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
+    const [players, setPlayers] = useState([]);
+    const [gameEnd, setGameEnd] = useState(false);
+    const [player, setPlayer] = useState('');
+    const progress = 100 - ((duration - timeLeft) / duration) * 100;
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -63,16 +73,18 @@ const GameMaster = () => {
         setId(roomName.split("-")[1]);
         const quizId = roomName.split("-")[1];
         const masterName = searchParams.get("masterName");
+        const gameMode = searchParams.get("gameMode");
         socket = io.connect(API_URL);
         setRoomName(roomName);
         setMasterName(masterName);
-        socket.emit('createRoom', { roomName, masterName, quizId }, (error) => {
+        socket.emit('createRoom', { roomName, masterName, quizId, gameMode }, (error) => {
             if (error) {
                 setError(true);
                 setErrorMsg(error);
                 console.log("Create room error: ", error);
-            };
+            }
         });
+        setIsRoomCreated(true);
 
         socket.on('playerData', (allPlayersInRoom) => {
             setPlayersInRoom(allPlayersInRoom);
@@ -104,50 +116,54 @@ const GameMaster = () => {
     };
 
     useEffect(() => {
-        if (id) {
 
-            const fetchQuizInfo = async () => {
-                try {
-                    const response = await axios.get(`${API_URL}quizzes/byquizId/${id}`);
-                    setQuizInfo(response.data);
-                    socket.emit('sendQuizInfo', response.data);
-                    console.log(response.data);
-                } catch (error) {
-                    console.log(error);
-                }
-            };
 
-            const fetchQuestions = async () => {
-                try {
-                    console.log(id);
-                    console.log(API_URL);
-                    const response = await axios.get(`${API_URL}questions/byquizId/${id}`);
-                    const quiz = response.data.quiz;
-                    console.log(response.data);
-                    const formattedQuestions = response.data.questions.map((question) => {
-                        const formattedAnswers = question.Answers.map((answer) => ({
-                            text: answer.answer,
-                            isCorrect: answer.isCorrect,
-                        }));
-                        return {
-                            question: question.question,
-                            answers: formattedAnswers,
-                        };
-                    });
-                    setQuestions(formattedQuestions);
-                    setTotalQuestions(formattedQuestions.length);
-                    setQuestionsAreLoading(false);
-                    socket.emit('sendQuestionsToServerTest', formattedQuestions);
-                } catch (error) {
-                    console.log(error);
-                }
-            };
+        const fetchQuizInfo = async () => {
+            try {
+                const response = await axios.get(`${API_URL}quizzes/byquizId/${id}`);
+                setQuizInfo(response.data);
+                socket.emit('sendQuizInfo', response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
 
+        const fetchQuestions = async () => {
+            try {
+                console.log(id);
+                console.log(API_URL);
+                const response = await axios.get(`${API_URL}questions/byquizId/${id}`);
+                const quiz = response.data.quiz;
+                const questionsLength = response.data.questions.length;
+                console.log(response.data);
+                const formattedQuestions = response.data.questions.map((question) => {
+                    const formattedAnswers = question.Answers.map((answer) => ({
+                        text: answer.answer,
+                        isCorrect: answer.isCorrect,
+                    }));
+                    return {
+                        question: question.question,
+                        answers: formattedAnswers,
+                    };
+                });
+                setQuestions(formattedQuestions);
+                setTotalQuestions(formattedQuestions.length);
+                setQuestionsAreLoading(false);
+                console.log(questionsLength, " roundsss ");
+                socket.emit('sendQuestionsToServerTest', formattedQuestions, questionsLength);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        if (id && isRoomCreated) {
             fetchQuizInfo();
             fetchQuestions();
 
+
         }
-    }, [API_URL, id]);
+        console.log(id, isRoomCreated);
+    }, [API_URL, id, isRoomCreated]);
 
     useEffect(() => {
         const startGame = async () => {
@@ -156,10 +172,7 @@ const GameMaster = () => {
                 socket.on('initGame', resolve);
             });
             socket.emit('startTimerTest');
-            socket.on('timerTick', (timeLeftTest) => {
-                console.log('timerTick: ', timeLeftTest);
-                setTimeLeft(timeLeftTest);
-            });
+
             socket.on('nextQuestion', () => {
                 console.log('nextQuestion has been sent ');
             });
@@ -169,7 +182,45 @@ const GameMaster = () => {
         }
     }, [socket]);
 
-    const progress = 100 - ((questionDuration - timeLeft) / questionDuration) * 100;
+    useEffect(() => {
+        socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum) => {
+            console.log("correct answer (current round): ", correctAnswer);
+            setCorrectAnswer(correctAnswer);
+            setCurrentQuestion(gameQuestion);
+            setCurrentOptions(gameOptionsArray);
+            setCurrentRound(gameRound);
+            setCurrentQuestionNum(gameRound);
+            setGameStart(true);
+            setGameEnd(false);
+            setTotalQuestionsNum(totalQuestionsNum);
+            setClickActivated(true);
+        });
+        socket.on('gameEnded', (res) => {
+            setPlayers(res);
+            setGameEnd(true);
+        });
+
+        socket.on("getRoomPlayers", (res) => {
+            setPlayersInRoom(res);
+        });
+
+        socket.on('finalPlayerInfo', (client) => {
+            setPlayer(client);
+        });
+
+        socket.on('timerTick', (timeLeftTest, duration) => {
+            setDuration(duration);
+            const elapsed = duration - timeLeftTest;
+            setTimeLeft(duration - elapsed);
+            console.log(duration - elapsed);
+            setTimerStarted(true);
+        });
+
+        socket.on('nextQuestion', () => {
+            console.log('nextQuestion has been sent ');
+        });
+    }, [duration]);
+
 
 
     return (
@@ -178,7 +229,7 @@ const GameMaster = () => {
             {gameStarted === true && gameEnded === false ? (
                 <div>
                     <h3>Time Left: {timeLeft}</h3>
-                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                    <ProgressBar animated now={progress} max={duration} label={`${timeLeft} seconds left`} />
                 </div>
             ) : (
                 <div>
@@ -228,19 +279,12 @@ const GameMaster = () => {
                                         }}>Start Game</Button>
                                     )
                                     }
-                                    <Button variant="primary" size="md" className='m-2'
-                                        onClick={() => {
-                                            toast.warning(t('featureInDevelopment'));
-                                        }}>
-
-                                        Join Game as Player
-                                    </Button>
-
                                 </div>
                             )
                             }
 
-                        </div> <div>
+                        </div>
+                        <div>
                             <h3>Number of questions: {totalQuestions}</h3>
                             <ProgressBar className='num-of-questions-bar' max={totalQuestions} now={currentQuestion} label={`${currentQuestion}/${totalQuestions} Questions`} />
                         </div>

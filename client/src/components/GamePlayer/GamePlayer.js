@@ -71,7 +71,7 @@ const GamePlayer = ({ location }) => {
             setPlayerCount(allPlayersInRoom.length);
         });
 
-        if (gameMode === 'ranked') {
+        if (gameMode === 'RankedGame') {
             socket.emit('start.RankedGame', joinRoomName);
         }
 
@@ -118,7 +118,6 @@ const GamePlayer = ({ location }) => {
             console.log('timerTick: ', timeLeftTest);
             const elapsed = questionDuration - timeLeftTest;
             setTimeLeft(questionDuration - elapsed);
-            console.log(questionDuration - elapsed);
             setTimerStarted(true);
         });
 

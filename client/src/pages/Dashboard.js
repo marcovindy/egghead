@@ -191,7 +191,7 @@ const Dashboard = () => {
                         const roomName = room.name;
                         const playerName = authState.username;
 
-                        history.push(`/gameplayer?joinRoomName=${roomName}&playerName=${playerName}`);
+                        history.push(`/gameplayer?joinRoomName=${roomName}&playerName=${playerName}&gameMode=CustomGame`);
                       }}
                     >
                       <PlayCircleFill size={24} />
@@ -303,7 +303,7 @@ const Dashboard = () => {
                         const quizTitle = value.title;
                         const roomName = createRoomName(quizTitle, quizId); // Generate random room name
                         const masterName = value.User.username;
-                        history.push(`/gamemaster?roomName=${roomName}&masterName=${masterName}`);
+                        history.push(`/gamemaster?roomName=${roomName}&masterName=${masterName}&gameMode=CustomGame`);
                       }}
                     >
                       <PlayCircleFill size={24} />
