@@ -105,6 +105,7 @@ const GameMaster = () => {
 
     useEffect(() => {
         if (id) {
+
             const fetchQuizInfo = async () => {
                 try {
                     const response = await axios.get(`${API_URL}quizzes/byquizId/${id}`);
@@ -115,10 +116,8 @@ const GameMaster = () => {
                     console.log(error);
                 }
             };
+
             const fetchQuestions = async () => {
-
-
-
                 try {
                     console.log(id);
                     console.log(API_URL);
@@ -142,10 +141,11 @@ const GameMaster = () => {
                 } catch (error) {
                     console.log(error);
                 }
-
             };
+
             fetchQuizInfo();
             fetchQuestions();
+
         }
     }, [API_URL, id]);
 

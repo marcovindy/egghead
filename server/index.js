@@ -180,7 +180,7 @@ const nextQuestion = (socket, round, questions) => {
 
 const startTimerTest = (socket) => {
   const room = rooms[socket.roomName];
-  const players = Object.values(room.players);
+  room.activated = true;
   const questions = room.questions;
   var timeLeftTest = questionDuration;
 
@@ -204,6 +204,7 @@ const startTimerTest = (socket) => {
         console.log("Game Ended! (Timer)");
         res = Object.values(room.players);
         io.to(socket.roomId).emit("gameEnded", res);
+        gameEnded(socket);
       }
     }
   }, 1000);
@@ -219,6 +220,13 @@ const updateScore = (socket, playerName) => {
   for (const client of res) {
     socket.to(client.id).emit('getRoomPlayers', res);
   };
+}
+
+const gameEnded = (socket) => {
+  const room = rooms[socket.roomName];
+  // const gameMode = room.gameMode;
+  const players = Object.values(room.players);
+
 }
 
 // Create new room
@@ -351,22 +359,9 @@ io.on('connect', (socket) => {
         delete rooms[socket.roomName];
       }
 
-      // // delete room if gamemaster left
-      // const room = rooms[socket.roomName];
-      // console.log(room.sockets[0].username, 'has left');
-      // socket.broadcast.to(socket.roomId).emit('message', { text: `The gamemaster ${room.sockets[0].username} has left the game! Please leave the room.` });
-      // socket.broadcast.to(socket.roomId).emit('stopTime');
-      // delete rooms[room.name];
-
     };
     // Update activeRooms list
     sendActiveRoomsToAll();
-    // if (room) {
-    //   // console.log("ROOM: ", room);
-    //   console.log(" \n\n ---- ", Object.values(room.players), "  ---- \n\n");
-    //   console.log(" \n\n ---- ", Object.keys(room.players).length, "  ---- \n\n");
-    // }
-
   });
 
 
