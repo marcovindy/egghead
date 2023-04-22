@@ -21,7 +21,7 @@ const GameMaster = () => {
     const IS_PROD = process.env.NODE_ENV === "development";
     const API_URL = IS_PROD ? "http://localhost:5000/" : "https://testing-egg.herokuapp.com/";
     const [roomName, setRoomName] = useState('');
-    const [id, setId] = useState(114); // Quiz ID
+    const [id, setId] = useState(null); // Quiz ID
     const [masterName, setMasterName] = useState('');
 
     const [serverResMsg, setServerResMsg] = useState({ res: 'When at least 2 players are in the room, click Start Game' });
@@ -55,13 +55,13 @@ const GameMaster = () => {
     const location = useLocation();
 
 
-    
+
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const roomName = searchParams.get("roomName");
         setId(roomName.split("-")[1]);
-        const quizId = roomName.split("-")[2];
+        const quizId = roomName.split("-")[1];
         const masterName = searchParams.get("masterName");
         socket = io.connect(API_URL);
         setRoomName(roomName);
@@ -104,39 +104,49 @@ const GameMaster = () => {
     };
 
     useEffect(() => {
-        const fetchQuizInfo = async () => {
-            try {
-                const response = await axios.get(`${API_URL}quizzes/byquizId/${id}`);
-                setQuizInfo(response.data);
-                socket.emit('sendQuizInfo', response.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        const fetchQuestions = async () => {
-            try {
-                const response = await axios.get(`${API_URL}questions/byquizId/${id}`);
-                const quiz = response.data.quiz;
-                const formattedQuestions = response.data.questions.map((question) => {
-                    const formattedAnswers = question.Answers.map((answer) => ({
-                        text: answer.answer,
-                        isCorrect: answer.isCorrect,
-                    }));
-                    return {
-                        question: question.question,
-                        answers: formattedAnswers,
-                    };
-                });
-                setQuestions(formattedQuestions);
-                setTotalQuestions(formattedQuestions.length);
-                setQuestionsAreLoading(false);
-                socket.emit('sendQuestionsToServerTest', formattedQuestions);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchQuizInfo();
-        fetchQuestions();
+        if (id) {
+            const fetchQuizInfo = async () => {
+                try {
+                    const response = await axios.get(`${API_URL}quizzes/byquizId/${id}`);
+                    setQuizInfo(response.data);
+                    socket.emit('sendQuizInfo', response.data);
+                    console.log(response.data);
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+            const fetchQuestions = async () => {
+
+
+
+                try {
+                    console.log(id);
+                    console.log(API_URL);
+                    const response = await axios.get(`${API_URL}questions/byquizId/${id}`);
+                    const quiz = response.data.quiz;
+                    console.log(response.data);
+                    const formattedQuestions = response.data.questions.map((question) => {
+                        const formattedAnswers = question.Answers.map((answer) => ({
+                            text: answer.answer,
+                            isCorrect: answer.isCorrect,
+                        }));
+                        return {
+                            question: question.question,
+                            answers: formattedAnswers,
+                        };
+                    });
+                    setQuestions(formattedQuestions);
+                    setTotalQuestions(formattedQuestions.length);
+                    setQuestionsAreLoading(false);
+                    socket.emit('sendQuestionsToServerTest', formattedQuestions);
+                } catch (error) {
+                    console.log(error);
+                }
+
+            };
+            fetchQuizInfo();
+            fetchQuestions();
+        }
     }, [API_URL, id]);
 
     useEffect(() => {

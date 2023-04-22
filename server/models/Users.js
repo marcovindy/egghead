@@ -28,6 +28,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.NUMBER,
       allowNull: true,
     },
+    role: {
+      type: DataTypes.NUMBER,
+      allowNull: true,
+    },
+    rank: {
+      type: DataTypes.NUMBER,
+      allowNull: true,
+    },
   });
 
   Users.associate = (models) => {

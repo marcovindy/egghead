@@ -271,6 +271,7 @@ io.on('connect', (socket) => {
 
   socket.on('sendQuizInfo', (quizInfo) => {
     const room = rooms[socket.roomName];
+    console.log("sendQuizInfo", quizInfo);
     if (quizInfo && quizInfo.Categories) {
       const categories = quizInfo.Categories.map((category) => {
         return {
