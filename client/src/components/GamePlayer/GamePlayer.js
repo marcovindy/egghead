@@ -44,7 +44,14 @@ const GamePlayer = ({ location }) => {
     const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
     const [gameMode, setGameMode] = useState('');
 
+    const [position, setPosition] = useState(0);
+    const [earnings, setEarnings] = useState(0);
+
     const history = useHistory();
+
+
+ 
+  
 
     useEffect(() => {
         const { joinRoomName, playerName, gameMode } = queryString.parse(location.search);
@@ -141,6 +148,18 @@ const GamePlayer = ({ location }) => {
         setClickActivated(val);
     };
 
+    useEffect(() => {
+        socket.on('finalRanking', ({ position, rounds, gameMode }) => {
+            setPosition(position);
+            setGameMode(gameMode);
+            setEarnings(rounds / position);
+        });
+       
+        return () => {
+          socket.off('finalRanking');
+        };
+    }, []);
+
     return (
         <Container>
             {error ? (
@@ -203,7 +222,14 @@ const GamePlayer = ({ location }) => {
                                 </>
                             )}
                             {gameEnd && (
-                                <EndGame players={players} player={player} />
+                                <EndGame 
+                                socket={socket} 
+                                players={playersInRoom} 
+                                playerName={playerName} 
+                                position={position}
+                                rounds={totalQuestionsNum}
+                                earnings={earnings}
+                                 />
                             )}
                         </>
                     )}

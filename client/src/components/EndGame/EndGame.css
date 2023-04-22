@@ -1,7 +1,29 @@
-.score-container, .save-score-container {
+.score-container,
+.save-score-container {
     background: #f7f7f7b4;
     border-radius: 5px;
     padding: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.end-game-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.end-game-sidenav {
+    width: 250px;
+    height: 100%;
+}
+
+.end-game-content {
+    padding: 32px;
+    text-align: center;
+}
+
+.leave-room-btn {
+    margin-top: 16px;
 }

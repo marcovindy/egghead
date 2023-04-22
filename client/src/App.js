@@ -185,7 +185,9 @@ function App() {
               <Route path="*" exact component={PageNotFound} />
             </Switch>
           </Router>
-          <ToastContainer />
+          <ToastContainer 
+          
+          />
           <Footer />
 
         </AuthContext.Provider>

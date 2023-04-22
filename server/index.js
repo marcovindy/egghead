@@ -135,18 +135,17 @@ const sendActiveRoomsToAll = () => {
 };
 
 const createNewRoom = async (roomName, masterName, socket, quizId, gameMode) => {
-  const quiz = {};
-  const questions = {};
-  const questionsLength = 1;
+  let quiz = {};
+  let questions = {};
+  let questionsLength = 1;
 
   if (rooms[roomName]) {
     return socket.emit('createRoomError', { message: 'Error: Room already exists with that name, try another!' });
   }
 
   if (gameMode === 'RankedGame') {
-    const { quiz, questions, questionsLength } = await fetchQuestionsForQuiz(quizId);
+    ({ quiz, questions, questionsLength } = await fetchQuestionsForQuiz(quizId));
   }
-
   const room = {
     id: uuidv1(),
     name: roomName,
@@ -185,7 +184,7 @@ const nextQuestion = (socket, round, questions) => {
   const totalQuestionsNum = room.questions.length;
 
   io.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum);
-  
+
   // Update activeRooms list
   sendActiveRoomsToAll();
 };
@@ -236,9 +235,16 @@ const updateScore = (socket, playerName) => {
 
 const gameEnded = (socket) => {
   const room = rooms[socket.roomName];
-  // const gameMode = room.gameMode;
+  const gameMode = room.gameMode;
   const players = Object.values(room.players);
 
+  // Sort players by their scores in descending order
+  const sortedPlayers = players.sort((a, b) => b.score - a.score);
+
+  // Emit the final ranking to each player
+  sortedPlayers.forEach((player, index) => {
+    io.to(player.id).emit('finalRanking', { position: index + 1, rounds: room.questions.length, gameMode: gameMode });
+  });
 }
 
 // Create new room
@@ -291,7 +297,7 @@ io.on('connect', (socket) => {
 
   socket.on('sendQuizInfo', (quizInfo) => {
     const room = rooms[socket.roomName];
-   
+
     if (quizInfo && quizInfo.Categories) {
       const categories = quizInfo.Categories.map((category) => {
         return {
@@ -299,8 +305,8 @@ io.on('connect', (socket) => {
           name: category.name,
         };
       });
-      
-     
+
+
       room.categories = categories;
     }
     console.log("sendQuizInfo", quizInfo);

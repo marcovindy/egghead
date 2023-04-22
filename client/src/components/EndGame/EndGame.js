@@ -1,37 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from "react-router-dom";
-import { Form, Container, Button, Table } from 'react-bootstrap';
+import { Container, Button, Table, Modal, Alert } from 'react-bootstrap';
+
 import './EndGame.css';
 import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 
-const EndGame = ({ players, player }) => {
+const EndGame = ({ socket, players, playerName, position, rounds, earnings }) => {
     let history = useHistory();
 
-    const handleSubmit = e => {
-        e.preventDefault();
+    useEffect(() => {
+        console.log('players:', players);
+    }, [])
 
-        fetch('http://localhost:5000/scores/save', {
-            method: 'POST',
-            body: JSON.stringify({
-                username: player.username,
-                score: player.score
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'applicaton/json'
-            }
-        }).then((response) => {
-            if (response.status === 200) {
-                console.log('Score has been saved');
-                history.push('/leaderboard');
-            };
-        });
+    // Find the player object matching the current playerName
+    const currentPlayer = players.find(player => player.username === playerName);
+
+    // Get the player's score
+    const playerScore = currentPlayer ? currentPlayer.score : 0;
+
+
+
+    const [showModal, setShowModal] = useState(true);
+
+    const handleCloseModal = () => {
+        setShowModal(false);
     };
-
     return (
         <Container>
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Congratulations!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Alert variant="success">
+                        You got <strong>{earnings}</strong> experience points!
+                    </Alert>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <div>You got: {earnings}</div>
             <div>
                 <h2>The game has ended!</h2>
+                <h3>Your position: {position}</h3>
+                <h4>Your score: {playerScore}</h4>
                 <div className="score-container">
                     <h3>Game scores</h3>
                     <ListOfPlayers playersInRoom={players} />
