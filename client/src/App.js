@@ -53,9 +53,9 @@ function App() {
   useEffect(() => {
     // Zavolání API pro ověření stavu autentizace
     axios.get(
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:5000/auth/auth"
-        : "https://testing-egg.herokuapp.com/auth/auth",
+      process.env.NODE_ENV === "production"
+        ? "https://testing-egg.herokuapp.com/auth/auth"
+        : "http://localhost:5000/auth/auth",
       {
         headers: {
           accessToken: localStorage.getItem("accessToken"),

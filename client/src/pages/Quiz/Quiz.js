@@ -15,9 +15,9 @@ import { Trash } from 'react-bootstrap-icons';
 
 function Quiz() {
     const API_URL =
-        process.env.NODE_ENV === "development"
-            ? "http://localhost:5000"
-            : "https://testing-egg.herokuapp.com";
+        process.env.NODE_ENV === "production"
+            ? "https://testing-egg.herokuapp.com"
+            : "http://localhost:5000";
 
     const { id } = useParams();
     const [quizInfo, setQuizInfo] = useState({});

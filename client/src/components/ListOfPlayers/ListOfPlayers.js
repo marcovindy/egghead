@@ -9,8 +9,8 @@ import { TrophyFill } from 'react-bootstrap-icons';
 const ListOfPlayers = ({ playersInRoom }) => {
   
   const [playerLevels, setPlayerLevels] = useState({});
-  const IS_PROD = process.env.NODE_ENV === "development";
-  const API_URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
+  const IS_PROD = process.env.NODE_ENV === "production";
+  const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
 
   const fetchPlayerLevels = async () => {
     const fetchedLevels = {};

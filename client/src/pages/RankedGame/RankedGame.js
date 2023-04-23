@@ -26,8 +26,8 @@ const RankedGame = () => {
     const [nameOfRoom, setNameOfRoom] = useState('');
     const [numOfPlayersInQueue, setNumOfPlayersInQueue] = useState(0);
     const [showModal, setShowModal] = useState(false);
-    const IS_PROD = process.env.NODE_ENV === "development";
-    const API_URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
+    const IS_PROD = process.env.NODE_ENV === "production";
+    const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
     const timerRef = useRef(null);
 
 

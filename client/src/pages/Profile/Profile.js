@@ -19,11 +19,8 @@ const initialUserState = {
 };
 
 function Profile() {
-  const IS_PROD = process.env.NODE_ENV === "development";
-  const URL0 = IS_PROD ? "http://localhost:5000/auth/basicinfo/" : "https://testing-egg.herokuapp.com/auth/basicinfo/";
-  const URL1 = IS_PROD ? "http://localhost:5000/auth/basicinfobyUsername/" : "https://testing-egg.herokuapp.com/auth/basicinfobyUsername/";
-  const URL2 = IS_PROD ? "http://localhost:5000/posts/byuserId/" : "https://testing-egg.herokuapp.com/posts/byuserId/";
-  const URL3 = IS_PROD ? "http://localhost:5000/quizzes/byuserId/" : "https://testing-egg.herokuapp.com/quizzes/byuserId/";
+  const IS_PROD = process.env.NODE_ENV === "production";
+  const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
 
   let { username } = useParams();
   let history = useHistory();
@@ -35,7 +32,7 @@ function Profile() {
   const { authState } = useContext(AuthContext);
   useEffect(() => {
     const source = axios.CancelToken.source();
-    axios.get(`${URL1}${username}`, { cancelToken: source.token })
+    axios.get(`${API_URL}/auth/basicinfobyUsername/${username}`, { cancelToken: source.token })
       .then((response) => {
         setId(response.data.id);
         console.log(response.data);
@@ -56,7 +53,7 @@ function Profile() {
   useEffect(() => {
     const source1 = axios.CancelToken.source();
     const source2 = axios.CancelToken.source();
-    axios.get(`${URL2}${id}`, { cancelToken: source1.token })
+    axios.get(`${API_URL}/posts/byuserId/${id}`, { cancelToken: source1.token })
       .then((response) => {
         setListOfPosts(response.data);
       })
@@ -67,7 +64,7 @@ function Profile() {
           throw error;
         }
       });
-    axios.get(`${URL3}${id}`, { cancelToken: source2.token })
+    axios.get(`${API_URL}/quizzes/byuserId/${id}`, { cancelToken: source2.token })
       .then((response) => {
         setListOfQuizzes(response.data.quizzes);
       })

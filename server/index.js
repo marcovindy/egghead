@@ -6,8 +6,8 @@ const http = require('http');
 const path = require('path');
 const uuidv1 = require('uuid/v1');
 const axios = require('axios');
-const questionsApiUrl = 'http://localhost:5000/questions';
-const quizzesApiUrl = 'http://localhost:5000/quizzes';
+// const questionsApiUrl = 'http://localhost:5000/questions';
+// const quizzesApiUrl = 'http://localhost:5000/quizzes';
 
 questionDuration = 10;
 

@@ -11,8 +11,8 @@ import './GamePlayer.css';
 
 let socket;
 
-const IS_PROD = process.env.NODE_ENV === 'development';
-const URL = IS_PROD ? 'http://localhost:5000/' : 'https://testing-egg.herokuapp.com/';
+const IS_PROD = process.env.NODE_ENV === 'production';
+const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
 
 const GamePlayer = ({ location }) => {
     const [joinRoomName, setJoinRoomName] = useState('');
@@ -58,7 +58,7 @@ const GamePlayer = ({ location }) => {
         setJoinRoomName(joinRoomName);
         setPlayerName(playerName);
         setGameMode(gameMode);
-        socket = io.connect(URL);
+        socket = io.connect(API_URL);
 
         window.addEventListener('beforeunload', () => {
             socket.emit('disconnect');

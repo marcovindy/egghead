@@ -10,8 +10,8 @@ import CheckboxGroup from "../CheckboxGroup/CheckboxGroup";
 
 import t from "../../i18nProvider/translate";
 
-const IS_PROD = process.env.NODE_ENV === "development";
-const URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
+const IS_PROD = process.env.NODE_ENV === "production";
+const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
 
 function CreateQuiz() {
 
@@ -31,7 +31,7 @@ function CreateQuiz() {
             history.push("/login");
         }
         axios
-            .get(`${URL}/categories`)
+            .get(`${API_URL}/categories`)
             .then((response) => {
                 setCategories(response.data.listOfCategories);
                 console.log("categories response.data: ", response.data.listOfCategories);
@@ -53,7 +53,7 @@ function CreateQuiz() {
             .filter((category) => data.categories.includes(category.name))
             .map((category) => category.id);
         axios
-            .post(`${URL}/quizzes/create`, {
+            .post(`${API_URL}/quizzes/create`, {
                 title: data.title,
                 language: data.language,
                 description: data.description,
