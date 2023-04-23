@@ -6,10 +6,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     language: {
       type: DataTypes.STRING,
+      default: "English",
       allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    verificated: {
+      type: DataTypes.BOOLEAN, 
+      default: false,
       allowNull: false,
     },
   });
