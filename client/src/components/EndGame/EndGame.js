@@ -48,14 +48,15 @@ const EndGame = ({ socket, players, playerName, position, rounds, earnings, game
             const currentExperience = user.data.experience;
             const currentLevel = user.data.level;
             const requiredExpForNextLevel = ((100 * currentLevel) / 2);
-
-            if (currentLevel >= requiredExpForNextLevel) {
+            if (currentExperience >= requiredExpForNextLevel) {
                 await axios.post(`${API_URL}/auth/update/level`, {
                     username: playerName,
                 });
                 toast('⬆️ Level up!');
                 setLevelUp(true);
+                console.log(currentExperience," z ", requiredExpForNextLevel)
             }
+            console.log(currentExperience," >= ", requiredExpForNextLevel)
         } catch (error) {
             console.error('Failed to check level up:', error);
             toast.error('Failed to check level up');

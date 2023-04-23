@@ -15,7 +15,7 @@ exports.updateLevel = async (req, res) => {
     const currentLevel = user.level;
     const currentExperience = user.experience;
     const newLevel = currentLevel + 1;
-    const newExperience = currentExperience - ((100 * currectLevel) / 2);
+    const newExperience = currentExperience - ((100 * currentLevel) / 2);
 
     console.log('Updating level and experience for user:', username);
     await user.update({ level: newLevel, experience: newExperience });
