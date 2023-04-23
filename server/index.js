@@ -6,7 +6,8 @@ const http = require('http');
 const path = require('path');
 const uuidv1 = require('uuid/v1');
 const axios = require('axios');
-const questionsApiUrl = 'http://localhost:5000/questions'; // Změňte na správnou adresu API, pokud je potřeba
+const questionsApiUrl = 'http://localhost:5000/questions';
+const quizzesApiUrl = 'http://localhost:5000/quizzes';
 
 questionDuration = 10;
 
@@ -66,6 +67,17 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
+async function fetchVerifiedQuizzes() {
+  try {
+    const response = await axios.get(`${quizzesApiUrl}/verified`);
+    const verifiedQuizzes = response.data.quizzes;
+    return verifiedQuizzes;
+  } catch (error) {
+    console.error('Error fetching verified quizzes:', error);
+    throw error;
+  }
+}
+
 async function fetchQuestionsForQuiz(quizId) {
   try {
     const response = await axios.get(`${questionsApiUrl}/byquizId/${quizId}`);
@@ -88,6 +100,36 @@ async function fetchQuestionsForQuiz(quizId) {
     return { quiz, questions: formattedQuestions, questionsLength };
   } catch (error) {
     console.error('Error fetching quiz questions:', error);
+    throw error;
+  }
+}
+
+async function fetchRandomQuestionsFromVerifiedQuizzes() {
+  try {
+    const verifiedQuizzes = await fetchVerifiedQuizzes();
+    console.log(verifiedQuizzes);
+    const allQuestions = [];
+
+    for (const quiz of verifiedQuizzes) {
+      console.log(quiz);
+      const { questions } = await fetchQuestionsForQuiz(quiz.id);
+      allQuestions.push(...questions);
+    }
+
+    const randomQuestions = [];
+    const usedQuestionIndices = new Set();
+
+    while (randomQuestions.length < 2 && randomQuestions.length < allQuestions.length) {
+      const randomIndex = Math.floor(Math.random() * allQuestions.length);
+      if (!usedQuestionIndices.has(randomIndex)) {
+        randomQuestions.push(allQuestions[randomIndex]);
+        usedQuestionIndices.add(randomIndex);
+      }
+    }
+
+    return randomQuestions;
+  } catch (error) {
+    console.error('Error fetching random questions from verified quizzes:', error);
     throw error;
   }
 }
@@ -144,7 +186,9 @@ const createNewRoom = async (roomName, masterName, socket, quizId, gameMode) => 
   }
 
   if (gameMode === 'RankedGame') {
-    ({ quiz, questions, questionsLength } = await fetchQuestionsForQuiz(quizId));
+    // ({ quiz, questions, questionsLength } = await fetchQuestionsForQuiz(quizId));
+    questions = await fetchRandomQuestionsFromVerifiedQuizzes();
+    questionsLength = questions.length;
   }
   const room = {
     id: uuidv1(),
