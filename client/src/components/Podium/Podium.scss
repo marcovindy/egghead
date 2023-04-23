@@ -1,0 +1,44 @@
+.podium {
+    .podium-animate-appear {
+      transform: translateY(100%);
+    }
+  
+    .podium-animate-appear-active {
+      transform: translateY(0%);
+      transition: transform 1s;
+    }
+  
+    .podium-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      background-color: #ddd;
+      padding: 1rem;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+      .trophy-icon {
+        width: 2rem;
+        height: 2rem;
+        margin-bottom: 0.5rem;
+      }
+  
+      .winner-name {
+        font-weight: bold;
+      }
+    }
+  }
+  
+  .position-1 .podium-step {
+    background-color: gold;
+  }
+  
+  .position-2 .podium-step {
+    background-color: silver;
+  }
+  
+  .position-3 .podium-step {
+    background-color: #cd7f32;
+  }
+  

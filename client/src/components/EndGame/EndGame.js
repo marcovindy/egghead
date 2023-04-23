@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import './EndGame.css';
 import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
+import Podium from '../Podium/Podium';
 
 const EndGame = ({ socket, players, playerName, position, rounds, earnings, gameMode }) => {
     let history = useHistory();
@@ -89,6 +90,7 @@ const EndGame = ({ socket, players, playerName, position, rounds, earnings, game
                 <h2>The game has ended!</h2>
                 <h3>Your position: {position}</h3>
                 <h4>Your score: {playerScore}</h4>
+                <Podium winners={players}></Podium>
                 <div className="score-container">
                     <h3>Game scores</h3>
                     <ListOfPlayers playersInRoom={players} />
