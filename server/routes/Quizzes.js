@@ -148,29 +148,6 @@ router.put('/title/byquizId/:id', validateToken, async (req, res) => {
   }
 });
 
-router.get("/random", async (req, res) => {
-  try {
-    const quizzes = await Quizzes.findAll({ where: { verificated: 1 } });
-    const quizIds = quizzes.map(quiz => quiz.id);
-    const questions = await Question.findAll({ where: { QuizId: quizIds } });
-
-    // Vybereme náhodně maximálně 15 otázek z nalezených otázek
-    const selectedQuestions = [];
-    const questionsCount = Math.min(questions.length, 15);
-
-    for (let i = 0; i < questionsCount; i++) {
-      const randomIndex = Math.floor(Math.random() * questions.length);
-      selectedQuestions.push(questions[randomIndex]);
-      questions.splice(randomIndex, 1);
-    }
-
-    res.json({ questions: selectedQuestions });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error occurred while fetching random questions." });
-  }
-});
-
 // Add this to your Quizzes router
 router.get("/verified", async (req, res) => {
   try {

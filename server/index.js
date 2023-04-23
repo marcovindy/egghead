@@ -61,78 +61,14 @@ const questionsRouter = require("./routes/Questions");
 app.use("/questions", questionsRouter);
 
 
+const fetchRandomQuestionsFromVerifiedQuizzes = require("./fetch/FetchRandomQuestionsFromVerifiedQuizzes");
+
+
 // Serve any static files
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
-
-async function fetchVerifiedQuizzes() {
-  try {
-    const response = await axios.get(`${quizzesApiUrl}/verified`);
-    const verifiedQuizzes = response.data.quizzes;
-    return verifiedQuizzes;
-  } catch (error) {
-    console.error('Error fetching verified quizzes:', error);
-    throw error;
-  }
-}
-
-async function fetchQuestionsForQuiz(quizId) {
-  try {
-    const response = await axios.get(`${questionsApiUrl}/byquizId/${quizId}`);
-    console.log(response.data.questions);
-    const quiz = response.data.quiz;
-    const questions = response.data.questions;
-    const questionsLength = questions.length;
-    console.log("questions length: ", questionsLength);
-    const formattedQuestions = questions.map((question) => {
-      const formattedAnswers = question.Answers.map((answer) => ({
-        text: answer.answer,
-        isCorrect: answer.isCorrect,
-      }));
-      return {
-        question: question.question,
-        answers: formattedAnswers,
-      };
-    });
-    console.log("fetched questions = ", formattedQuestions);
-    return { quiz, questions: formattedQuestions, questionsLength };
-  } catch (error) {
-    console.error('Error fetching quiz questions:', error);
-    throw error;
-  }
-}
-
-async function fetchRandomQuestionsFromVerifiedQuizzes() {
-  try {
-    const verifiedQuizzes = await fetchVerifiedQuizzes();
-    console.log(verifiedQuizzes);
-    const allQuestions = [];
-
-    for (const quiz of verifiedQuizzes) {
-      console.log(quiz);
-      const { questions } = await fetchQuestionsForQuiz(quiz.id);
-      allQuestions.push(...questions);
-    }
-
-    const randomQuestions = [];
-    const usedQuestionIndices = new Set();
-
-    while (randomQuestions.length < 2 && randomQuestions.length < allQuestions.length) {
-      const randomIndex = Math.floor(Math.random() * allQuestions.length);
-      if (!usedQuestionIndices.has(randomIndex)) {
-        randomQuestions.push(allQuestions[randomIndex]);
-        usedQuestionIndices.add(randomIndex);
-      }
-    }
-
-    return randomQuestions;
-  } catch (error) {
-    console.error('Error fetching random questions from verified quizzes:', error);
-    throw error;
-  }
-}
 
 // SOCKET
 const rooms = [];
