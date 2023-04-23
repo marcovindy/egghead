@@ -229,6 +229,7 @@ const GamePlayer = ({ location }) => {
                                 position={position}
                                 rounds={totalQuestionsNum}
                                 earnings={earnings}
+                                gameMode={gameMode}
                                  />
                             )}
                         </>

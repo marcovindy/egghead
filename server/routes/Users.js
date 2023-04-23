@@ -4,6 +4,8 @@ const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
+const { updateExperience } = require('../controllers/experienceController');
+const { updateLevel } = require('../controllers/updateLevelController');
 
 router.post("/", async (req, res) => {
   const { username, email, password } = req.body;
@@ -22,7 +24,7 @@ router.post("/login", async (req, res) => {
 
   const user = await Users.findOne({ where: { username: username } });
 
-  if (!user) return res.json({  error: "User Doesn't Exist" });
+  if (!user) return res.json({ error: "User Doesn't Exist" });
 
   if (user) {
     bcrypt.compare(password, user.password).then(async (match) => {
@@ -36,11 +38,10 @@ router.post("/login", async (req, res) => {
     });
   } else {
     return res.status(404).json({ error: "user.password: Not found" });
-    
-    
+
+
   }
 });
-
 
 router.get("/auth", validateToken, (req, res) => {
   return res.json(req.user);
@@ -67,8 +68,6 @@ router.get("/basicinfobyUsername/:username", async (req, res) => {
   return res.json(basicInfo);
 });
 
-
-
 router.put("/changepassword", validateToken, async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await Users.findOne({ where: { username: req.user.username } });
@@ -85,5 +84,8 @@ router.put("/changepassword", validateToken, async (req, res) => {
     });
   });
 });
+
+router.post('/update/experience', updateExperience);
+router.post('/update/level', updateLevel);
 
 module.exports = router;

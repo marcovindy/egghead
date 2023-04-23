@@ -1,48 +1,90 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from "react-router-dom";
 import { Container, Button, Table, Modal, Alert } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+
 
 import './EndGame.css';
 import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 
-const EndGame = ({ socket, players, playerName, position, rounds, earnings }) => {
+const EndGame = ({ socket, players, playerName, position, rounds, earnings, gameMode }) => {
     let history = useHistory();
 
-    useEffect(() => {
-        console.log('players:', players);
-    }, [])
+    const IS_PROD = process.env.NODE_ENV === "development";
+    const API_URL = IS_PROD ? "http://localhost:5000" : "https://testing-egg.herokuapp.com";
+    const [areExpAdded, setAreExpAdded] = useState(false);
+    const [levelUp, setLevelUp] = useState(false);
 
-    // Find the player object matching the current playerName
     const currentPlayer = players.find(player => player.username === playerName);
 
-    // Get the player's score
     const playerScore = currentPlayer ? currentPlayer.score : 0;
+    
+   
+    const gameModeMultiplier = gameMode === 'RankedGame' ? 2 : 1;
+    const adjustedEarnings = earnings * gameModeMultiplier;
 
-
-
-    const [showModal, setShowModal] = useState(true);
-
-    const handleCloseModal = () => {
-        setShowModal(false);
+    
+    const saveExperience = async () => {
+        try {
+            if (!areExpAdded && adjustedEarnings > 0) {
+                await axios.post(`${API_URL}/auth/update/experience`, {
+                    username: playerName,
+                    experience: adjustedEarnings,
+                    gameMode: gameMode,
+                });
+                setAreExpAdded(true);
+                toast(`⭐ ${adjustedEarnings} Experience points added successfully!`);
+            }
+        } catch (error) {
+            toast.error('Failed to save experience');
+        }
     };
+
+    const checkLevelUp = async () => {
+        try {
+            const user = await axios.get(`${API_URL}/auth/basicinfobyUsername/${playerName}`);
+            const currentExperience = user.data.experience;
+            const currentLevel = user.data.level;
+            const requiredExpForNextLevel = ((100 * currentLevel) / 2);
+
+            if (currentLevel >= requiredExpForNextLevel) {
+                await axios.post(`${API_URL}/auth/update/level`, {
+                    username: playerName,
+                });
+                toast('⬆️ Level up!');
+                setLevelUp(true);
+            }
+        } catch (error) {
+            console.error('Failed to check level up:', error);
+            toast.error('Failed to check level up');
+        }
+    };
+    
+    useEffect(() => {
+        const handleExperienceAndLevel = async () => {
+            await saveExperience();
+            await checkLevelUp();
+        };
+        console.log(areExpAdded);
+        handleExperienceAndLevel();
+    }, [adjustedEarnings]);
+
+
+
+
     return (
         <Container>
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Congratulations!</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Alert variant="success">
-                        You got <strong>{earnings}</strong> experience points!
-                    </Alert>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-            <div>You got: {earnings}</div>
+            {levelUp && (
+                <Alert variant="success">
+                    Gratulujeme! Dosáhl jste nové úrovně!
+                </Alert>
+            )}
+            {earnings > 0 && (
+                <Alert variant="success">
+                    You got: {adjustedEarnings} experience points ⭐
+                </Alert>
+            )}
             <div>
                 <h2>The game has ended!</h2>
                 <h3>Your position: {position}</h3>
