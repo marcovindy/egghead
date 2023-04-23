@@ -4,6 +4,7 @@ import { Progress } from 'rsuite';
 import { useHistory } from "react-router-dom";
 import './PlayerBox.css';
 import Achievements from '../Achievements/Achievements';
+import Badge from '../Badge/Badge';
 
 const PlayerBox = ({ name, level, avatar, experience }) => {
   const history = useHistory();
@@ -33,7 +34,7 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
             className="position-absolute"
             showInfo={false}
           />
-          <span className="player-box-avatar-level">{level}</span>
+          <Badge level={level}/>
         </div>
         <div >
           <h3 className="mb-0 mt-1">{name}</h3>
