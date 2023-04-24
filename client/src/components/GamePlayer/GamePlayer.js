@@ -46,6 +46,7 @@ const GamePlayer = ({ location }) => {
 
     const [position, setPosition] = useState(0);
     const [earnings, setEarnings] = useState(0);
+    const [quizId, setquizId] = useState(0);
 
     const history = useHistory();
 
@@ -105,6 +106,10 @@ const GamePlayer = ({ location }) => {
             setGameEnd(false);
             setTotalQuestionsNum(totalQuestionsNum);
             setClickActivated(true);
+        });
+
+        socket.on('getquizId', (quizId) => {
+            setquizId(quizId);
         });
 
         socket.on('gameEnded', (res) => {
@@ -230,6 +235,7 @@ const GamePlayer = ({ location }) => {
                                 rounds={totalQuestionsNum}
                                 earnings={earnings}
                                 gameMode={gameMode}
+                                roomName={joinRoomName}
                                  />
                             )}
                         </>

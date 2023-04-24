@@ -302,7 +302,7 @@ const Dashboard = () => {
                         const quizId = value.id;
                         const quizTitle = value.title;
                         const roomName = createRoomName(quizTitle, quizId); // Generate random room name
-                        const masterName = value.User.username;
+                        const masterName = authState.username;
                         history.push(`/gamemaster?roomName=${roomName}&masterName=${masterName}&gameMode=CustomGame`);
                       }}
                     >

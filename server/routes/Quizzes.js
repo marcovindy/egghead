@@ -97,6 +97,7 @@ router.get("/byquizId/:id", async (req, res) => {
       },
     ],
   });
+  console.log("router: quiz..", quiz);
   return res.json(quiz);
 });
 

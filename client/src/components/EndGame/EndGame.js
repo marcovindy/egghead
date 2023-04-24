@@ -9,7 +9,7 @@ import './EndGame.css';
 import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 import Podium from '../Podium/Podium';
 
-const EndGame = ({ socket, players, playerName, position, rounds, earnings, gameMode }) => {
+const EndGame = ({ socket, players, playerName, position, rounds, earnings, gameMode, roomName }) => {
     let history = useHistory();
 
     const IS_PROD = process.env.NODE_ENV === "production";
@@ -20,12 +20,11 @@ const EndGame = ({ socket, players, playerName, position, rounds, earnings, game
     const currentPlayer = players.find(player => player.username === playerName);
 
     const playerScore = currentPlayer ? currentPlayer.score : 0;
-    
-   
+
+
     const gameModeMultiplier = gameMode === 'RankedGame' ? 2 : 1;
     const adjustedEarnings = earnings * gameModeMultiplier;
 
-    
     const saveExperience = async () => {
         try {
             if (!areExpAdded && adjustedEarnings > 0) {
@@ -54,25 +53,47 @@ const EndGame = ({ socket, players, playerName, position, rounds, earnings, game
                 });
                 toast('⬆️ Level up!');
                 setLevelUp(true);
-                console.log(currentExperience," z ", requiredExpForNextLevel)
+                console.log(currentExperience, " z ", requiredExpForNextLevel)
             }
-            console.log(currentExperience," >= ", requiredExpForNextLevel)
+            console.log(currentExperience, " >= ", requiredExpForNextLevel)
         } catch (error) {
             console.error('Failed to check level up:', error);
             toast.error('Failed to check level up');
         }
     };
-    
+
+
+
+    const saveQuizStats = async () => {
+        const userIdResponse = await axios.get(`${API_URL}/auth/basicinfobyUsername/${playerName}`);
+        const userId = userIdResponse.data.id;
+        console.log("userId: ", userId, "room", socket);
+        try {
+           
+            // await axios.post(`${API_URL}/stats/saveStats`, {
+            //     userId: userId,
+            //     quizId: socket.rooms[roomName].quizId,
+            //     score: playerScore,
+            //     experience: adjustedEarnings,
+            //     questions: rounds,
+            //     rank: 0,
+            //     timeSpend: currentPlayer.time_spent,
+            // });
+            // console.log('Quiz stats saved successfully!');
+        } catch (error) {
+            console.error('Failed to save quiz stats:', error);
+            toast.error('Failed to save quiz stats');
+        }
+    };
+
     useEffect(() => {
         const handleExperienceAndLevel = async () => {
             await saveExperience();
             await checkLevelUp();
+            await saveQuizStats();
         };
-        console.log(areExpAdded);
         handleExperienceAndLevel();
     }, [adjustedEarnings]);
-
-
 
 
     return (

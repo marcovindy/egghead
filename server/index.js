@@ -59,6 +59,8 @@ const quizzesRouter = require("./routes/Quizzes");
 app.use("/quizzes", quizzesRouter);
 const questionsRouter = require("./routes/Questions");
 app.use("/questions", questionsRouter);
+const statsRouter = require("./routes/Stats");
+app.use("/stats", statsRouter);
 
 
 const fetchRandomQuestionsFromVerifiedQuizzes = require("./fetch/FetchRandomQuestionsFromVerifiedQuizzes");
@@ -215,6 +217,7 @@ const updateScore = (socket, playerName) => {
 
 const gameEnded = (socket) => {
   const room = rooms[socket.roomName];
+  console.log("\n\nquizid : ", room.quiz);
   const gameMode = room.gameMode;
   const players = Object.values(room.players);
 
@@ -223,6 +226,7 @@ const gameEnded = (socket) => {
 
   // Emit the final ranking to each player
   sortedPlayers.forEach((player, index) => {
+    
     io.to(player.id).emit('finalRanking', { position: index + 1, rounds: room.questions.length, gameMode: gameMode });
   });
 }
@@ -295,9 +299,11 @@ io.on('connect', (socket) => {
   });
 
   socket.on('sendQuestionsToServerTest', (questions, questionsLength) => {
+    console.log("sendQuestions", questions);
     const room = rooms[socket.roomName];
     const round = 0;
     room.questions = questions;
+    console.log(room.questions);
     room.questionsLength = questionsLength;
     room.round = round;
     room.activated = true;

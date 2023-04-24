@@ -120,7 +120,7 @@ const GameMaster = () => {
 
         const fetchQuizInfo = async () => {
             try {
-                const response = await axios.get(`${API_URL}quizzes/byquizId/${id}`);
+                const response = await axios.get(`${API_URL}/quizzes/byquizId/${id}`);
                 setQuizInfo(response.data);
                 socket.emit('sendQuizInfo', response.data);
                 console.log(response.data);
@@ -133,7 +133,7 @@ const GameMaster = () => {
             try {
                 console.log(id);
                 console.log(API_URL);
-                const response = await axios.get(`${API_URL}questions/byquizId/${id}`);
+                const response = await axios.get(`${API_URL}/questions/byquizId/${id}`);
                 const quiz = response.data.quiz;
                 const questionsLength = response.data.questions.length;
                 console.log(response.data);
@@ -227,18 +227,6 @@ const GameMaster = () => {
 
     return (
         <Container>
-
-            {gameStarted === true && gameEnded === false ? (
-                <div>
-                    <h3>Time Left: {timeLeft}</h3>
-                    <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
-                </div>
-            ) : (
-                <div>
-                </div>
-            )
-            }
-
             <div className="wrapper">
                 {error === true ? (
                     <div className="errorMsg">
@@ -255,7 +243,7 @@ const GameMaster = () => {
 
                             {gameStarted === true ? (
                                 <div>
-                                    {gameEnded === true ? (
+                                    {!gameStarted && gameEnded === true ? (
                                         <div>
                                             {playerCount >= 2 ? (
                                                 <Button variant="primary" size="md" onClick={InitGame}>Play Again</Button>
