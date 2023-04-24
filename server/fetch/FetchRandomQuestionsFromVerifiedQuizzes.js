@@ -1,7 +1,3 @@
-const axios = require('axios');
-const questionsApiUrl = 'http://localhost:5000/questions';
-const quizzesApiUrl = 'http://localhost:5000/quizzes';
-
 const fetchVerifiedQuizzes = require("./FetchVerifiedQuizzes");
 const fetchQuestionsForQuiz = require("./FetchQuestionsForQuiz");
 

@@ -6,13 +6,14 @@ const http = require('http');
 const path = require('path');
 const uuidv1 = require('uuid/v1');
 const axios = require('axios');
+require('dotenv').config();
 // const questionsApiUrl = 'http://localhost:5000/questions';
 // const quizzesApiUrl = 'http://localhost:5000/quizzes';
 
 questionDuration = 10;
 
 const PORT = process.env.PORT || 5000;
-
+console.log('Port: ' + process.env.PORT);
 const server = http.createServer(app);
 const io = socketio(server, {
   pingInterval: 10000, // check how often

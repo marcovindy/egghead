@@ -1,10 +1,12 @@
+require('dotenv').config();
 const axios = require('axios');
-const isProduction = process.env.NODE_ENV === "production";
-const questionsApiUrl = isProduction ? "https://testing-egg.herokuapp.com/questions" : "http://localhost:5000/questions";
+const isProduction = process.env.NODE_ENV === "development";
+const questionsApiUrl = isProduction ? "http://localhost:5000/questions"  :  "https://testing-egg.herokuapp.com/questions";
 
 
 
 async function fetchQuestionsForQuiz(quizId) {
+  console.log(questionsApiUrl, process.env.NODE_ENV);
     try {
       const response = await axios.get(`${questionsApiUrl}/byquizId/${quizId}`);
       console.log(response.data.questions);
