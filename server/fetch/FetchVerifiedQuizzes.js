@@ -1,6 +1,8 @@
 const axios = require('axios');
-const questionsApiUrl = 'http://localhost:5000/questions';
-const quizzesApiUrl = 'http://localhost:5000/quizzes';
+const isProduction = process.env.NODE_ENV === "production";
+const quizzesApiUrl = isProduction ? "https://testing-egg.herokuapp.com/quizzes" : "http://localhost:5000/quizzes";
+
+
 
 
 
