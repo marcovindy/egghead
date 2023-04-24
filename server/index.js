@@ -12,8 +12,7 @@ require('dotenv').config();
 
 questionDuration = 10;
 
-const PORT = process.env.PORT || 5000;
-console.log('Port: ' + process.env.PORT);
+const PORT = process.env.PORT;
 const server = http.createServer(app);
 const io = socketio(server, {
   pingInterval: 10000, // check how often
