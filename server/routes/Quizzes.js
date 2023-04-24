@@ -3,18 +3,19 @@ const router = express.Router();
 const { Quizzes, Categories, Users, Answers, Questions } = require('../models');
 
 const { validateToken } = require("../middlewares/AuthMiddleware");
-
 router.post('/create', validateToken, async (req, res) => {
-  const { title, language, description, categoryIds } = req.body;
+  const { title, categoryIds } = req.body;
+  let { language, description } = req.body;
   const userId = req.user.id;
-
   if (!description) description = "";
-
+  if (!language) language = "English";
   // Validate the data
-  if (!title || !description || categoryIds.length === 0 || !language) {
+  console.log(title, language, description, categoryIds);
+  if (!title || categoryIds.length === 0 || !language) {
     return res.status(400).json({ message: 'Invalid data' });
   }
 
+console.log(title, description, categoryIds, userId, language);
   try {
     // Create a new quiz object
     const quiz = await Quizzes.create({
@@ -22,17 +23,15 @@ router.post('/create', validateToken, async (req, res) => {
       language,
       description,
       userId,
+      verificated: 0,
     });
-
     // Associate the quiz with the selected categories
     const categories = await Categories.findAll({
       where: { id: categoryIds },
     });
     await quiz.setCategories(categories);
     await quiz.setCategories(categories.map(category => category.id), { through: { updatedAt: new Date() } });
-
-
-    res.status(201).json({ message: 'Quiz created successfully', quiz });
+    res.status(201).json({ message: 'Quiz created successfully', quiz, quizId: quiz.id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to create quiz' });

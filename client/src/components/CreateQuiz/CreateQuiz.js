@@ -26,6 +26,7 @@ function CreateQuiz() {
         description: "",
         categories: [],
     };
+
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
             history.push("/login");
@@ -63,7 +64,7 @@ function CreateQuiz() {
             })
             .then((response) => {
                 toast.success(t("createquiz-success"));
-                history.push(`/customgame`);
+                history.push(`/quiz/${response.data.quizId}`);
             })
             .catch((error) => {
                 console.error(error);
@@ -97,7 +98,7 @@ function CreateQuiz() {
                                 <label>Language: </label>
                                 <ErrorMessage className="ml-1 text-color-red" name="language" component="span" />
                                 <Field as="select" name="language">
-                                    <option value="English" label="English" />
+                                    <option defaultChecked value="English" label="English" />
                                     <option value="Czech" label="Czech" />
                                     <option value="French" label="French" />
                                 </Field>
