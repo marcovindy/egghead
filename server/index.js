@@ -151,24 +151,27 @@ const createNewRoom = async (roomName, masterName, socket, quizId, gameMode) => 
 };
 
 const nextQuestion = (socket, round, questions) => {
+
   const room = rooms[socket.roomName];
-  const gameQuestion = room.questions[round - 1].question;
-  const answers = room.questions[round - 1].answers;
-  const correctAnswer = answers.find(answer => answer.isCorrect).text;
-  const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
-  const gameOptionsArray = [
-    ...incorrectAnswers.map(answer => answer.text)
-  ];
-  const randomNumber = Math.random() * 3;
-  const position = Math.floor(randomNumber) + 1;
-  gameOptionsArray.splice(position - 1, 0, correctAnswer);
-  const gameRound = round;
-  const totalQuestionsNum = room.questions.length;
+  if (room.questions[round - 1].question) {
+    const gameQuestion = room.questions[round - 1].question;
+    const answers = room.questions[round - 1].answers;
+    const correctAnswer = answers.find(answer => answer.isCorrect).text;
+    const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
+    const gameOptionsArray = [
+      ...incorrectAnswers.map(answer => answer.text)
+    ];
+    const randomNumber = Math.random() * 3;
+    const position = Math.floor(randomNumber) + 1;
+    gameOptionsArray.splice(position - 1, 0, correctAnswer);
+    const gameRound = round;
+    const totalQuestionsNum = room.questions.length;
 
-  io.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum);
+    io.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum);
 
-  // Update activeRooms list
-  sendActiveRoomsToAll();
+    // Update activeRooms list
+    sendActiveRoomsToAll();
+  }
 };
 
 const startTimerTest = (socket) => {
@@ -226,7 +229,7 @@ const gameEnded = (socket) => {
 
   // Emit the final ranking to each player
   sortedPlayers.forEach((player, index) => {
-    
+
     io.to(player.id).emit('finalRanking', { position: index + 1, rounds: room.questions.length, gameMode: gameMode });
   });
 }
@@ -428,11 +431,12 @@ io.on('connect', (socket) => {
   socket.on('start.RankedGame', (joinRoomName) => {
     console.log('start.RankedGame by', socket.username);
     console.log(rooms[joinRoomName]);
-    if (!rooms[joinRoomName].activated) {
+    if (rooms[joinRoomName] && !rooms[joinRoomName].activated) {
       rooms[joinRoomName].activated = true;
       startTimerTest(socket);
     }
   });
+
 
 
 
