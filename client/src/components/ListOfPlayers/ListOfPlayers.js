@@ -40,7 +40,7 @@ const ListOfPlayers = ({ playersInRoom }) => {
           <tbody>
             {playersInRoom.sort((a, b) => b.score - a.score).map((playerInfo, index) => (
               <tr key={index}>
-                <td>{index+1 === 1 ? (<TrophyFill size={20} color='rgb(255, 201, 71)'/>) : index+1}</td>
+                <td>{index+1 === 1 ? (<TrophyFill size={20} color='gold'/>) : index+1 === 2 ? (<TrophyFill size={20} color='silver'/>) : index+1 === 3 ? (<TrophyFill size={20} color='#cd7f32'/>) : index+1}</td>
                 <td className='d-flex justify-content-center'><Badge level={playerLevels[playerInfo.username]}/></td>
                 <td>{playerInfo.username}</td>
                 <td>{playerInfo.score}</td>
