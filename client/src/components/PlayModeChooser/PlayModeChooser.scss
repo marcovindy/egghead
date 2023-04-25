@@ -1,8 +1,12 @@
-.info-icon {
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.info-icon:hover {
-    color: #007bff;
+.card {
+    .card-body {
+        padding: 1rem !important;
+    }
+    .info-icon {
+        cursor: pointer;
+        transition: color 0.3s ease;
+        &:hover {
+            color: #007bff;
+        }
+    }
 }

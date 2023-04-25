@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,eAAe,CAAC;EACZ,WAAW,EAAE,eAAe;CAM/B;;AAPD,AAGQ,eAHO,CAEX,SAAS,CACL,eAAe,CAAC;EACZ,SAAS,EAAE,KAAK;CACnB",
+    "sources": [
+        "Play.scss"
+    ],
+    "names": [],
+    "file": "Play.css"
+}

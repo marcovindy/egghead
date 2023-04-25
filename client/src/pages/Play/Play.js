@@ -8,19 +8,21 @@ import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 import { AuthContext } from "../../helpers/AuthContext";
 import useBasicInfo from "../../hooks/useBasicInfo";
 
+import './Play.css';
+
 function Play() {
   const { authState } = useContext(AuthContext);
   const { basicInfo, isLoading } = useBasicInfo(authState.username);
 
   return (
-    <Container className="d-flex justify-content-center align-items-center">
-      <Row>
+    <Container className="play-container">
+      <Row className="justify-content-center play-row p-4">
         {authState.status === true ? (
           <Col
             xs={12}
             md={12}
             lg={6}
-            className="d-flex flex-column justify-content-center align-items-center"
+            className="d-flex flex-column justify-content-center align-items-center player-box-col"
           >
             <PlayerBox
               name={basicInfo.username}
@@ -43,7 +45,10 @@ function Play() {
             </div>
           </Col>
         )}
-        <Col xs={12} md={12} lg={6} className="">
+        
+      </Row>
+      <Row className="p-4">
+      <Col xs={12} md={12} lg={12} className="">
           <div className="d-flex flex-column align-items-center">
             <PlayModeChooser />
           </div>

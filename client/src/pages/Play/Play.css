@@ -1,0 +1,8 @@
+.play-container {
+  padding-top: 1rem !important;
+}
+
+.play-container .play-row .player-box-col {
+  max-width: 420px;
+}
+/*# sourceMappingURL=Play.css.map */

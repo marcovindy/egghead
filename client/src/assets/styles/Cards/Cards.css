@@ -1,17 +1,21 @@
-.card-col.col {
+.card-col {
   padding: 10px;
   /* Style for cards */
 }
 
-.card-col.col .card {
+.card-col .card {
   min-width: 200px !important;
+  -webkit-transition: -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
+  transition: -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
   /* Style for unordered list inside the card */
   /* Style for card buttons */
   /* Style for card title */
   /* Style for card body */
 }
 
-.card-col.col .card ul {
+.card-col .card ul {
   margin: 0;
   padding: 0;
   display: -webkit-box !important;
@@ -20,7 +24,7 @@
   /* Style for list items inside the unordered list */
 }
 
-.card-col.col .card ul li {
+.card-col .card ul li {
   list-style: none;
   padding: 3px 6px;
   color: #fff;
@@ -30,35 +34,44 @@
   cursor: pointer;
 }
 
-.card-col.col .card .card-buttons {
+.card-col .card .card-buttons {
   margin-top: -1.33rem;
   /* Style for buttons inside card-buttons */
 }
 
-.card-col.col .card .card-buttons button {
+.card-col .card .card-buttons button {
   margin: 0 5px;
 }
 
-.card-col.col .card .card-title {
+.card-col .card .card-title {
   padding-top: 5px;
   margin: 0;
 }
 
-.card-col.col .card .card-body {
+.card-col .card .card-body {
   padding: 0;
   /* Style for .body inside card-body */
   /* Style for .footer inside card-body */
 }
 
-.card-col.col .card .card-body .body {
+.card-col .card .card-body .body {
   padding: 5px;
 }
 
-.card-col.col .card .card-body .footer {
+.card-col .card .card-body .footer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   padding: 5px;
   background-color: #dddddd;
+}
+
+.card-col .card:hover {
+  -webkit-box-shadow: 0 0.25rem 0.8rem rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0.25rem 0.8rem rgba(0, 0, 0, 0.2);
+  -webkit-transition: -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
+  transition: -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, -webkit-transform 0.3s ease, -webkit-box-shadow 0.3s ease;
 }
 /*# sourceMappingURL=Cards.css.map */

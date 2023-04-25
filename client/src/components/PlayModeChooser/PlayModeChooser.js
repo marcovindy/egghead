@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Modal } from 'react-bootstrap';
+import { Row, Col, Button, Modal, Image } from 'react-bootstrap';
+import Card from 'react-bootstrap/Card';
 import { InfoCircleFill } from 'react-bootstrap-icons';
 import { toast } from 'react-toastify';
 import { useHistory } from "react-router-dom";
@@ -7,12 +8,28 @@ import { useHistory } from "react-router-dom";
 import t from "../../i18nProvider/translate";
 
 import './PlayModeChooser.css';
+import '../../assets/styles/Cards/Cards.css';
 
 const PlayModeChooser = () => {
   let history = useHistory();
   const [showModal, setShowModal] = useState(false);
   const [selectedMode, setSelectedMode] = useState(null);
   const [selectedModeDescription, setSelectedModeDescription] = useState(null);
+
+  const availableImages = [
+    'rankedgame.png',
+    'customgame.png',
+    'randomgame.png',
+  ];
+
+  const getImagePath = (mode) => {
+    const imageFilename = `${mode}.png`;
+    console.log(imageFilename);
+    if (availableImages.includes(imageFilename)) {
+      return require(`../../assets/images/gameMode/${imageFilename}`);
+    }
+    return null;
+  };
 
   const handleShowModal = (mode, description) => {
     setSelectedMode(mode);
@@ -27,74 +44,54 @@ const PlayModeChooser = () => {
   };
 
   const handleButtonClick = (gamemode) => {
-    if (gamemode === 'customgame') {
-      history.push(`/${gamemode}`);
-    } else if (gamemode === 'rankedgame') {
+    if (gamemode === 'customgame' || gamemode === 'rankedgame') {
       history.push(`/${gamemode}`);
     } else {
       toast.warning(t('featureInDevelopment'));
     }
   };
 
+  const renderButton = (label, mode) => (
+    <>
+        <Card>
+          <Card.Body className='cursor-pointer' onClick={() => handleButtonClick(mode)}>
+            {getImagePath(mode) && (
+              <Card.Img variant="top" src={getImagePath(mode)} alt={label} />
+            )}
+            <Card.Title>{label}</Card.Title>
+
+          </Card.Body>
+          <Card.Footer>
+          <InfoCircleFill
+          size={24}
+          className="info-icon"
+          onClick={() =>
+            handleShowModal(
+              label,
+              mode === 'rankedgame'
+                ? 'Play random quiz and earn XP and coins!'
+                : mode === 'customgame'
+                  ? 'Play custom quiz from our egghead community.'
+                  : 'This mode is not available now.'
+            )
+          }
+        />
+          </Card.Footer>
+        </Card>
+    </>
+  );
+
   return (
     <>
       <Row className='p-0 d-flex'>
-        <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
-          <Col lg={11} className="d-flex justify-content-center">
-            <Button className="w-100" block="true" onClick={() => handleButtonClick('rankedgame')}>
-              Ranked Game
-            </Button>
-          </Col>
-          <Col lg={1} className="d-flex flex-column align-items-center justify-content-center">
-            <InfoCircleFill
-              size={20}
-              className="info-icon"
-              onClick={() =>
-                handleShowModal(
-                  'Ranked Game',
-                  'Play random quiz and earn XP and coins!'
-                )
-              }
-            />
-          </Col>
+        <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
+          {renderButton('Ranked Game', 'rankedgame')}
         </Col>
-        <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
-          <Col lg={11} className="d-flex justify-content-center">
-            <Button className="w-100" block="true" onClick={() => handleButtonClick('customgame')}>
-              Custom Game
-            </Button>
-          </Col>
-          <Col lg={1} className="d-flex flex-column align-items-center justify-content-center">
-            <InfoCircleFill
-              size={20}
-              className="info-icon"
-              onClick={() =>
-                handleShowModal(
-                  'Custom Game',
-                  'Play custom quiz from our egghead community.'
-                )
-              }
-            />
-          </Col>
+        <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
+          {renderButton('Custom Game', 'customgame')}
         </Col>
-        <Col xs={12} md={12} lg={12} className="mb-4 d-flex w-100">
-          <Col lg={11} className="d-flex justify-content-center">
-            <Button className="w-100" block="true" onClick={() => handleButtonClick('randomgame')}>
-              Random Game with Friends
-            </Button>
-          </Col>
-          <Col lg={1} className="flex-column align-items-center justify-content-center">
-            <InfoCircleFill
-              size={20}
-              className="info-icon"
-              onClick={() =>
-                handleShowModal(
-                  'Random Game with Friends',
-                  'Play random game with your friends random quiz and compete.'
-                )
-              }
-            />
-          </Col>
+        <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
+          {renderButton('Random Game', 'randomgame')}
         </Col>
       </Row>
 
