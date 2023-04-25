@@ -51,8 +51,8 @@ const GamePlayer = ({ location }) => {
     const history = useHistory();
 
 
- 
-  
+
+
 
     useEffect(() => {
         const { joinRoomName, playerName, gameMode } = queryString.parse(location.search);
@@ -159,9 +159,9 @@ const GamePlayer = ({ location }) => {
             setGameMode(gameMode);
             setEarnings(rounds / position);
         });
-       
+
         return () => {
-          socket.off('finalRanking');
+            socket.off('finalRanking');
         };
     }, []);
 
@@ -178,10 +178,11 @@ const GamePlayer = ({ location }) => {
                         <>
                             {timerStarted ? (
                                 <>
-                                    <div>
-                                        <h3>Num of questions: {totalQuestionsNum}</h3>
-                                    </div>
-
+                                    {totalQuestionsNum && totalQuestionsNum !== 0 &&
+                                        (<div>
+                                            <h3>Num of questions: {totalQuestionsNum}</h3>
+                                        </div>)
+                                    }
                                     <div>
                                         <h3>Game will be started: {timeLeft}</h3>
                                         <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
@@ -227,16 +228,16 @@ const GamePlayer = ({ location }) => {
                                 </>
                             )}
                             {gameEnd && (
-                                <EndGame 
-                                socket={socket} 
-                                players={playersInRoom} 
-                                playerName={playerName} 
-                                position={position}
-                                rounds={totalQuestionsNum}
-                                earnings={earnings}
-                                gameMode={gameMode}
-                                roomName={joinRoomName}
-                                 />
+                                <EndGame
+                                    socket={socket}
+                                    players={playersInRoom}
+                                    playerName={playerName}
+                                    position={position}
+                                    rounds={totalQuestionsNum}
+                                    earnings={earnings}
+                                    gameMode={gameMode}
+                                    roomName={joinRoomName}
+                                />
                             )}
                         </>
                     )}
