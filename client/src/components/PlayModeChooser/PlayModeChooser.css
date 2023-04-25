@@ -1,14 +1,14 @@
-.card .card-body {
+.play-mode-chooser-row .card .card-body {
   padding: 1rem !important;
 }
 
-.card .info-icon {
+.play-mode-chooser-row .card .info-icon {
   cursor: pointer;
   -webkit-transition: color 0.3s ease;
   transition: color 0.3s ease;
 }
 
-.card .info-icon:hover {
+.play-mode-chooser-row .card .info-icon:hover {
   color: #007bff;
 }
 /*# sourceMappingURL=PlayModeChooser.css.map */
