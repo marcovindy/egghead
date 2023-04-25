@@ -1,4 +1,10 @@
 .podium {
+    .row {
+      height: 250px;
+      padding-bottom: 1rem;
+      padding-top: 1rem;
+    }
+
     .podium-animate-appear {
       transform: translateY(100%);
     }
@@ -28,17 +34,27 @@
         font-weight: bold;
       }
     }
-  }
-  
-  .position-1 .podium-step {
-    background-color: gold;
-  }
-  
-  .position-2 .podium-step {
-    background-color: silver;
-  }
-  
-  .position-3 .podium-step {
-    background-color: #cd7f32;
+
+    .position {
+      &-1  {
+        .podium-step {
+          background-color: gold;
+          height: 100%;
+        }
+      }
+      &-2 {
+        .podium-step {
+          background-color: silver;
+          height: 70%;
+        }
+      }
+      &-3 {
+        .podium-step {
+          background-color: #cd7f32;
+          height: 40%;
+        }
+      }
+    }
+
   }
   

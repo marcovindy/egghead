@@ -8,19 +8,17 @@ import './Podium.css';
 
 const Podium = ({ winners }) => {
   const podium = winners.slice(0, 3).sort((a, b) => b.score - a.score);
-  const podiumHeights = [75, 100, 50];
+  const podiumHeights = [100, 75, 50];
+  const columnOrderClasses = ["", "order-first", "order-last"];
 
   return (
     <div className="podium">
       <Row className="justify-content-center">
         {podium.map((winner, index) => (
-          <Col key={index} className={`position-${index + 1}`} xs="auto">
+          <Col key={index} className={`position-${index + 1} ${columnOrderClasses[index]}`} xs="auto">
             <CSSTransition in timeout={1000} classNames="podium-animate" appear>
               <div
                 className="podium-step"
-                style={{
-                  height: `${podiumHeights[index]}%`,
-                }}
               >
                 <TrophyFill className="trophy-icon" />
                 <div className="winner-name">{winner.username}</div>
