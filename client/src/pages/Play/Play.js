@@ -16,7 +16,7 @@ function Play() {
 
   return (
     <Container className="play-container">
-      <Row className="justify-content-center play-row p-4">
+      <Row className="justify-content-center play-row p-3">
         {authState.status === true ? (
           <Col
             xs={12}
@@ -47,7 +47,7 @@ function Play() {
         )}
         
       </Row>
-      <Row className="p-4">
+      <Row className="p-3">
       <Col xs={12} md={12} lg={12} className="">
           <div className="d-flex flex-column align-items-center">
             <PlayModeChooser />
