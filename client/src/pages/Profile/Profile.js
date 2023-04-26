@@ -89,8 +89,8 @@ function Profile() {
               {console.log(user.avatar)}
               <Image src={require(`../../assets/images/userAvatars/${user.avatar}`)} alt={user.avatar} width='200px' />
               <div className="d-flex p-3">
-              <Badge level={user.level} />
-              <ProgressBar now={progress} />
+              <Badge level={user.level}/>
+              <ProgressBar now={progress} label={`${progress} %`}/>
               </div>
               
             </div>
