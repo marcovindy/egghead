@@ -16,6 +16,7 @@ import ChangePassword from "./pages/ChangePassword";
 import Signup from "./pages/Signup/Signup";
 import LandingPage from './pages/Home/LandingPage';
 import RankedGame from './pages/RankedGame/RankedGame';
+import Leaderboard from './pages/Leaderboard/Leaderboard';
 import Quiz from './pages/Quiz/Quiz';
 import Play from './pages/Play/Play';
 import JoinGame from './components/JoinGame/JoinGame';
@@ -142,16 +143,26 @@ function App() {
                           <NavLink className='px-3 navlink' to='/login'><span className="align-middle">{t('Log in')}</span></NavLink>
                         </>
                       )}
-
+                      <NavLink className='navlink' to={`/profile/${authState.username}`}>
+                        <span className="align-middle">{t("Profile")} </span>
+                      </NavLink>
                       <div className="loggedInContainer">
                         <Row className='p-0 m-0'>
                           {authState.status && (
                             <>
                               <Col>
                                 <DropdownButton id="dropdown-basic-button" title={`${authState.username}`}>
-                                  <Dropdown.Item href={`/profile/${authState.username}`}>{t("Profile")}</Dropdown.Item>
+                                  <Dropdown.Item>
+                                    <NavLink className='navlink' to={`/profile/${authState.username}`}>
+                                      <span className="align-middle">{t("Profile")} </span>
+                                    </NavLink>
+                                  </Dropdown.Item>
+                                  <Dropdown.Item>
+                                    <NavLink className='navlink' to={`/leaderboard`}>
+                                      <span className="align-middle">Leaderboard</span>
+                                    </NavLink>
+                                  </Dropdown.Item>
                                   <Dropdown.Item onClick={logout} href="#">{t("Logout")}</Dropdown.Item>
-                                  <Dropdown.Item href="#/action-3">{t("Report bug")}</Dropdown.Item>
                                 </DropdownButton>
                               </Col>
                             </>
@@ -175,6 +186,7 @@ function App() {
               <Route path="/post/:id" exact component={Post} />
               <Route path="/signup" exact component={Signup} />
               <Route path="/login" exact component={Login} />
+              <Route path="/leaderboard" exact component={Leaderboard} />
               <Route path="/profile/:username" exact component={Profile} />
               <Route path="/quiz/:id" exact component={Quiz} />
               <Route path="/changepassword" exact component={ChangePassword} />
@@ -184,8 +196,8 @@ function App() {
               <Route path="*" exact component={PageNotFound} />
             </Switch>
           </Router>
-          <ToastContainer 
-          
+          <ToastContainer
+
           />
           <Footer />
 

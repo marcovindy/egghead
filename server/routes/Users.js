@@ -8,13 +8,13 @@ const { updateExperience } = require('../controllers/experienceController');
 const { updateLevel } = require('../controllers/updateLevelController');
 const { registerUser } = require('../controllers/users/RegisterUserController');
 const { loginUser } = require('../controllers/users/LoginUserController');
+const { getLeaderboard } = require("../controllers/users/LeaderboardController");
+
 
 // Použití kontroleru pro registraci uživatele
 router.post('/signup', registerUser);
 
 router.post('/login', loginUser);
-
-
 
 router.get("/auth", validateToken, (req, res) => {
   return res.json(req.user);
@@ -30,7 +30,7 @@ router.get("/basicinfo/:id", async (req, res) => {
   return res.json(basicInfo);
 });
 
-router.get("/basicinfobyUsername/:username", async (req, res) => {
+router.get("/user/byusername/:username", async (req, res) => {
   const { username } = req.params; // Destructure username from params
 
   const basicInfo = await Users.findOne({
@@ -59,6 +59,9 @@ router.put("/changepassword", validateToken, async (req, res) => {
 });
 
 router.post('/update/experience', updateExperience);
+
 router.post('/update/level', updateLevel);
+
+router.get("/leaderboard", getLeaderboard);
 
 module.exports = router;

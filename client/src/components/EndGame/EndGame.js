@@ -43,7 +43,7 @@ const EndGame = ({ socket, players, playerName, position, rounds, earnings, game
 
     const checkLevelUp = async () => {
         try {
-            const user = await axios.get(`${API_URL}/auth/basicinfobyUsername/${playerName}`);
+            const user = await axios.get(`${API_URL}/auth/user/byusername/${playerName}`);
             const currentExperience = user.data.experience;
             const currentLevel = user.data.level;
             const requiredExpForNextLevel = ((100 * currentLevel) / 2);
@@ -65,7 +65,7 @@ const EndGame = ({ socket, players, playerName, position, rounds, earnings, game
 
 
     const saveQuizStats = async () => {
-        const userIdResponse = await axios.get(`${API_URL}/auth/basicinfobyUsername/${playerName}`);
+        const userIdResponse = await axios.get(`${API_URL}/auth/user/byusername/${playerName}`);
         const userId = userIdResponse.data.id;
         console.log("userId: ", userId, "room", socket);
         try {

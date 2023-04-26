@@ -13,7 +13,7 @@ const useBasicInfo = (username) => {
     const fetchBasicInfo = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}/auth/basicinfobyUsername/${username}`
+          `${API_URL}/auth/user/byusername/${username}`
         );
         setBasicInfo(response.data);
       } catch (error) {

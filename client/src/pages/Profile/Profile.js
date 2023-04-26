@@ -32,7 +32,7 @@ function Profile() {
   const { authState } = useContext(AuthContext);
   useEffect(() => {
     const source = axios.CancelToken.source();
-    axios.get(`${API_URL}/auth/basicinfobyUsername/${username}`, { cancelToken: source.token })
+    axios.get(`${API_URL}/auth/user/byusername/${username}`, { cancelToken: source.token })
       .then((response) => {
         setId(response.data.id);
         console.log(response.data);
@@ -51,20 +51,8 @@ function Profile() {
   }, [username]);
 
   useEffect(() => {
-    const source1 = axios.CancelToken.source();
-    const source2 = axios.CancelToken.source();
-    axios.get(`${API_URL}/posts/byuserId/${id}`, { cancelToken: source1.token })
-      .then((response) => {
-        setListOfPosts(response.data);
-      })
-      .catch((error) => {
-        if (axios.isCancel(error)) {
-          console.log("Request canceled by cleanup:", error.message);
-        } else {
-          throw error;
-        }
-      });
-    axios.get(`${API_URL}/quizzes/byuserId/${id}`, { cancelToken: source2.token })
+    const source = axios.CancelToken.source();
+    axios.get(`${API_URL}/quizzes/byuserId/${id}`, { cancelToken: source.token })
       .then((response) => {
         setListOfQuizzes(response.data.quizzes);
       })
@@ -76,8 +64,7 @@ function Profile() {
         }
       });
     return () => {
-      source1.cancel("Request canceled by cleanup");
-      source2.cancel("Request canceled by cleanup");
+      source.cancel("Request canceled by cleanup");
       // CLEAN UP
       // Pokud by se v této asynchronní funkci pokusili provést 
       // nějakou změnu v React stavu, způsobilo by to memory leak a aplikace

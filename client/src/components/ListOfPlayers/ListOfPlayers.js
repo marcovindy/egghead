@@ -15,7 +15,7 @@ const ListOfPlayers = ({ playersInRoom }) => {
   const fetchPlayerLevels = async () => {
     const fetchedLevels = {};
     for (const player of playersInRoom) {
-      const res = await axios.get(`${API_URL}/auth/basicinfobyUsername/${player.username}`);
+      const res = await axios.get(`${API_URL}/auth/user/byusername/${player.username}`);
       fetchedLevels[player.username] = res.data.level;
     }
     setPlayerLevels(fetchedLevels);
