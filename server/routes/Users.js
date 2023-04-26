@@ -7,15 +7,26 @@ const { sign } = require("jsonwebtoken");
 const { updateExperience } = require('../controllers/experienceController');
 const { updateLevel } = require('../controllers/updateLevelController');
 
-router.post("/", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
     Users.create({
       username: username,
       email: email,
       password: hash,
-    });
-    return res.json("SUCCESS");
+    })
+      .then(() => {
+        return res.json("Username successfully created");
+      }).catch((error) => {
+        console.log(error.errors[0].message);
+        if (error.errors[0].message === 'email must be unique') {
+          return res.status(400).json({ message: 'User with that email already exists' });
+        } else if (error.errors[0].message === 'username must be unique') {
+          return res.status(400).json({ message: 'User with that username already exists' });
+        } else {
+          return res.status(500).json({ message: 'An error occurred' });
+        }
+      });
   });
 });
 

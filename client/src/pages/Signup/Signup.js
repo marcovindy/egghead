@@ -16,35 +16,55 @@ import './Signup.css';
 import t from "../../i18nProvider/translate";
 
 function Signup() {
+    const API_URL = process.env.NODE_ENV === "production"
+        ? `https://testing-egg.herokuapp.com`
+        : `http://localhost:5000`;
+
     const initialValues = {
         username: "",
         password: "",
         email: "",
         avatar: AvatarImg,
-        description: "No description provided",
+        description: "No description provided.",
     };
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().min(3).max(15).required(),
-        password: Yup.string().min(4).max(20).required(),
-        email: Yup.string().email().required(),
+        username: Yup.string()
+            .matches(/^[A-Za-z0-9]+$/, "Username can only contain letters and numbers")
+            .min(3, "Username should be at least 3 characters long")
+            .max(20, "Username should not exceed 20 characters")
+            .required("Username is required"),
+        password: Yup.string()
+            .min(8, "Password should be at least 8 characters long")
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/,
+                "Password should contain at least one uppercase letter, one lowercase letter, and one number"
+            )
+            .required("Password is required"),
+        email: Yup.string()
+            .email("Invalid email format")
+            .required("Email is required"),
     });
+
 
     const onSubmit = (data) => {
         try {
-            if (process.env.NODE_ENV === "development") {
-                axios.post(`http://localhost:5000/auth`, data).then(() => {
-                    console.log(data);
+            axios.post(`${API_URL}/auth/signup`, data)
+                .then(() => {
+                    toast.success(t("signup-success"));
+                })
+                .catch((error) => {
+                    if (error.response && error.response.data) {
+                        console.log(error.response.data);
+                        toast.error(error.response.data.message);
+                    } else {
+                        console.log(error);
+                        toast.error('An error occurred');
+                    }
                 });
-            } else {
-                axios.post(`https://testing-egg.herokuapp.com/auth`, data).then(() => {
-                    console.log(data);
-                });
-            }
-            toast.success(t("signup-success"));
         } catch (error) {
-            console.log(error.response.data);
-            toast.error(error.response.data);
+            console.log(error.response);
+            toast.error('An error occurred');
         }
     };
 
@@ -74,47 +94,46 @@ function Signup() {
                         onSubmit={onSubmit}
                         validationSchema={validationSchema}
                     >
+                        {(formik) => (
+                            <Form className="formContainer">
+                                <h1>Create Account</h1>
 
-                        <Form className="formContainer">
-                            <h1>Create Account</h1>
+                                <div className="social-container">
+                                </div>
+                                <label>Username: </label>
+                                <ErrorMessage className="ml-1   text-color-red" name="username" component="span" />
+                                <Field
+                                    autoComplete="off"
+                                    id="inputCreatePost"
+                                    name="username"
+                                    placeholder="(Ex. John123...)"
+                                />
 
-                            <div className="social-container">
-                            </div>
-                            <label>Username: </label>
-                            <ErrorMessage className="ml-1   text-color-red" name="username" component="span" />
-                            <Field
-                                autoComplete="off"
-                                id="inputCreatePost"
-                                name="username"
-                                placeholder="(Ex. John123...)"
-                            />
+                                <label>Email: </label>
+                                <ErrorMessage className="ml-1   text-color-red" name="email" component="span" />
+                                <Field
+                                    autoComplete="off"
+                                    id="inputCreatePost"
+                                    name="email"
+                                    placeholder="Your Email..."
+                                />
 
-                            <label>Email: </label>
-                            <ErrorMessage className="ml-1   text-color-red" name="email" component="span" />
-                            <Field
-                                autoComplete="off"
-                                id="inputCreatePost"
-                                name="email"
-                                placeholder="Your Email..."
-                            />
-
-                            <label>Password: </label>
-                            <ErrorMessage className="ml-1   text-color-red" name="password" component="span" />
-                            <Field
-                                autoComplete="off"
-                                type="password"
-                                id="inputCreatePost"
-                                name="password"
-                                placeholder="Your Password..."
-                            />
-                            <Button type="submit"> {t('Sign up')}</Button>
-                        </Form>
+                                <label>Password: </label>
+                                <ErrorMessage className="ml-1   text-color-red" name="password" component="span" />
+                                <Field
+                                    autoComplete="off"
+                                    type="password"
+                                    id="inputCreatePost"
+                                    name="password"
+                                    placeholder="Your Password..."
+                                />
+                                <Button type="submit" disabled={!formik.isValid}> {t('Sign up')}</Button>
+                            </Form>
+                        )}
                     </Formik>
                 </Col>
             </Row>
         </Container>
-
-
     );
 }
 
