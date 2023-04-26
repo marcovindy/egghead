@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Container, Row, Col, Image, Button } from "react-bootstrap";
+import { Container, Row, Col, Image, Button, ProgressBar } from "react-bootstrap";
 import { useParams, useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../helpers/AuthContext";
 import Achievements from "../../components/Achievements/Achievements";
 import Card from 'react-bootstrap/Card';
 import { PlayCircleFill, HeartFill } from 'react-bootstrap-icons';
+import Badge from "../../components/Badge/Badge";
 
+import './Profile.css';
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
@@ -15,20 +17,23 @@ const initialUserState = {
   avatar: "default-avatar.png",
   username: "",
   email: "",
+  experience: 0,
+  level: 1,
 };
 
 function Profile() {
   const IS_PROD = process.env.NODE_ENV === "production";
   const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
 
+  const [user, setUser] = useState(initialUserState);
+  const { authState } = useContext(AuthContext);
   let { username } = useParams();
   let history = useHistory();
   const [id, setId] = useState("");
   const [listOfPosts, setListOfPosts] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
-
-  const [user, setUser] = useState(initialUserState);
-  const { authState } = useContext(AuthContext);
+  const [progress, setProgress] = useState(0);
+  
   useEffect(() => {
     const source = axios.CancelToken.source();
     axios.get(`${API_URL}/auth/user/byusername/${username}`, { cancelToken: source.token })
@@ -48,6 +53,12 @@ function Profile() {
       source.cancel("Request canceled by cleanup");
     };
   }, [username]);
+
+  useEffect(() => {
+    const maxExperience = ((100 * user.level) / 2);
+    const experiencePercentage = (user.experience / maxExperience) * 100;
+    setProgress(experiencePercentage);
+  }, [user.experience, user.level]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -70,16 +81,21 @@ function Profile() {
 
   return (
     <Container>
-      <div className="profilePageContainer">
+      <div className="profile-page-container">
         <Row className="justify-content-center">
 
-          <Col>
+          <Col lg={6} md={12}>
             <div className="avatarBox">
               {console.log(user.avatar)}
               <Image src={require(`../../assets/images/userAvatars/${user.avatar}`)} alt={user.avatar} width='200px' />
+              <div className="d-flex p-3">
+              <Badge level={user.level} />
+              <ProgressBar now={progress} />
+              </div>
+              
             </div>
           </Col>
-          <Col>
+          <Col lg={6} md={12}>
 
             <div className="infoBox">
               {" "}

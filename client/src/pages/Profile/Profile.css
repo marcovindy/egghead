@@ -1,4 +1,4 @@
-.profilePageContainer .basicInfo {
+.profile-page-container .basicInfo {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -6,5 +6,9 @@
 
 .btn-add-quiz {
   width: 50px;
+}
+
+.progress {
+  height: 1.7rem !important;
 }
 /*# sourceMappingURL=Profile.css.map */
