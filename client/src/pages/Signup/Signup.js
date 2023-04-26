@@ -19,6 +19,8 @@ function Signup() {
     const API_URL = process.env.NODE_ENV === "production"
         ? `https://testing-egg.herokuapp.com`
         : `http://localhost:5000`;
+        
+    const history = useHistory();
 
     const initialValues = {
         username: "",
@@ -52,6 +54,7 @@ function Signup() {
             axios.post(`${API_URL}/auth/signup`, data)
                 .then(() => {
                     toast.success(t("signup-success"));
+                    history.push('/login');
                 })
                 .catch((error) => {
                     if (error.response && error.response.data) {
