@@ -7,7 +7,6 @@ import Achievements from "../../components/Achievements/Achievements";
 import Card from 'react-bootstrap/Card';
 import { PlayCircleFill, HeartFill } from 'react-bootstrap-icons';
 
-import imgUrl from "../../assets/images/egg2.png";
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
 
@@ -27,7 +26,7 @@ function Profile() {
   const [id, setId] = useState("");
   const [listOfPosts, setListOfPosts] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
-  
+
   const [user, setUser] = useState(initialUserState);
   const { authState } = useContext(AuthContext);
   useEffect(() => {
@@ -65,18 +64,6 @@ function Profile() {
       });
     return () => {
       source.cancel("Request canceled by cleanup");
-      // CLEAN UP
-      // Pokud by se v této asynchronní funkci pokusili provést 
-      // nějakou změnu v React stavu, způsobilo by to memory leak a aplikace
-      //  by se stala nestabilní. Aby se tato chyba opravila, musí se v kódu implementovat tzv. 
-      //  cleanup funkce (tj. funkce, která se spustí, když se komponenta odstraní z DOM), která zruší 
-      //  všechny probíhající asynchronní funkce. Tím se zajistí, že se React stav neaktualizuje, když uživatel 
-      //  již není na stránce a zabrání se tak memory leaku.
-
-      // TODO: 
-      // Není nutné používat to u každého axios požadavku, ale pokud komponent 
-      // obsahuje více axios požadavků, může být užitečné použít tuto techniku u všech požadavků, 
-      // aby se minimalizovala šance na memory leaky a unmountované komponenty.
     };
   }, [id]);
 
@@ -89,7 +76,7 @@ function Profile() {
           <Col>
             <div className="avatarBox">
               {console.log(user.avatar)}
-              <Image src={require(`../../assets/images/userAvatars/${user.avatar}`)}  alt={user.avatar} width='200px'/>
+              <Image src={require(`../../assets/images/userAvatars/${user.avatar}`)} alt={user.avatar} width='200px' />
             </div>
           </Col>
           <Col>
@@ -110,15 +97,23 @@ function Profile() {
             </div>
           </Col>
         </Row>
-        <h2>My Quizzes</h2>
-        <button className="a-button"
-          onClick={() => {
-            history.push("/createquiz");
-          }}
-        >
-          {" "}
-          Add Quiz
-        </button>
+
+        {authState.username !== username ? (
+          <>
+            <h2>Quizzes</h2>
+          </>
+        ) : (
+          <>
+            <h2>My Quizzes</h2>
+            <button className="a-button"
+              onClick={() => {
+                history.push("/createquiz");
+              }}
+            >
+              Add Quiz
+            </button>
+          </>
+        )}
         <Row>
 
 
@@ -192,7 +187,7 @@ function Profile() {
           })}
         </Row>
         <Row>
-          <Achievements preview={false}/>
+          <Achievements preview={false} />
         </Row>
       </div>
 
