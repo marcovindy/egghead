@@ -20,12 +20,13 @@ function Signup() {
     const API_URL = process.env.NODE_ENV === "production"
         ? `https://testing-egg.herokuapp.com`
         : `http://localhost:5000`;
-        
+
     const history = useHistory();
 
     const initialValues = {
         username: "",
         password: "",
+        confirmPassword: "",
         email: "",
         avatar: AvatarImg,
         description: "No description provided.",
@@ -44,6 +45,9 @@ function Signup() {
                 "Password should contain at least one uppercase letter, one lowercase letter, and one number"
             )
             .required("Password is required"),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref("password"), null], "Passwords must match")
+            .required("Confirm Password is required"),
         email: Yup.string()
             .email("Invalid email format")
             .required("Email is required"),
@@ -59,10 +63,8 @@ function Signup() {
                 })
                 .catch((error) => {
                     if (error.response && error.response.data) {
-                        console.log(error.response.data);
                         toast.error(error.response.data.message);
                     } else {
-                        console.log(error);
                         toast.error('An error occurred');
                     }
                 });
@@ -131,6 +133,17 @@ function Signup() {
                                     name="password"
                                     placeholder="Your Password..."
                                 />
+
+                                <label>Confirm Password: </label>
+                                <ErrorMessage className="ml-1 text-color-red" name="confirmPassword" component="span" />
+                                <Field
+                                    autoComplete="off"
+                                    type="password"
+                                    id="inputCreatePost"
+                                    name="confirmPassword"
+                                    placeholder="Confirm Your Password..."
+                                />
+
                                 <Button type="submit" disabled={!formik.isValid}> {t('Sign up')}</Button>
                             </Form>
                         )}

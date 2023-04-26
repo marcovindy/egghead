@@ -7,30 +7,14 @@ const { sign } = require("jsonwebtoken");
 const { updateExperience } = require('../controllers/experienceController');
 const { updateLevel } = require('../controllers/updateLevelController');
 const { registerUser } = require('../controllers/users/RegisterUserController');
+const { loginUser } = require('../controllers/users/LoginUserController');
 
 // Použití kontroleru pro registraci uživatele
 router.post('/signup', registerUser);
 
-router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+router.post('/login', loginUser);
 
-  const user = await Users.findOne({ where: { username: username } });
 
-  if (!user) return res.json({ error: "User Doesn't Exist" });
-
-  if (user) {
-    bcrypt.compare(password, user.password).then(async (match) => {
-      if (!match) return res.json({ error: "Wrong Username And Password Combination" });
-      const accessToken = sign(
-        { username: user.username, id: user.id },
-        "importantsecret"
-      );
-      return res.json({ token: accessToken, username: username, id: user.id, email: user.email, experience: user.experience, level: user.level });
-    });
-  } else {
-    return res.status(404).json({ error: "user.password: Not found" });
-  }
-});
 
 router.get("/auth", validateToken, (req, res) => {
   return res.json(req.user);

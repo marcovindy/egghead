@@ -24,7 +24,6 @@ const PlayModeChooser = () => {
 
   const getImagePath = (mode) => {
     const imageFilename = `${mode}.png`;
-    console.log(imageFilename);
     if (availableImages.includes(imageFilename)) {
       return require(`../../assets/images/gameMode/${imageFilename}`);
     }

@@ -36,10 +36,8 @@ function Login() {
         ? "http://localhost:5000"
         : "https://testing-egg.herokuapp.com";
 
-    axios.post(`${API_URL}/auth/login`, data).then((response) => {
-      if (response.data.error) {
-        toast.error(response.data.error);
-      } else {
+    axios.post(`${API_URL}/auth/login`, data)
+      .then((response) => {
         toast.success(t("login-success"));
         localStorage.setItem("accessToken", response.data.token);
         setAuthState({
@@ -51,10 +49,17 @@ function Login() {
           status: true,
         });
         history.push("/play");
-      }
-    });
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          toast.error(error.response.data.error);
+          console.log(error.response.data.error);
+        } else {
+          toast.error("Error");
+          console.log(error.response.data.error);
+        }
+      });
   };
-
 
   return (
     <Container className="container-sign p-0" id="container-sign">

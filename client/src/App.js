@@ -100,7 +100,6 @@ function App() {
 
   // Funkce pro změnu vybraného jazyka
   function handleChange(selectedOption) {
-    console.log(selectedOption.value);
     // Nastavení jazyka na základě vybrané možnosti
     if (selectedOption.value === "cs") {
       setLocale(LOCALES.CZECH);
