@@ -3,10 +3,11 @@ import axios from "axios";
 import { Container, Button, Image, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import { AuthContext } from "../../helpers/AuthContext";
+import { toast } from 'react-toastify';
+import * as Yup from "yup";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import imgEggR from '../../assets/images/egg2.png';
-
-import { toast } from 'react-toastify';
 
 import t from "../../i18nProvider/translate";
 
@@ -17,16 +18,27 @@ function Login() {
 
   let history = useHistory();
 
-  const login = () => {
-    const data = { username, password };
+  const initialValues = {
+    username: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .required("Username is required"),
+    password: Yup.string()
+      .required("Password is required")
+  });
+
+  const login = (data) => {
     const API_URL =
       process.env.NODE_ENV === "development"
         ? "http://localhost:5000"
         : "https://testing-egg.herokuapp.com";
-  
+
     axios.post(`${API_URL}/auth/login`, data).then((response) => {
       if (response.data.error) {
-        alert(response.data.error);
+        toast.error(response.data.error);
       } else {
         toast.success(t("login-success"));
         localStorage.setItem("accessToken", response.data.token);
@@ -42,31 +54,45 @@ function Login() {
       }
     });
   };
-  
-  
+
+
   return (
     <Container className="container-sign p-0" id="container-sign">
       <Row className="">
         <Col md={6} xs={12} className="p-5">
-          <div className="align-middle">
-            <h1>Login</h1>
-            <label>Username:</label>
-            <input
-              type="text"
-              onChange={(event) => {
-                setUsername(event.target.value);
-              }}
-            />
-            <label>Password:</label>
-            <input
-              type="password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            />
+          <Formik
+            initialValues={initialValues}
+            onSubmit={login}
+            validationSchema={validationSchema}
+          >
+            {(formik) => (
+              <Form className="formContainer">
+                <h1>Login</h1>
 
-            <Button className="cursor-pointer" onClick={login}> {t('Log in')}</Button>
-          </div>
+                <div className="-socialcontainer">
+                </div>
+                <label>Username: </label>
+                <ErrorMessage className="ml-1   text-color-red" name="username" component="span" />
+                <Field
+                  autoComplete="off"
+                  id="inputCreatePost"
+                  name="username"
+                  placeholder="(Ex. Eggman007...)"
+                />
+
+                <label>Password: </label>
+                <ErrorMessage className="ml-1   text-color-red" name="password" component="span" />
+                <Field
+                  autoComplete="off"
+                  type="password"
+                  id="inputCreatePost"
+                  name="password"
+                  placeholder="Your Password..."
+                />
+                <Button type="submit" disabled={!formik.isValid}> {t('Log in')}</Button>
+              </Form>
+            )}
+          </Formik>
         </Col>
         <Col md={6} xs={12} className="background p-5 col-right">
           <h1>{t('sign-up-text-1')}</h1>

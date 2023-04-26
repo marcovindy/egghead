@@ -21,7 +21,6 @@ router.post("/login", async (req, res) => {
   if (user) {
     bcrypt.compare(password, user.password).then(async (match) => {
       if (!match) return res.json({ error: "Wrong Username And Password Combination" });
-
       const accessToken = sign(
         { username: user.username, id: user.id },
         "importantsecret"
@@ -30,8 +29,6 @@ router.post("/login", async (req, res) => {
     });
   } else {
     return res.status(404).json({ error: "user.password: Not found" });
-
-
   }
 });
 

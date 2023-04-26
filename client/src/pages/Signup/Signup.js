@@ -2,10 +2,11 @@ import React, { useState, useContext } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Container, Button, Image, Row, Col } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as Yup from "yup";
 import axios from "axios";
 
-import { toast } from 'react-toastify';
+
 
 import AvatarImg from '../../assets/images/egg1.png';
 
@@ -109,7 +110,7 @@ function Signup() {
                                     autoComplete="off"
                                     id="inputCreatePost"
                                     name="username"
-                                    placeholder="(Ex. John123...)"
+                                    placeholder="(Ex. Eggman007...)"
                                 />
 
                                 <label>Email: </label>
@@ -118,7 +119,7 @@ function Signup() {
                                     autoComplete="off"
                                     id="inputCreatePost"
                                     name="email"
-                                    placeholder="Your Email..."
+                                    placeholder="(Ex. Eggman007@egghead.com...)"
                                 />
 
                                 <label>Password: </label>
