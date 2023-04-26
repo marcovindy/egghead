@@ -31,6 +31,10 @@
           transform: rotate(180deg);
 }
 
+.player-box-avatar .rs-progress-svg:hover .rs-progress-trail {
+  stroke: #c4c4c4 !important;
+}
+
 .player-box-avatar-content {
   overflow: hidden;
   position: relative;

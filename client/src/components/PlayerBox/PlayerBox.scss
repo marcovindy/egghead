@@ -18,7 +18,16 @@
         border-bottom: 0.5px solid grey;
         .rs-progress-circle {
             transform: rotate(180deg);
+            
         }
+        .rs-progress-svg{
+            &:hover {
+                .rs-progress-trail {
+                    stroke: rgb(196, 196, 196) !important;
+                }
+            }
+        }
+        
         &-content {
             overflow: hidden;
             position: relative;

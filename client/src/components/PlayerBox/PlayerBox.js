@@ -5,10 +5,11 @@ import { useHistory } from "react-router-dom";
 import './PlayerBox.css';
 import Achievements from '../Achievements/Achievements';
 import Badge from '../Badge/Badge';
+import { toast } from "react-toastify";
 
 const PlayerBox = ({ name, level, avatar, experience }) => {
   const history = useHistory();
-  
+
   const maxExperience = ((100 * level) / 2);
   const experiencePercentage = (experience / maxExperience) * 100;
 
@@ -17,6 +18,10 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
     history.push(`/profile/${name}`);
   };
 
+  const showExperienceInformation = () => {
+    const text = `Do levelu ${level + 1}, vám zbývá ${maxExperience - experience} bodů zkušeností`;
+    toast.info(text);
+  };
 
   return (
     <div className="w-100 mb-4 player-box">
@@ -31,10 +36,11 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
             strokeColor="#3FC7FA"
             strokeWidth={6}
             trailColor="#D9D9D9"
-            className="position-absolute"
+            className="position-absolute cursor-pointer progress-cicrle"
             showInfo={false}
+            onClick={showExperienceInformation}
           />
-          <Badge level={level}/>
+          <Badge onClick={showExperienceInformation} level={level} />
         </div>
         <div >
           <h3 className="mb-0 mt-1">{name}</h3>
