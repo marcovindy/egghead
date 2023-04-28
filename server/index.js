@@ -62,6 +62,8 @@ const questionsRouter = require("./routes/Questions");
 app.use("/questions", questionsRouter);
 const statsRouter = require("./routes/Stats");
 app.use("/stats", statsRouter);
+const achievementsRouter = require("./routes/Achievements");
+app.use("/achievements", achievementsRouter);
 
 
 const fetchRandomQuestionsFromVerifiedQuizzes = require("./fetch/FetchRandomQuestionsFromVerifiedQuizzes");
