@@ -30,7 +30,6 @@ function Profile() {
   let { username } = useParams();
   let history = useHistory();
   const [id, setId] = useState("");
-  const [listOfPosts, setListOfPosts] = useState([]);
   const [listOfQuizzes, setListOfQuizzes] = useState([]);
   const [progress, setProgress] = useState(0);
   
@@ -203,7 +202,7 @@ function Profile() {
           })}
         </Row>
         <Row>
-          <Achievements preview={false} />
+          <Achievements preview={false} userId={id} />
         </Row>
       </div>
 

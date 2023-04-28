@@ -42,12 +42,6 @@ module.exports = (sequelize, DataTypes) => {
     Users.hasMany(models.Quizzes);
   };
 
-  // Associate with Achievements
-  Users.belongsToMany(models.Achievements, {
-    through: "user_achievements",
-    foreignKey: "userId",
-  });
-
   Users.associate = (models) => {
     Users.hasMany(models.Likes, {
       onDelete: "cascade",
@@ -56,6 +50,13 @@ module.exports = (sequelize, DataTypes) => {
     Users.hasMany(models.Posts, {
       onDelete: "cascade",
     });
+
+    // Associate with Achievements
+    Users.belongsToMany(models.Achievements, {
+      through: "user_achievements",
+      foreignKey: "userId",
+    });
+
   };
 
   return Users;

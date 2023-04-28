@@ -22,12 +22,12 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Achievements.associate = (models) => {
-      // Associate with User
-      Achievements.belongsToMany(models.Users, {
-        through: "user_achievements",
-        foreignKey: "achievementId",
-      });
-    };
+        // Associate with User
+        Achievements.hasMany(models.UserAchievements, {
+          foreignKey: "achievementId",
+        });
+      };
+      
   
     return Achievements;
   };

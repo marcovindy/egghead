@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AchievementCard from './AchievementCard/AchievementCard';
 import { Trophy } from 'react-bootstrap-icons';
+import axios from 'axios';
 import './Achievements.css';
 
-const Achievements = ({preview}) => {
-  const achievements = [
-    {
-      title: 'First Achievement',
-      description: 'You have unlocked your first achievement!',
-      unlocked: true,
-    },
-    {
-      title: 'Second Achievement',
-      description: 'You have unlocked your second achievement!',
-      unlocked: true,
-    },
-    {
-      title: 'Third Achievement',
-      description: 'You have unlocked your third achievement!',
-      unlocked: false,
-    },
-  ];
-
+const Achievements = ({ preview, userId }) => {
+  const [achievements, setAchievements] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(-1);
 
+  const IS_PROD = process.env.NODE_ENV === "production";
+  const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
 
+  useEffect(() => {
+    const fetchAchievements = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/achievements`, {
+          params: { userId },
+        });
+        setAchievements(response.data);
+      } catch (error) {
+        console.error('Error fetching achievements:', error);
+      }
+    };
+
+    fetchAchievements();
+  }, [userId]);
   return (
     <div>
 
