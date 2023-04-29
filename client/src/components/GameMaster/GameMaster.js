@@ -53,6 +53,9 @@ const GameMaster = () => {
     const [isRoomCreated, setIsRoomCreated] = useState(false);
 
     const location = useLocation();
+    const [position, setPosition] = useState(0);
+    const [earnings, setEarnings] = useState(0);
+    const [gameMode, setGameMode] = useState('');
 
     const [currentRound, setCurrentRound] = useState(0);
     const [duration, setDuration] = useState(10);
@@ -231,6 +234,7 @@ const GameMaster = () => {
         socket.on("gameEnded", (res) => {
             setPlayers(res);
             setGameEnd(true);
+            setGameEnded(true);
         });
 
         socket.on("getRoomPlayers", (res) => {
@@ -275,6 +279,18 @@ const GameMaster = () => {
         toast.success("Game link copied to clipboard");
     };
 
+    useEffect(() => {
+        socket.on('finalRanking', ({ position, rounds, gameMode }) => {
+            setPosition(position);
+            setGameMode(gameMode);
+            setEarnings(rounds / position);
+        });
+
+        return () => {
+            socket.off('finalRanking');
+        };
+    }, []);
+
     return (
         <Container>
             <div className="wrapper">
@@ -294,23 +310,18 @@ const GameMaster = () => {
                         <div className="button-container">
                             {gameStarted === true ? (
                                 <div>
-                                    {!gameStarted && gameEnded === true ? (
-                                        <div>
-                                            {playerCount >= 2 ? (
-                                                <Button variant="primary" size="md" onClick={InitGame}>
-                                                    Play Again
-                                                </Button>
-                                            ) : (
-                                                <Button
-                                                    variant="primary"
-                                                    disabled
-                                                    size="md"
-                                                    onClick={InitGame}
-                                                >
-                                                    Play Again
-                                                </Button>
-                                            )}
-                                        </div>
+                                    {gameEnded ? (
+                                        <EndGame
+                                            socket={socket}
+                                            players={playersInRoom}
+                                            playerName={masterName}
+                                            position={position}
+                                            rounds={totalQuestionsNum}
+                                            earnings={earnings}
+                                            gameMode={gameMode}
+                                            roomName={roomName}
+                                        />
+
                                     ) : (
                                         <div>
                                             <h3>
@@ -321,16 +332,18 @@ const GameMaster = () => {
                                                 now={progress}
                                                 label={`${timeLeft} seconds left`}
                                             />
-                                            <GameQuestion
-                                                currentQuestion={currentQuestion}
-                                                currentOptions={currentOptions}
-                                                currentRound={currentRound}
-                                                playerName={masterName}
-                                                socket={socket}
-                                                clickStatus={clickActivated}
-                                                onClickChange={handleClickChange}
-                                                correctAnswer={correctAnswer}
-                                            />
+                                            {currentQuestion && (
+                                                <GameQuestion
+                                                    currentQuestion={currentQuestion}
+                                                    currentOptions={currentOptions}
+                                                    currentRound={currentRound}
+                                                    playerName={masterName}
+                                                    socket={socket}
+                                                    clickStatus={clickActivated}
+                                                    onClickChange={handleClickChange}
+                                                    correctAnswer={correctAnswer}
+                                                />
+                                            )}
                                         </div>
                                     )}
                                 </div>

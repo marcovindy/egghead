@@ -200,7 +200,6 @@ const startTimerTest = (socket) => {
         nextQuestion(socket, round, questions);
         startTimerTest(socket);
       } else {
-        console.log("Game Ended! (Timer)");
         res = Object.values(room.players);
         io.to(socket.roomId).emit("gameEnded", res);
         gameEnded(socket);

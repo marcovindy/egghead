@@ -78,6 +78,42 @@ const Dashboard = () => {
           return false;
         }
       }
+
+      // Filter by date
+      if (filterValues.date) {
+        const quizDate = new Date(quiz.createdAt);
+        const currentDate = new Date();
+        let dateLimit;
+
+        switch (filterValues.date) {
+          case "day":
+            dateLimit = new Date(currentDate.setDate(currentDate.getDate() - 1));
+            break;
+          case "week":
+            dateLimit = new Date(currentDate.setDate(currentDate.getDate() - 7));
+            break;
+          case "month":
+            dateLimit = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+            break;
+          case "year":
+            dateLimit = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
+            break;
+          case "older":
+            dateLimit = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
+            if (quizDate > dateLimit) {
+              return false;
+            }
+            break;
+          default:
+            break;
+        }
+
+        if (filterValues.date !== "older" && quizDate < dateLimit) {
+          return false;
+        }
+      }
+
+
       return true;
     });
     if (isMounted) {
@@ -85,13 +121,21 @@ const Dashboard = () => {
     }
   }, [listOfQuizzes, isMounted]);
 
+  useEffect(() => {
+    onFilterApply(filterValues);
+  }, [filterValues, onFilterApply]);
+  
+
   const createFilterMessage = () => {
-    const { language, categories, length } = filterValues;
+    const { language, categories, length, date } = filterValues;
     const messageParts = [];
 
     if (language) {
-      // console.log(language);
       messageParts.push(`language: ${language}`);
+    }
+
+    if (date) {
+      messageParts.push(`date: ${date}`);
     }
 
     if (categories && categories.length > 0) {
@@ -200,7 +244,6 @@ const Dashboard = () => {
                       {room.name}
                     </h3>
                     <ul>
-                      {console.log(room)}
                       {room.categories && room.categories.map((category, index) => (
                         <li key={index} className="d-flex flex-column justify-content-center">
                           <span>
