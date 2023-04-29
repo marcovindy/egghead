@@ -143,9 +143,6 @@ function App() {
                           <NavLink className='px-3 navlink' to='/login'><span className="align-middle">{t('Log in')}</span></NavLink>
                         </>
                       )}
-                      <NavLink className='navlink' to={`/profile/${authState.username}`}>
-                        <span className="align-middle">{t("Profile")} </span>
-                      </NavLink>
                       <div className="loggedInContainer">
                         <Row className='p-0 m-0'>
                           {authState.status && (
