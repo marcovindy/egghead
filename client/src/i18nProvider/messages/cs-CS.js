@@ -2,7 +2,8 @@ import { LOCALES } from '../constants';
 
 export default {
   [LOCALES.CZECH]: {
-    'edit-file': 'Edit {file} and save to reload.',
+    'Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our': 'Hrajte novou multiplayerovou hru plnou otázek a zábavy! Spojte se s naší komunitou a sdílejte své nápady, nahlášení chyb a tipy s ostatními hráči přes naši',
+    'community. Come join us and have fun together': 'komunitu. Přidejte se k nám a bavte se s námi',
     'hello': 'Hello',
     'demo-placeholder': 'Placeholder sample',
     'landingpage-title': 'EggHead: Kvízová hra pro více hráčů',
@@ -11,8 +12,8 @@ export default {
     'Join Game': 'Připoj se ke hře',
     'Home': 'Domů',
     'Play': 'Hraj',
-    'Sign up': 'Registrovat',
-    'Log in': 'Přihlásit',
+    'Sign up': 'Registrovat se',
+    'Log in': 'Přihlásit se',
     'Create Account': 'Vytvoř účet',
     'Forgot Password': 'Zapomenuté heslo',
     'Sign In': 'Přihlásit',

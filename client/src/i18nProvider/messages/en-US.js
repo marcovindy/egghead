@@ -2,8 +2,8 @@ import { LOCALES } from '../constants';
 
 export default {
   [LOCALES.ENGLISH]: {
-    'edit-file': 'Edit {file} and save to reload.',
     'hello': 'Hello',
+    'Hello': 'Hello',
     'demo-placeholder': 'Placeholder sample',
     'landingpage-title': 'EggHead: Multiplayer Trivia Quiz Game',
     'landingpage-description': 'Compete, study, and learn. The ultimate goal for trivia enthusiasts!',
@@ -65,6 +65,27 @@ export default {
     'Reset Filters': 'Reset Filters',
     'Categories:': 'Categories:',
 
-
+    'Leaderboard': 'Leaderboard',
+    'Username': 'Username',
+    'Experience': 'Experience',
+    'Ranked score': 'Ranked score',
+    'Sort by Rank': 'Sort by Rank',
+    'Sort by Level': 'Sort by Level',
+    'Page Not Found': 'Page Not Found',
+    'Go to the Home Page': 'Go to the Home Page',
+    'Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our': 'Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our',
+    'community. Come join us and have fun together': 'community. Come join us and have fun together',
+    'Do you really want to delete this quiz?': 'Do you really want to delete this quiz?',
+    'login': 'login',
+    'Login': 'Login',
+    'You need to': 'You need to',
+    'to play all modes': 'to play all modes',
+    'Delete': 'Delete',
+    'Close': 'Close',
+    'Do you really want to delete this quiz?': 'Do you really want to delete this quiz?',
+    'Delete Quiz': 'Delete Quiz',
+    'Change Your Password': 'Change Your Password',
+    'closeButton': 'Close',
+    'Leaderboard': 'Leaderboard',
   },
 };

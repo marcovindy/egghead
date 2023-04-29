@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import PlayerBox from "../../components/PlayerBox/PlayerBox";
 import PlayModeChooser from "../../components/PlayModeChooser/PlayModeChooser";
@@ -7,7 +7,7 @@ import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 
 import { AuthContext } from "../../helpers/AuthContext";
 import useBasicInfo from "../../hooks/useBasicInfo";
-
+import t from "../../i18nProvider/translate";
 import './Play.css';
 
 function Play() {
@@ -40,7 +40,7 @@ function Play() {
           >
             <div>
               <p>
-                You need to <Link to="/login">login</Link> to play all modes.
+                {t('You need to')} <Link to="/login"><Button>{t('login')}</Button></Link> {t('to play all modes')}.
               </p>
             </div>
           </Col>

@@ -56,12 +56,12 @@ const LandingPage = () => {
                     </Col>
                     <Col md={6} xs={12} className="d-flex flex-column justify-content-center">
                         <p className='landing-page-description'>
-                            Hrajte novou multiplayerovou hru plnou otázek a zábavy! Spojte se s naší komunitou a sdílejte své nápady, nahlášení chyb a tipy s ostatními hráči přes naši {''}
+                            {t('Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our')} {' '}
                             <Button target='_blank' rel='noopener noreferrer' variant="primary" href="https://discord.gg/eCXJTQ7EXQ">
                                 <FaDiscord className='me-2' />
                                 Discord
                             </Button> {' '}
-                            komunitu. Přidejte se k nám a bavte se s námi!
+                            {t('community. Come join us and have fun together')}!
                         </p>
                     </Col>
                 </Row>

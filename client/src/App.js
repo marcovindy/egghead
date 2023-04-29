@@ -155,7 +155,7 @@ function App() {
                                   </Dropdown.Item>
                                   <Dropdown.Item>
                                     <NavLink className='navlink' to={`/leaderboard`}>
-                                      <span className="align-middle">Leaderboard</span>
+                                      <span className="align-middle">{t('Leaderboard')}</span>
                                     </NavLink>
                                   </Dropdown.Item>
                                   <Dropdown.Item onClick={logout} href="#">{t("Logout")}</Dropdown.Item>

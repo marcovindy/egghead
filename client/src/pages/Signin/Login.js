@@ -72,11 +72,11 @@ function Login() {
           >
             {(formik) => (
               <Form className="formContainer">
-                <h1>Login</h1>
+                <h1>{t('Login')}</h1>
 
                 <div className="-socialcontainer">
                 </div>
-                <label>Username: </label>
+                <label>{t('Username')}: </label>
                 <ErrorMessage className="ml-1   text-color-red" name="username" component="span" />
                 <Field
                   autoComplete="off"
@@ -85,7 +85,7 @@ function Login() {
                   placeholder="(Ex. Eggman007...)"
                 />
 
-                <label>Password: </label>
+                <label>{t('Password')}: </label>
                 <ErrorMessage className="ml-1   text-color-red" name="password" component="span" />
                 <Field
                   autoComplete="off"
