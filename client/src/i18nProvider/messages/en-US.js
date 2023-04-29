@@ -110,5 +110,12 @@ export default {
     'Are you sure you want to delete this question?': 'Are you sure you want to delete this question?',
   
     'log in': 'log in',
+    'Go back': 'Go back',
+    'Num of questions': 'Num of questions',
+    'Game will be started': 'Game will be started',
+    'Waiting for Game Master to start the game': 'Waiting for Game Master to start the game',
+    'Activity': 'Activity',
+    'Leave room': 'Leave room',
+    'Time left': 'Time left',
   },
 };

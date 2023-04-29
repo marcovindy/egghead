@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import queryString from 'query-string';
 import { useHistory, Link } from "react-router-dom";
 import { Container, ProgressBar, Row, Col, Button, Table } from 'react-bootstrap';
@@ -8,6 +8,9 @@ import GameQuestion from '../GameQuestion/GameQuestion';
 import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 import EndGame from '../EndGame/EndGame';
 import './GamePlayer.css';
+import { AuthContext } from "../../helpers/AuthContext";
+
+import t from "../../i18nProvider/translate";
 
 let socket;
 
@@ -50,13 +53,16 @@ const GamePlayer = ({ location }) => {
 
     const history = useHistory();
 
-
+    const { authState } = useContext(AuthContext);
 
 
 
     useEffect(() => {
         const { joinRoomName, playerName, gameMode } = queryString.parse(location.search);
         setJoinRoomName(joinRoomName);
+        if (playerName !== authState.username) {
+            history.push('/customgame');
+        }
         setPlayerName(playerName);
         setGameMode(gameMode);
         socket = io.connect(API_URL);
@@ -170,7 +176,7 @@ const GamePlayer = ({ location }) => {
             {error ? (
                 <div className="errorMsg">
                     <p>{errorMsg.error}</p>
-                    <Link to="/customgame">Go back</Link>
+                    <Link to="/customgame">{t('Go back')}</Link>
                 </div>
             ) : (
                 <>
@@ -180,24 +186,24 @@ const GamePlayer = ({ location }) => {
                                 <>
                                     {totalQuestionsNum && totalQuestionsNum !== 0 &&
                                         (<div>
-                                            <h3>Num of questions: {totalQuestionsNum}</h3>
+                                            <h3>{t('Num of questions')}: {totalQuestionsNum}</h3>
                                         </div>)
                                     }
                                     <div>
-                                        <h3>Game will be started: {timeLeft}</h3>
+                                        <h3>{t('Game will be started')}: {timeLeft}</h3>
                                         <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
                                     </div>
                                 </>
                             ) : (
                                 <div>
-                                    <h2>Hello, Game player {playerName}!</h2>
-                                    <p><strong>Waiting for Game Master to start the game...</strong></p>
+                                    <h2>{t('hello')} {playerName}!</h2>
+                                    <p><strong>{t('Waiting for Game Master to start the game')}...</strong></p>
                                     <div className="messages-container">
-                                        <h3>Activity</h3>
+                                        <h3>{t('Activity')}</h3>
                                         <hr />
                                         <Messages messages={messages} />
                                     </div>
-                                    <a href="/lobby">Leave room</a>
+                                    <a href="/lobby">{t('Leave room')}</a>
                                 </div>
                             )}
                         </>
@@ -207,12 +213,12 @@ const GamePlayer = ({ location }) => {
                             {!gameEnd && (
                                 <>
                                     <div>
-                                        <h3>Num of questions: {totalQuestionsNum}</h3>
+                                        <h3>{t('Num of questions')}: {totalQuestionsNum}</h3>
                                         <ProgressBar className='num-of-questions-bar' max={totalQuestionsNum} now={currentQuestionNum} label={`${currentQuestionNum}/${totalQuestionsNum} questions`} />
                                     </div>
 
                                     <div>
-                                        <h3>Time left: {timeLeft}</h3>
+                                        <h3>{t('Time left')}: {timeLeft}</h3>
                                         <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
                                         <GameQuestion
                                             currentQuestion={currentQuestion}

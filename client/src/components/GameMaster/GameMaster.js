@@ -10,6 +10,7 @@ import GameQuestion from '../GameQuestion/GameQuestion';
 import Messages from '../Messages/Messages';
 import t from "../../i18nProvider/translate";
 import axios from 'axios';
+import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 
 
 let socket;     // Proměnná pro ukládání instance soketu pro komunikaci s ostatními hráči
@@ -17,7 +18,7 @@ let socket;     // Proměnná pro ukládání instance soketu pro komunikaci s o
 
 
 const GameMaster = () => {
-   
+
     const IS_PROD = process.env.NODE_ENV === "production";
     const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
     const [roomName, setRoomName] = useState('');
@@ -91,6 +92,12 @@ const GameMaster = () => {
             setPlayerCount(allPlayersInRoom.length);
         });
 
+        socket.on('createRoomError', (error) => {
+            console.log(error);
+            setError(true);
+            setErrorMsg(error);
+        });
+
         return () => {
             socket.emit('disconnect');
             socket.disconnect();
@@ -122,7 +129,13 @@ const GameMaster = () => {
             try {
                 const response = await axios.get(`${API_URL}/quizzes/byquizId/${id}`);
                 setQuizInfo(response.data);
-                socket.emit('sendQuizInfo', response.data);
+                socket.emit('sendQuizInfo', response.data, (error) => {
+                    if (error) {
+                        setError(true);
+                        setErrorMsg(error);
+                        console.log("Create room error: ", error);
+                    }
+                });
                 console.log(response.data);
             } catch (error) {
                 console.log(error);
@@ -151,7 +164,13 @@ const GameMaster = () => {
                 setTotalQuestions(formattedQuestions.length);
                 setQuestionsAreLoading(false);
                 console.log(questionsLength, " roundsss ");
-                socket.emit('sendQuestionsToServerTest', formattedQuestions, questionsLength);
+                socket.emit('sendQuestionsToServerTest', formattedQuestions, questionsLength, (error) => {
+                    if (error) {
+                        setError(true);
+                        setErrorMsg(error);
+                        console.log("Create room error: ", error);
+                    }
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -231,11 +250,11 @@ const GameMaster = () => {
                 {error === true ? (
                     <div className="errorMsg">
                         <p>{errorMsg.error}</p>
-                        <a href="/">Go back</a>
+                        <a href="/customgame">{t('Go back')}</a>
                     </div>
                 ) : (
                     <div>
-                        <h2>Hello, Game Master {masterName}!</h2>
+                        <h2>{t('hello')} {masterName}!</h2>
                         <div className="serverRes">
                             <strong>{serverResMsg.res}</strong>
                         </div>
@@ -255,18 +274,18 @@ const GameMaster = () => {
                                         </div>
                                     ) : (
                                         <div>
-                                        <h3>Time left: {timeLeft}</h3>
-                                        <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
-                                        <GameQuestion
-                                            currentQuestion={currentQuestion}
-                                            currentOptions={currentOptions}
-                                            currentRound={currentRound}
-                                            playerName={masterName}
-                                            socket={socket}
-                                            clickStatus={clickActivated}
-                                            onClickChange={handleClickChange}
-                                            correctAnswer={correctAnswer}
-                                        />
+                                            <h3>{t('Time left')}: {timeLeft}</h3>
+                                            <ProgressBar animated now={progress} label={`${timeLeft} seconds left`} />
+                                            <GameQuestion
+                                                currentQuestion={currentQuestion}
+                                                currentOptions={currentOptions}
+                                                currentRound={currentRound}
+                                                playerName={masterName}
+                                                socket={socket}
+                                                clickStatus={clickActivated}
+                                                onClickChange={handleClickChange}
+                                                correctAnswer={correctAnswer}
+                                            />
                                         </div>
                                     )
                                     }
@@ -279,7 +298,7 @@ const GameMaster = () => {
                                     ) : (
                                         <Button variant="primary" disabled size="md" onClick={() => {
                                             toast.warning('You need have at least 2 players to play this game.');
-                                        }}>Start Game</Button>
+                                        }}>{t('Start Game')}</Button>
                                     )
                                     }
                                 </div>
@@ -288,18 +307,12 @@ const GameMaster = () => {
 
                         </div>
                         <div>
-                            <h3>Number of questions: {totalQuestions}</h3>
+                            <h3>{t('Num of questions')}: {totalQuestions}</h3>
                             <ProgressBar className='num-of-questions-bar' max={totalQuestions} now={currentQuestion} label={`${currentQuestion}/${totalQuestions} Questions`} />
                         </div>
 
                         <div className="players-container">
-                            <h3>Players in room: {playerCount}</h3>
-                            <hr />
-                            {playersInRoom.map((playerInfo, index) =>
-                                <p className="p-players" key={index}>
-                                    Playername: {playerInfo.username}
-                                </p>
-                            )}
+                            <ListOfPlayers playersInRoom={playersInRoom} />
                         </div>
                         <div className="messages-container">
                             <h3>Activity</h3>

@@ -286,36 +286,49 @@ io.on('connect', (socket) => {
   // });
 
   socket.on('sendQuizInfo', (quizInfo) => {
-    const room = rooms[socket.roomName];
 
-    if (quizInfo && quizInfo.Categories) {
-      const categories = quizInfo.Categories.map((category) => {
-        return {
-          id: category.id,
-          name: category.name,
-        };
-      });
+    if (rooms && rooms[socket.roomName]) {
+      const room = rooms[socket.roomName];
+      if (quizInfo && quizInfo.Categories) {
+        const categories = quizInfo.Categories.map((category) => {
+          return {
+            id: category.id,
+            name: category.name,
+          };
+        });
 
 
-      room.categories = categories;
+        room.categories = categories;
+      }
+      console.log("sendQuizInfo", quizInfo);
+      // Update activeRooms list
+      sendActiveRoomsToAll();
+
+    } else {
+      return socket.emit('createRoomError', { error: 'Error: Room already exists with that name, try another!' });
     }
-    console.log("sendQuizInfo", quizInfo);
-    // Update activeRooms list
-    sendActiveRoomsToAll();
+
   });
 
   socket.on('sendQuestionsToServerTest', (questions, questionsLength) => {
-    console.log("sendQuestions", questions);
-    const room = rooms[socket.roomName];
-    const round = 0;
-    room.questions = questions;
-    console.log(room.questions);
-    room.questionsLength = questionsLength;
-    room.round = round;
-    room.activated = true;
-    console.log("sendQuizInfo", room);
-    // Update activeRooms list
-    sendActiveRoomsToAll();
+
+    if (rooms && rooms[socket.roomName]) {
+      const room = rooms[socket.roomName];
+      const round = 0;
+      room.questions = questions;
+      console.log(room.questions);
+      room.questionsLength = questionsLength;
+      room.round = round;
+      room.activated = true;
+      console.log("sendQuizInfo", room);
+      // Update activeRooms list
+      sendActiveRoomsToAll();
+    } else {
+      return socket.emit('createRoomError', { error: 'Error: Room already exists with that name, try another!' });
+    }
+
+
+
   });
 
   socket.on('startTimerTest', () => {
