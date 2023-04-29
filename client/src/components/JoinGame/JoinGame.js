@@ -13,6 +13,8 @@ const JoinGame = () => {
     const [masterName, setMasterName] = useState('');
     const [playerName, setPlayerName] = useState('');
 
+    
+
     return (
         <Container>
 

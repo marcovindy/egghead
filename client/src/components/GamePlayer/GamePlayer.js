@@ -60,9 +60,9 @@ const GamePlayer = ({ location }) => {
     useEffect(() => {
         const { joinRoomName, playerName, gameMode } = queryString.parse(location.search);
         setJoinRoomName(joinRoomName);
-        if (playerName !== authState.username) {
-            history.push('/customgame');
-        }
+        // if (playerName !== authState.username) {
+        //     history.push('/customgame');
+        // }
         setPlayerName(playerName);
         setGameMode(gameMode);
         socket = io.connect(API_URL);

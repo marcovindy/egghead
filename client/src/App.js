@@ -22,6 +22,7 @@ import CreateQuiz from './components/CreateQuiz/CreateQuiz';
 import Footer from './components/Footer/Footer';
 import GameMaster from './components/GameMaster/GameMaster';
 import GamePlayer from './components/GamePlayer/GamePlayer';
+import JoinGameByLink from './components/JoinGameByLink/JoinGameByLink';
 
 import Logo from "./assets/images/trivia.png";
 
@@ -190,6 +191,7 @@ function App() {
               <Route path="/changepassword" exact component={ChangePassword} />
               <Route path="/gamemaster" component={GameMaster} />
               <Route path="/gameplayer" component={GamePlayer} />
+              <Route path="/game" component={JoinGameByLink} />
               <Route path="/play" component={Play} />
               <Route path="*" exact component={PageNotFound} />
             </Switch>
