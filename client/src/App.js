@@ -135,8 +135,7 @@ function App() {
                     </Navbar.Brand>
                     <Nav className='justify-content-end'>
                       <NavLink className='px-3 navlink' to='/'><span className="align-middle">{t('Home')}</span></NavLink>
-                      <NavLink className='px-3 navlink' to='/lobby'><span className="align-middle">{t('Play')}(OLD)</span></NavLink>
-                      <NavLink className='px-3 navlink' to='/play'><span className="align-middle">{t('Play')}(NEW)</span></NavLink>
+                      <NavLink className='px-3 navlink' to='/play'><span className="align-middle">{t('Play')}</span></NavLink>
                       {!authState.status && (
                         <>
                           <NavLink className='px-3 navlink' to='/signup'><span className="align-middle">{t('Sign up')}</span></NavLink>
