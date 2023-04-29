@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './GameQuestion.css';
+import t from "../../i18nProvider/translate";
 
 const GameQuestion = ({ currentQuestion, currentOptions, currentRound, playerName, socket, clickStatus, onClickChange, correctAnswer }) => {
     const [playerChoice, setPlayerChoice] = useState('');
@@ -24,7 +25,7 @@ const GameQuestion = ({ currentQuestion, currentOptions, currentRound, playerNam
     return (
         <div>
             <div className="round-container">
-                <h2>Question {currentRound}</h2>
+                <h2>{t('Question')} {currentRound}</h2>
             </div>
             {clickStatus === true ? (
                 <div className="container">
@@ -43,8 +44,8 @@ const GameQuestion = ({ currentQuestion, currentOptions, currentRound, playerNam
             ) : (
                 // Zobrazení zvolené volby a správné odpovědi na otázku
                 <div>
-                    <h3 className="h3-chosen-option">You chose: {playerChoice}</h3>
-                    <h3 className="correct-answer">Correct answer is: {decodeURIComponent(correctAnswer)}</h3>
+                    <h3 className="h3-chosen-option">{t('You chose')}: {playerChoice}</h3>
+                    <h3 className="correct-answer">{t('Correct answer is')}: {decodeURIComponent(correctAnswer)}</h3>
                 </div>
             )
             }

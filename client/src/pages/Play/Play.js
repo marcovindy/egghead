@@ -40,7 +40,7 @@ function Play() {
           >
             <div>
               <p>
-                {t('You need to')} <Link to="/login"><Button>{t('login')}</Button></Link> {t('to play all modes')}.
+                {t('You need to')} <Link to="/login"><Button>{t('log in')}</Button></Link> {t('to play all modes')}.
               </p>
             </div>
           </Col>

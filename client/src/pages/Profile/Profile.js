@@ -7,7 +7,7 @@ import Achievements from "../../components/Achievements/Achievements";
 import Card from 'react-bootstrap/Card';
 import { PlayCircleFill, HeartFill } from 'react-bootstrap-icons';
 import Badge from "../../components/Badge/Badge";
-
+import t from "../../i18nProvider/translate";
 import './Profile.css';
 
 const img = "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
@@ -98,7 +98,7 @@ function Profile() {
 
             <div className="infoBox">
               {" "}
-              <h1> Username: {username} </h1>
+              <h1> {t('Username')}: {username} </h1>
               {authState.username === username && (
                 <button className="a-button"
                   onClick={() => {
@@ -106,7 +106,7 @@ function Profile() {
                   }}
                 >
                   {" "}
-                  Change My Password
+                  {t('Change Your Password')}
                 </button>
               )}
             </div>
@@ -115,17 +115,17 @@ function Profile() {
 
         {authState.username !== username ? (
           <>
-            <h2>Quizzes</h2>
+            <h2>{t('Quizzes')}</h2>
           </>
         ) : (
           <>
-            <h2>My Quizzes</h2>
+            <h2>{t('My Quizzes')}</h2>
             <button className="a-button"
               onClick={() => {
                 history.push("/createquiz");
               }}
             >
-              Add Quiz
+              {t('Add Quiz')}
             </button>
           </>
         )}
@@ -146,7 +146,7 @@ function Profile() {
                           history.push(`/quiz/${value.id}`);
                         }}
                       >
-                        View
+                        {t('View')}
                       </Button>
                       <Button
                         onClick={() => {
@@ -192,7 +192,7 @@ function Profile() {
                         {value.updatedAt.slice(0, 19).replace('T', ' ')}
                       </Col>
                       <Col lg={6}>
-                        Unlocked
+                        {t('Verified')}
                       </Col>
                     </div>
                   </Card.Body>

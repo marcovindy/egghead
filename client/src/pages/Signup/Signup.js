@@ -102,44 +102,44 @@ function Signup() {
                     >
                         {(formik) => (
                             <Form className="formContainer">
-                                <h1>Create Account</h1>
+                                <h1>{t('Create Account')}</h1>
 
                                 <div className="social-container">
                                 </div>
-                                <label>Username: </label>
+                                <label>{t('Username')}: </label>
                                 <ErrorMessage className="ml-1   text-color-red" name="username" component="span" />
                                 <Field
                                     autoComplete="off"
-                                    id="inputCreatePost"
+                                    id="inputCreateusername"
                                     name="username"
                                     placeholder="(Ex. Eggman007...)"
                                 />
 
-                                <label>Email: </label>
+                                <label>{t('Email')}: </label>
                                 <ErrorMessage className="ml-1   text-color-red" name="email" component="span" />
                                 <Field
                                     autoComplete="off"
-                                    id="inputCreatePost"
+                                    id="inputCreateEmail"
                                     name="email"
                                     placeholder="(Ex. Eggman007@egghead.com...)"
                                 />
 
-                                <label>Password: </label>
+                                <label>{t('Password')}: </label>
                                 <ErrorMessage className="ml-1   text-color-red" name="password" component="span" />
                                 <Field
                                     autoComplete="off"
                                     type="password"
-                                    id="inputCreatePost"
+                                    id="inputCreatePassword"
                                     name="password"
                                     placeholder="Your Password..."
                                 />
 
-                                <label>Confirm Password: </label>
+                                <label>{t('Confirm Password')}: </label>
                                 <ErrorMessage className="ml-1 text-color-red" name="confirmPassword" component="span" />
                                 <Field
                                     autoComplete="off"
                                     type="password"
-                                    id="inputCreatePost"
+                                    id="inputCreateConfirmPassword"
                                     name="confirmPassword"
                                     placeholder="Confirm Your Password..."
                                 />

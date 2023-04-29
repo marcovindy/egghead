@@ -80,7 +80,7 @@ function Login() {
                 <ErrorMessage className="ml-1   text-color-red" name="username" component="span" />
                 <Field
                   autoComplete="off"
-                  id="inputCreatePost"
+                  id="username"
                   name="username"
                   placeholder="(Ex. Eggman007...)"
                 />
@@ -90,7 +90,7 @@ function Login() {
                 <Field
                   autoComplete="off"
                   type="password"
-                  id="inputCreatePost"
+                  id="password"
                   name="password"
                   placeholder="Your Password..."
                 />

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Switch, Link, NavLink } from "react-router-dom";
-import { Navbar, Container, Nav, Row, Col } from "react-bootstrap";
+import { Navbar, Container, Nav, Row, Col, Button } from "react-bootstrap";
 import Select from "react-select";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -7,12 +7,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Dashboard from "./pages/Dashboard";
-import CreatePost from "./pages/CreatePost";
-import Post from "./pages/Post";
 import Login from "./pages/Signin/Login";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Profile from "./pages/Profile/Profile";
-import ChangePassword from "./pages/ChangePassword";
+import ChangePassword from "./components/ChangePassword.js/ChangePassword";
 import Signup from "./pages/Signup/Signup";
 import LandingPage from './pages/Home/LandingPage';
 import RankedGame from './pages/RankedGame/RankedGame';
@@ -108,6 +106,8 @@ function App() {
       setLocale(LOCALES.ENGLISH);
     } else if (selectedOption.value === "es") {
       setLocale(LOCALES.SPANISH);
+    } else if (selectedOption.value === "fr") {
+      setLocale(LOCALES.FRENCH);
     } else if (selectedOption.value === "ru") {
       setLocale(LOCALES.RUSSIAN);
     } else if (selectedOption.value === "uk") {
@@ -148,17 +148,21 @@ function App() {
                             <>
                               <Col>
                                 <DropdownButton id="dropdown-basic-button" title={`${authState.username}`}>
-                                  <Dropdown.Item>
-                                    <NavLink className='navlink' to={`/profile/${authState.username}`}>
+                                  <div className="d-flex justify-content-center">
+                                    <NavLink className='navlink d-block' to={`/profile/${authState.username}`}>
                                       <span className="align-middle">{t("Profile")} </span>
                                     </NavLink>
-                                  </Dropdown.Item>
-                                  <Dropdown.Item>
+                                  </div>
+
+
+                                  <div className="d-flex justify-content-center">
                                     <NavLink className='navlink' to={`/leaderboard`}>
                                       <span className="align-middle">{t('Leaderboard')}</span>
                                     </NavLink>
-                                  </Dropdown.Item>
-                                  <Dropdown.Item onClick={logout} href="#">{t("Logout")}</Dropdown.Item>
+                                  </div>
+                                  <div className="d-flex justify-content-center">
+                                    <Dropdown.Item className="d-flex navlink justify-content-center" onClick={logout} href="#">{t("Logout")}</Dropdown.Item>
+                                  </div>
                                 </DropdownButton>
                               </Col>
                             </>
@@ -178,8 +182,6 @@ function App() {
               <Route path="/customgame" exact component={Dashboard} />
               <Route path="/rankedgame" exact component={RankedGame} />
               <Route path="/lobby" exact component={JoinGame} />
-              <Route path="/createpost" exact component={CreatePost} />
-              <Route path="/post/:id" exact component={Post} />
               <Route path="/signup" exact component={Signup} />
               <Route path="/login" exact component={Login} />
               <Route path="/leaderboard" exact component={Leaderboard} />

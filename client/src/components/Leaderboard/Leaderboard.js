@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import { Container, Table } from 'react-bootstrap';
+import t from "../../i18nProvider/translate";
 
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -21,13 +22,13 @@ const Leaderboard = () => {
     return (
         <Container>
             <div className="wrapper">
-                <h1>Leaderboard</h1>
+                <h1>{t('Leaderboard')}</h1>
                 <h3>Top 20</h3>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>Player name</th>
-                            <th>Score</th>
+                            <th>{t('Player name')}</th>
+                            <th>{t('Score')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,7 +40,6 @@ const Leaderboard = () => {
                         )}
                     </tbody>
                 </Table>
-                <a href="/">Join a new game</a>
             </div>
         </Container>
     );

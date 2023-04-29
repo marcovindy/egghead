@@ -69,14 +69,14 @@ function Question({ question, index, onQuestionDelete, onAnswerEdit, onQuestionE
             </Row>
             <Modal show={showDeleteModal} onHide={handleDeleteCancel}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Delete question?</Modal.Title>
+                    <Modal.Title>{t('Delete Question')}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Are you sure you want to delete this question?
+                    {t('Are you sure you want to delete this question?')}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleDeleteCancel}>Cancel</Button>
-                    <Button variant="danger" onClick={handleDeleteConfirm}>Delete</Button>
+                    <Button variant="secondary" onClick={handleDeleteCancel}>{t('closeButton')}</Button>
+                    <Button variant="danger" onClick={handleDeleteConfirm}>{t('deleteButton')}</Button>
                 </Modal.Footer>
             </Modal>
         </>

@@ -245,7 +245,7 @@ const Dashboard = () => {
                 ""
               )}
               <Button className="m-2" variant="primary" onClick={toggleFilter}>
-                {isFilterOpen ? 'Close' : 'Open'} Filters
+                {isFilterOpen ? 'Close' : 'Open'} {t('Filters')}
               </Button>
             </Col>
           </div>
@@ -272,7 +272,7 @@ const Dashboard = () => {
           </Col>
         </Card>
         <div className="d-flex justify-content-center">
-          <Button className="a-button" href="/createquiz">Create Quiz</Button>
+          <Button className="a-button" href="/createquiz">{t('Add Quiz')}</Button>
         </div>
         {filteredQuizzes.map((value, key) => {
           return (

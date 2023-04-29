@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import Badge from '../Badge/Badge';
 import { TrophyFill } from 'react-bootstrap-icons';
+import t from "../../i18nProvider/translate";
 
 
 const ListOfPlayers = ({ playersInRoom }) => {
@@ -31,10 +32,10 @@ const ListOfPlayers = ({ playersInRoom }) => {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Position</th>
+              <th>{t('Position')}</th>
               <th>LVL</th>
-              <th>Player name</th>
-              <th>Score</th>
+              <th>{t('Player name')}</th>
+              <th>{t('Score')}</th>
             </tr>
           </thead>
           <tbody>
@@ -49,7 +50,7 @@ const ListOfPlayers = ({ playersInRoom }) => {
           </tbody>
         </Table>
       ) : (
-        <p>No players in the room yet...</p>
+        <p>{t('No players in the room yet')}...</p>
       )}
     </div>
   );

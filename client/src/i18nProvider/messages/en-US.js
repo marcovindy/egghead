@@ -2,6 +2,9 @@ import { LOCALES } from '../constants';
 
 export default {
   [LOCALES.ENGLISH]: {
+    'Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our': 'Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our',
+    'community. Come join us and have fun together': 'community. Come join us and have fun together',
+
     'hello': 'Hello',
     'Hello': 'Hello',
     'demo-placeholder': 'Placeholder sample',
@@ -73,8 +76,6 @@ export default {
     'Sort by Level': 'Sort by Level',
     'Page Not Found': 'Page Not Found',
     'Go to the Home Page': 'Go to the Home Page',
-    'Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our': 'Play our new multiplayer game full of questions and fun! Join our community and share your ideas, bug reports, and tips with other players through our',
-    'community. Come join us and have fun together': 'community. Come join us and have fun together',
     'Do you really want to delete this quiz?': 'Do you really want to delete this quiz?',
     'login': 'login',
     'Login': 'Login',
@@ -86,6 +87,28 @@ export default {
     'Delete Quiz': 'Delete Quiz',
     'Change Your Password': 'Change Your Password',
     'closeButton': 'Close',
-    'Leaderboard': 'Leaderboard',
+
+
+    'Quizzes': 'Quizzes',
+    'My Quizzes': 'My Quizzes',
+    'View': 'View',
+    'Password': 'Password',
+    'Email': 'Email',
+    'Add Quiz': 'Add Quiz',
+    'Confirm Password': 'Confirm Password',
+    'Create Account': 'Create Account',
+    'Filters': 'Filters',
+    'Loading': 'Loading', 
+    'Position': 'Position', 
+    'Player name': 'EmaPlayer nameil',
+    'Score': 'Score',
+    'No players in the room yet': 'No players in the room yet',
+    'Question': 'Question',
+    'You chose': 'You chose',
+    'Correct answer is': 'Correct answer is',
+    'Delete Question': 'Delete Question',
+    'Are you sure you want to delete this question?': 'Are you sure you want to delete this question?',
+  
+    'log in': 'log in',
   },
 };
