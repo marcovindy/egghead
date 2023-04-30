@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import t from "../../../i18nProvider/translate";
 import { Formik, Field } from "formik";
 import AnimatedRadioCircle from "../../AnimatedRadioCircle/AnimatedRadioCircle";
-
+import { toast } from "react-toastify";
 
 const AnswerField = ({
   index,
@@ -21,14 +21,17 @@ const AnswerField = ({
       id={`${name}-${index}`}
       disabled={disabled}
     />
-    <label className={values[name] && !disabled ? "radio" : "radio disabled"}>
+    <label
+      className={values[name] && !disabled ? "checkbox" : "checkbox disabled"}
+    >
       <span>{t("correctAnswerLabel")}</span>
       <Field
-        type="radio"
-        name="correctAnswer"
-        value={name}
-        onChange={() => setFieldValue("correctAnswer", name)}
-        checked={values.correctAnswer === name}
+        type="checkbox"
+        name={`isCorrect_${name}`}
+        onChange={() =>
+          setFieldValue(`isCorrect_${name}`, !values[`isCorrect_${name}`])
+        }
+        checked={values[`isCorrect_${name}`]}
         disabled={!values[name] || disabled}
       />
       <AnimatedRadioCircle />

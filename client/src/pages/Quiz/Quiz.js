@@ -113,7 +113,14 @@ function Quiz() {
   };
 
   const handleFormSubmit = (values, actions) => {
-    if (values.correctAnswer) {
+    const correctAnswers = [];
+    for (let i = 1; i <= numAnswerFields; i++) {
+      if (values[`isCorrect_answer${i}`]) {
+        correctAnswers.push(`answer${i}`);
+      }
+    }
+
+    if (correctAnswers.length > 0) {
       setQuestions([
         ...questions,
         {
@@ -121,35 +128,35 @@ function Quiz() {
           answers: [
             {
               text: values.answer1,
-              isCorrect: values.correctAnswer === "answer1",
+              isCorrect: values["isCorrect_answer1"] || false,
             },
             {
               text: values.answer2,
-              isCorrect: values.correctAnswer === "answer2",
+              isCorrect: values["isCorrect_answer2"] || false,
             },
             {
               text: values.answer3,
-              isCorrect: values.correctAnswer === "answer3",
+              isCorrect: values["isCorrect_answer3"] || false,
             },
             {
               text: values.answer4,
-              isCorrect: values.correctAnswer === "answer4",
+              isCorrect: values["isCorrect_answer4"] || false,
             },
             {
               text: values.answer5,
-              isCorrect: values.correctAnswer === "answer5",
+              isCorrect: values["isCorrect_answer5"] || false,
             },
             {
               text: values.answer6,
-              isCorrect: values.correctAnswer === "answer6",
+              isCorrect: values["isCorrect_answer6"] || false,
             },
             {
               text: values.answer7,
-              isCorrect: values.correctAnswer === "answer7",
+              isCorrect: values["isCorrect_answer7"] || false,
             },
             {
               text: values.answer8,
-              isCorrect: values.correctAnswer === "answer8",
+              isCorrect: values["isCorrect_answer8"] || false,
             },
           ].filter((answer) => answer.text),
         },
@@ -158,7 +165,8 @@ function Quiz() {
       toast.success("Question has been created successfully.");
       setIsSaved(false);
     } else {
-      toast.error("Please select a correct answer");
+      
+      toast.error("Correct answer is required.");
     }
   };
 
@@ -180,10 +188,10 @@ function Quiz() {
         setNumAnswerFields(6);
       }
     }, [values, setNumAnswerFields]);
-  
+
     return null;
   };
-  
+
   useEffect(() => {
     console.log("quizInfo: ", quizInfo);
     console.log("questions: ", questions);
@@ -293,14 +301,24 @@ function Quiz() {
                 question: "",
                 answer1: "",
                 answer2: "",
-                correctAnswer: "",
+                isCorrect_answer1: false,
+                isCorrect_answer2: false,
+                isCorrect_answer3: false,
+                isCorrect_answer4: false,
+                isCorrect_answer5: false,
+                isCorrect_answer6: false,
+                isCorrect_answer7: false,
+                isCorrect_answer8: false,
               }}
               onSubmit={handleFormSubmit}
               validationSchema={validationSchema}
             >
               {({ isSubmitting, values, setFieldValue }) => (
                 <>
-                 <DynamicAnswerFields values={values} setNumAnswerFields={setNumAnswerFields} />
+                  <DynamicAnswerFields
+                    values={values}
+                    setNumAnswerFields={setNumAnswerFields}
+                  />
 
                   <Form className="custom-form">
                     <Row className="mb-3">
@@ -345,7 +363,6 @@ function Quiz() {
                     <Button
                       type="submit"
                       disabled={
-                        !values.correctAnswer ||
                         !values.answer1 ||
                         !values.answer2 ||
                         !values.question
