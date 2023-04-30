@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import t from "../../../i18nProvider/translate";
 import { Formik, Field } from "formik";
-import AnimatedRadioCircle from "../../AnimatedRadioCircle/AnimatedRadioCircle";
+import AnimatedSquere from "../../AnimatedSquere/AnimatedSquere";
 import { toast } from "react-toastify";
 
 const AnswerField = ({
@@ -34,7 +34,7 @@ const AnswerField = ({
         checked={values[`isCorrect_${name}`]}
         disabled={!values[name] || disabled}
       />
-      <AnimatedRadioCircle />
+      <AnimatedSquere />
     </label>
   </div>
 );
