@@ -275,7 +275,6 @@ const GameMaster = () => {
         document.execCommand("copy");
         document.body.removeChild(el);
 
-        // Zobrazte upozornění, že odkaz byl zkopírován
         toast.success("Game link copied to clipboard");
     };
 

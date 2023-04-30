@@ -9,6 +9,7 @@ import ListOfPlayers from '../ListOfPlayers/ListOfPlayers';
 import EndGame from '../EndGame/EndGame';
 import './GamePlayer.css';
 import { AuthContext } from "../../helpers/AuthContext";
+import { toast } from "react-toastify";
 
 import t from "../../i18nProvider/translate";
 
@@ -60,9 +61,10 @@ const GamePlayer = ({ location }) => {
     useEffect(() => {
         const { joinRoomName, playerName, gameMode } = queryString.parse(location.search);
         setJoinRoomName(joinRoomName);
-        // if (playerName !== authState.username) {
-        //     history.push('/customgame');
-        // }
+        if (playerName !== authState.username && gameMode === 'RankedGame') {
+            setError(true);
+            setErrorMsg(t('For ranked games, you must be logged in.'));
+        }
         setPlayerName(playerName);
         setGameMode(gameMode);
         socket = io.connect(API_URL);
@@ -76,7 +78,6 @@ const GamePlayer = ({ location }) => {
             if (error) {
                 setError(true);
                 setErrorMsg(error);
-                console.log(error);
             }
         });
 
@@ -102,7 +103,6 @@ const GamePlayer = ({ location }) => {
 
     useEffect(() => {
         socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum) => {
-            console.log("correct answer (current round): ", correctAnswer);
             setCorrectAnswer(correctAnswer);
             setCurrentQuestion(gameQuestion);
             setCurrentOptions(gameOptionsArray);
@@ -133,7 +133,6 @@ const GamePlayer = ({ location }) => {
 
         socket.on('timerTick', (timeLeftTest, questionDuration) => {
             setDuration(questionDuration);
-            console.log('timerTick: ', timeLeftTest);
             const elapsed = questionDuration - timeLeftTest;
             setTimeLeft(questionDuration - elapsed);
             setTimerStarted(true);
@@ -148,6 +147,7 @@ const GamePlayer = ({ location }) => {
         socket.on("errorMsg", (err) => {
             setError(true);
             setErrorMsg(err);
+            toast.error(error);
         });
 
         return () => {
