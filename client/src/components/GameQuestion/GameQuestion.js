@@ -13,7 +13,7 @@ const GameQuestion = ({
   correctAnswer,
 }) => {
   const [playerChoice, setPlayerChoice] = useState("");
-  const [clickActivated, setClickActivated] = useState(clickStatus); // true by default
+  const [clickActivated, setClickActivated] = useState(clickStatus);
 
   // Funkce pro zpracování kliknutí na volbu
   const clickOption = (event) => {

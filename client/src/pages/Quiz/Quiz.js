@@ -4,7 +4,6 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import EditableTitle from "../../components/EditableTitle/EditableTitle";
-import AnimatedRadioCircle from "../../components/AnimatedRadioCircle/AnimatedRadioCircle";
 import Question from "../../components/Question/Question";
 import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 import "./Quiz.css";
@@ -12,6 +11,8 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import t from "../../i18nProvider/translate";
 import { Trash } from "react-bootstrap-icons";
+
+import AnswerField from "../../components/QuizComponents/AnswerField/AnswerField";
 
 function Quiz() {
   const API_URL =
@@ -26,6 +27,7 @@ function Quiz() {
   const [isSaved, setIsSaved] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const history = useHistory();
+  const [numAnswerFields, setNumAnswerFields] = useState(2);
 
   const handleQuizDelete = () => {
     axios
@@ -133,7 +135,23 @@ function Quiz() {
               text: values.answer4,
               isCorrect: values.correctAnswer === "answer4",
             },
-          ],
+            {
+              text: values.answer5,
+              isCorrect: values.correctAnswer === "answer5",
+            },
+            {
+              text: values.answer6,
+              isCorrect: values.correctAnswer === "answer6",
+            },
+            {
+              text: values.answer7,
+              isCorrect: values.correctAnswer === "answer7",
+            },
+            {
+              text: values.answer8,
+              isCorrect: values.correctAnswer === "answer8",
+            },
+          ].filter((answer) => answer.text),
         },
       ]);
       actions.resetForm();
@@ -144,6 +162,28 @@ function Quiz() {
     }
   };
 
+  const DynamicAnswerFields = ({ values, setNumAnswerFields }) => {
+    useEffect(() => {
+      if (values.answer1 && values.answer2) {
+        setNumAnswerFields(4);
+      } else {
+        setNumAnswerFields(2);
+      }
+      if (values.answer3 && values.answer4) {
+        setNumAnswerFields(6);
+      } else if (values.answer1 && values.answer2) {
+        setNumAnswerFields(4);
+      }
+      if (values.answer5 && values.answer6) {
+        setNumAnswerFields(8);
+      } else if (values.answer3 && values.answer4) {
+        setNumAnswerFields(6);
+      }
+    }, [values, setNumAnswerFields]);
+  
+    return null;
+  };
+  
   useEffect(() => {
     console.log("quizInfo: ", quizInfo);
     console.log("questions: ", questions);
@@ -253,154 +293,68 @@ function Quiz() {
                 question: "",
                 answer1: "",
                 answer2: "",
-                answer3: "",
-                answer4: "",
                 correctAnswer: "",
               }}
               onSubmit={handleFormSubmit}
               validationSchema={validationSchema}
             >
               {({ isSubmitting, values, setFieldValue }) => (
-                <Form className="custom-form">
-                  <Row className="mb-3">
-                    <Col>
-                      <label htmlFor="question">{t("questionLabel")}</label>
-                      <Field
-                        type="text"
-                        name="question"
-                        placeholder="What's your question?"
-                        as="textarea"
-                        rows="5"
-                        autoComplete="off"
-                      />
-                      <div className="text-danger">
-                        <ErrorMessage
-                          className="ml-1   text-color-red"
+                <>
+                 <DynamicAnswerFields values={values} setNumAnswerFields={setNumAnswerFields} />
+
+                  <Form className="custom-form">
+                    <Row className="mb-3">
+                      <Col>
+                        <label htmlFor="question">{t("questionLabel")}</label>
+                        <Field
+                          type="text"
                           name="question"
+                          placeholder="What's your question?"
+                          as="textarea"
+                          rows="5"
+                          autoComplete="off"
                         />
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row className="mb-3">
-                    <Col xs={12} lg={6}>
-                      <div>
-                        <label htmlFor="answer1">{t("answer1Label")}</label>
-                        <Field type="text" name="answer1" />
                         <div className="text-danger">
                           <ErrorMessage
                             className="ml-1   text-color-red"
-                            name="answer1"
+                            name="question"
                           />
                         </div>
-                      </div>
-                      <label>
-                        <span>{t("correctAnswerLabel")}</span>
-                        <Field
-                          type="radio"
-                          name="correctAnswer"
-                          value="answer1"
-                          id="answer1"
-                          onChange={() =>
-                            setFieldValue("correctAnswer", "answer1")
-                          }
-                          checked={values.correctAnswer === "answer1"}
-                        />
-                        <AnimatedRadioCircle />
-                      </label>
-                    </Col>
-                    <Col xs={12} lg={6}>
-                      <div>
-                        <label htmlFor="answer2">{t("answer2Label")}</label>
-                        <Field type="text" name="answer2" />
-                        <div className="text-danger">
-                          <ErrorMessage
-                            className="ml-1   text-color-red"
-                            name="answer2"
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-3">
+                      {Array.from(
+                        { length: numAnswerFields },
+                        (_, index) => `answer${index + 1}`
+                      ).map((answer, index) => (
+                        <Col xs={12} lg={6} key={index}>
+                          <AnswerField
+                            index={index}
+                            answerIndex={index + 1}
+                            name={answer}
+                            label={t(`${answer}Label`)}
+                            disabled={index > 1 && !values[`answer${index}`]}
+                            values={values}
+                            setFieldValue={setFieldValue}
                           />
-                        </div>
-                      </div>
-                      <label>
-                        <span>{t("correctAnswerLabel")}</span>
-                        <Field
-                          type="radio"
-                          name="correctAnswer"
-                          value="answer2"
-                          id="answer2"
-                          onChange={() =>
-                            setFieldValue("correctAnswer", "answer2")
-                          }
-                          checked={values.correctAnswer === "answer2"}
-                        />
-                        <AnimatedRadioCircle />
-                      </label>
-                    </Col>
-                    <Col xs={12} lg={6}>
-                      <div>
-                        <label htmlFor="answer3">{t("answer3Label")}</label>
-                        <Field
-                          type="text"
-                          id="answer3"
-                          name="answer3"
-                          disabled={!values.answer1 || !values.answer2}
-                        />
-                      </div>
-                      <label
-                        className={values.answer3 ? "radio" : "radio disabled"}
-                      >
-                        <span>{t("correctAnswerLabel")}</span>
-                        <Field
-                          type="radio"
-                          name="correctAnswer"
-                          value="answer3"
-                          onChange={() =>
-                            setFieldValue("correctAnswer", "answer3")
-                          }
-                          checked={values.correctAnswer === "answer3"}
-                          disabled={!values.answer3}
-                        />
-                        <AnimatedRadioCircle />
-                      </label>
-                    </Col>
-                    <Col xs={12} lg={6}>
-                      <div>
-                        <label htmlFor="answer4">{t("answer4Label")}</label>
-                        <Field
-                          type="text"
-                          name="answer4"
-                          id="answer4"
-                          disabled={!values.answer1 || !values.answer2}
-                        />
-                      </div>
-                      <label
-                        className={values.answer4 ? "radio" : "radio disabled"}
-                      >
-                        <span>{t("correctAnswerLabel")}</span>
-                        <Field
-                          type="radio"
-                          name="correctAnswer"
-                          value="answer4"
-                          onChange={() =>
-                            setFieldValue("correctAnswer", "answer4")
-                          }
-                          checked={values.correctAnswer === "answer4"}
-                          disabled={!values.answer4}
-                        />
-                        <AnimatedRadioCircle />
-                      </label>
-                    </Col>
-                  </Row>
-                  <Button
-                    type="submit"
-                    disabled={
-                      !values.correctAnswer ||
-                      !values.answer1 ||
-                      !values.answer2 ||
-                      !values.question
-                    }
-                  >
-                    {t("submitButton")}
-                  </Button>
-                </Form>
+                        </Col>
+                      ))}
+                    </Row>
+
+                    <Button
+                      type="submit"
+                      disabled={
+                        !values.correctAnswer ||
+                        !values.answer1 ||
+                        !values.answer2 ||
+                        !values.question
+                      }
+                    >
+                      {t("submitButton")}
+                    </Button>
+                  </Form>
+                </>
               )}
             </Formik>
           </Col>
@@ -443,15 +397,15 @@ function Quiz() {
       <LoadingOverlay isLoading={isLoading} />
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{t('Delete Quiz')}</Modal.Title>
+          <Modal.Title>{t("Delete Quiz")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{t('Do you really want to delete this quiz?')}</Modal.Body>
+        <Modal.Body>{t("Do you really want to delete this quiz?")}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
-            {t('closeButton')}
+            {t("closeButton")}
           </Button>
           <Button variant="danger" onClick={handleQuizDelete}>
-            {t('deleteButton')}
+            {t("deleteButton")}
           </Button>
         </Modal.Footer>
       </Modal>

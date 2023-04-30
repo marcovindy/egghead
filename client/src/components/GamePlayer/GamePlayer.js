@@ -63,7 +63,7 @@ const GamePlayer = ({ location }) => {
         setJoinRoomName(joinRoomName);
         if (playerName !== authState.username && gameMode === 'RankedGame') {
             setError(true);
-            setErrorMsg(t('For ranked games, you must be logged in.'));
+            setErrorMsg(t('For ranked games, you must be logged in'));
         }
         setPlayerName(playerName);
         setGameMode(gameMode);
@@ -147,7 +147,7 @@ const GamePlayer = ({ location }) => {
         socket.on("errorMsg", (err) => {
             setError(true);
             setErrorMsg(err);
-            toast.error(error);
+            toast.error(err);
         });
 
         return () => {
