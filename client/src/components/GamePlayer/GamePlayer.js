@@ -32,7 +32,7 @@ const GamePlayer = ({ location }) => {
     const [currentQuestion, setCurrentQuestion] = useState('');
     const [currentOptions, setCurrentOptions] = useState([]);
     const [currentRound, setCurrentRound] = useState(0);
-    const [correctAnswer, setCorrectAnswer] = useState('');
+    const [correctAnswers, setCorrectAnswers] = useState([]);
     const [clickActivated, setClickActivated] = useState(true);
     const [players, setPlayers] = useState([]);
     const [gameEnd, setGameEnd] = useState(false);
@@ -102,8 +102,8 @@ const GamePlayer = ({ location }) => {
     }, [messages]);
 
     useEffect(() => {
-        socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum) => {
-            setCorrectAnswer(correctAnswer);
+        socket.on('currentRound', (gameQuestion, gameOptionsArray, gameRound, correctAnswers, totalQuestionsNum) => {
+            setCorrectAnswers(correctAnswers);
             setCurrentQuestion(gameQuestion);
             setCurrentOptions(gameOptionsArray);
             setCurrentRound(gameRound);
@@ -228,7 +228,7 @@ const GamePlayer = ({ location }) => {
                                             socket={socket}
                                             clickStatus={clickActivated}
                                             onClickChange={handleClickChange}
-                                            correctAnswer={correctAnswer}
+                                            correctAnswers={correctAnswers}
                                         />
                                     </div>
                                 </>

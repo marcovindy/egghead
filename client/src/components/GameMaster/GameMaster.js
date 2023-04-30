@@ -63,7 +63,7 @@ const GameMaster = () => {
     const [gameStart, setGameStart] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState("");
     const [currentOptions, setCurrentOptions] = useState([]);
-    const [correctAnswer, setCorrectAnswer] = useState("");
+    const [correctAnswers, setCorrectAnswers] = useState([]);
     const [clickActivated, setClickActivated] = useState(true);
     const [totalQuestionsNum, setTotalQuestionsNum] = useState(0);
     const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
@@ -216,11 +216,11 @@ const GameMaster = () => {
                 gameQuestion,
                 gameOptionsArray,
                 gameRound,
-                correctAnswer,
+                correctAnswers,
                 totalQuestionsNum
             ) => {
-                console.log("correct answer (current round): ", correctAnswer);
-                setCorrectAnswer(correctAnswer);
+                console.log("correct answer (current round): ", correctAnswers);
+                setCorrectAnswers(correctAnswers);
                 setCurrentQuestion(gameQuestion);
                 setCurrentOptions(gameOptionsArray);
                 setCurrentRound(gameRound);
@@ -340,7 +340,7 @@ const GameMaster = () => {
                                                     socket={socket}
                                                     clickStatus={clickActivated}
                                                     onClickChange={handleClickChange}
-                                                    correctAnswer={correctAnswer}
+                                                    correctAnswers={correctAnswers}
                                                 />
                                             )}
                                         </div>

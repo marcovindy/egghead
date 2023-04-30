@@ -36,6 +36,7 @@ const Dashboard = () => {
     ]
   );
   const [isMounted, setIsMounted] = useState(true);
+  const [defaultCategories, setDefaultCategories] = useState([]);
 
 
   let history = useHistory();
@@ -44,7 +45,14 @@ const Dashboard = () => {
     categories: [],
     length: '',
   });
-
+  
+  useEffect(() => {
+    if (categories.length > 0) {
+      const categoryNames = categories.map((c) => c.name);
+      setDefaultCategories(categoryNames);
+    }
+  }, [categories]);
+  
   const createRoomName = useMemo(() => {
     const shortId = uuid().slice(0, 6);
     return (quizTitle, quizId) => `${quizTitle}-${quizId}-${shortId}`;
@@ -52,12 +60,10 @@ const Dashboard = () => {
 
   const onFilterApply = useCallback((filterValues) => {
     if (filterValues.categories.length === 0) {
-      const categoryNames = categories.map((c) => c.name);
-      setFilterValues({ ...filterValues, categories: categoryNames });
+      setFilterValues({ ...filterValues, categories: defaultCategories });
     } else {
       setFilterValues(filterValues);
     }
-
     // Filter the quizzes based on the filter values
     const newQuizzes = listOfQuizzes.filter((quiz) => {
       // Filter by language
@@ -119,11 +125,12 @@ const Dashboard = () => {
     if (isMounted) {
       setFilteredQuizzes(newQuizzes);
     }
-  }, [listOfQuizzes, isMounted]);
+  }, [listOfQuizzes, isMounted, defaultCategories]);
 
   useEffect(() => {
     onFilterApply(filterValues);
-  }, [filterValues, onFilterApply]);
+  }, [filterValues, onFilterApply, categories]);
+  
   
 
   const createFilterMessage = () => {

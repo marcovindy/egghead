@@ -153,29 +153,41 @@ const createNewRoom = async (roomName, masterName, socket, quizId, gameMode) => 
   sendActiveRoomsToAll();
 };
 
+const addCorrectAnswersRandomly = (gameOptionsArray, correctAnswers) => {
+  const tempCorrectAnswers = [...correctAnswers];
+  while (tempCorrectAnswers.length > 0) {
+    const randomIndex = Math.floor(Math.random() * tempCorrectAnswers.length);
+    const randomCorrectAnswer = tempCorrectAnswers.splice(randomIndex, 1)[0];
+    const insertIndex = Math.floor(Math.random() * (gameOptionsArray.length + 1));
+    gameOptionsArray.splice(insertIndex, 0, randomCorrectAnswer);
+  }
+  return gameOptionsArray;
+};
 const nextQuestion = (socket, round, questions) => {
-
   const room = rooms[socket.roomName];
   if (room.questions[round - 1].question) {
     const gameQuestion = room.questions[round - 1].question;
     const answers = room.questions[round - 1].answers;
-    const correctAnswer = answers.find(answer => answer.isCorrect).text;
+    const correctAnswers = answers.filter(answer => answer.isCorrect).map(answer => answer.text);
+
     const incorrectAnswers = answers.filter(answer => !answer.isCorrect);
     const gameOptionsArray = [
       ...incorrectAnswers.map(answer => answer.text)
     ];
-    const randomNumber = Math.random() * 3;
-    const position = Math.floor(randomNumber) + 1;
-    gameOptionsArray.splice(position - 1, 0, correctAnswer);
+
+    // Call the new function to add all correct answers to gameOptionsArray
+    addCorrectAnswersRandomly(gameOptionsArray, correctAnswers);
+
     const gameRound = round;
     const totalQuestionsNum = room.questions.length;
 
-    io.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswer, totalQuestionsNum);
+    io.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound, correctAnswers, totalQuestionsNum);
 
     // Update activeRooms list
     sendActiveRoomsToAll();
   }
 };
+
 
 const startTimerTest = (socket) => {
   const room = rooms[socket.roomName];
@@ -335,12 +347,13 @@ io.on('connect', (socket) => {
     console.log("startTimerTest");
   });
 
-  socket.on('playerChoice', ({ playerName, choice, gameRound }, correctAnswer) => {
+  socket.on('playerChoice', ({ playerName, choice, gameRound }, correctAnswers) => {
     const room = rooms[socket.roomName];
-    room.sockets[0].emit('playerChoice', playerName, choice, gameRound, correctAnswer); // first socket is game master
-    if (choice === correctAnswer) {
+    room.sockets[0].emit('playerChoice', playerName, choice, gameRound, correctAnswers);
+    if (correctAnswers.includes(choice)) {
       updateScore(socket, playerName);
     }
+    
   });
 
   socket.on('playerBoard', () => {

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./GameQuestion.css";
 import t from "../../i18nProvider/translate";
+import { Col, Row, Card } from "react-bootstrap";
 
 const GameQuestion = ({
   currentQuestion,
@@ -10,29 +11,48 @@ const GameQuestion = ({
   socket,
   clickStatus,
   onClickChange,
-  correctAnswer,
+  correctAnswers,
 }) => {
   const [playerChoice, setPlayerChoice] = useState("");
   const [clickActivated, setClickActivated] = useState(clickStatus);
+  const [optionClasses, setOptionClasses] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false);
 
-  // Funkce pro zpracování kliknutí na volbu
+  useEffect(() => {
+    setClickActivated(clickStatus);
+    setShowAnswer(false);
+    setOptionClasses(currentOptions.map(() => "option"));
+  }, [clickStatus, currentOptions]);
+
+  useEffect(() => {
+    if (showAnswer) {
+      const newOptionClasses = currentOptions.map((option) => {
+        const isCorrect = correctAnswers.includes(encodeURIComponent(option));
+        const isSelected = playerChoice === option;
+        return `option${isCorrect ? " correct" : ""}${
+          isSelected ? " selected" : ""
+        }`;
+      });
+      setOptionClasses(newOptionClasses);
+    }
+  }, [showAnswer, playerChoice, currentOptions]);
+
   const clickOption = (event) => {
-    const choice = event.target.innerText; // Získání textu vybrané volby
-    const gameRound = currentRound; // Uložení aktuálního kola do proměnné
-    // Odeslání volby hráče serveru pomocí socketu
+    const choice = event.target.innerText;
+    const gameRound = currentRound;
+
     socket.emit(
       "playerChoice",
       { playerName, choice, gameRound },
-      correctAnswer,
+      correctAnswers,
       () => {
         console.log("player name", playerName, "choice", playerChoice);
       }
     );
-    setPlayerChoice(choice); // Uložení volby hráče do stavu
-
-    // Zamezení dalšímu kliknutí a změna stavu kliknutí v GamePlayer
+    setPlayerChoice(choice);
     setClickActivated(false);
     onClickChange(false);
+    setShowAnswer(true);
   };
 
   return (
@@ -42,33 +62,19 @@ const GameQuestion = ({
           {t("Question")} {currentRound}
         </h2>
       </div>
-      {clickStatus === true ? (
-        <div className="container">
-          <div className="question-container">
-            <h2>{decodeURIComponent(currentQuestion.question)}</h2>
-          </div>
-          <div className="options-container">
-            {currentOptions
-              .filter((option) => option !== "")
-              .map((option, index) => (
-                <div className="option" key={index} onClick={clickOption}>
-                  {console.log(option)}
-                  {decodeURIComponent(option)}
-                </div>
-              ))}
-          </div>
-        </div>
-      ) : (
-        // Zobrazení zvolené volby a správné odpovědi na otázku
-        <div>
-          <h3 className="h3-chosen-option">
-            {t("You chose")}: {playerChoice}
-          </h3>
-          <h3 className="correct-answer">
-            {t("Correct answer is")}: {decodeURIComponent(correctAnswer)}
-          </h3>
-        </div>
-      )}
+      <div className="options-container">
+        {currentOptions
+          .filter((option) => option !== "")
+          .map((option, index) => (
+            <div
+              className={optionClasses[index]}
+              key={index}
+              onClick={clickActivated ? clickOption : null}
+            >
+              {decodeURIComponent(option)}
+            </div>
+          ))}
+      </div>
     </div>
   );
 };
