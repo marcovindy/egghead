@@ -239,7 +239,7 @@ const Dashboard = ({ userId }) => {
       setIsMounted(false);
       socket.disconnect();
     };
-  }, [userId]);
+  }, [userId, history]);
 
   return (
     <div>

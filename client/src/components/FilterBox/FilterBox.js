@@ -32,24 +32,23 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
 
     useEffect(() => {
         let isMounted = true;
-
+    
         const updateFilterValues = () => {
             if (isMounted) {
-                setFilterValues({
-                    language: "",
-                    categories: [],
+                setFilterValues((prevValues) => ({
+                    ...prevValues,
                     length: [minValue, maxValue],
-                    date: "", 
-                });
+                }));
             }
         };
-
+    
         updateFilterValues();
-
+    
         return () => {
             isMounted = false;
         };
-    }, [minValue, maxValue]);
+    }, []);
+    
 
     const handleCategoryChange = (event) => {
         const { value, checked } = event.target;
