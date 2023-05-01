@@ -57,6 +57,7 @@ const GamePlayer = ({ location }) => {
   const [totalQuestionsNum, setTotalQuestionsNum] = useState(0);
   const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
   const [gameMode, setGameMode] = useState("");
+  const [roomExist, setRoomExist] = useState(false);
 
   const [position, setPosition] = useState(0);
   const [earnings, setEarnings] = useState(0);
@@ -99,6 +100,8 @@ const GamePlayer = ({ location }) => {
     if (gameMode === "RankedGame") {
       socket.emit("start.RankedGame", joinRoomName);
     }
+
+    setRoomExist(true);
 
     return () => {
       socket.emit("disconnect");
@@ -290,7 +293,7 @@ const GamePlayer = ({ location }) => {
                 <ListOfPlayers playersInRoom={playersInRoom} />
               </Col>
             )}
-            {socket && (
+            {roomExist && socket && (
               <Col lg={6} sm={12}>
                 <Chat socket={socket} />
               </Col>
