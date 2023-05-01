@@ -1,9 +1,1 @@
-{
-    "version": 3,
-    "mappings": "",
-    "sources": [
-        "GamePlayer.scss"
-    ],
-    "names": [],
-    "file": "GamePlayer.css"
-}
+{"version":3,"sources":[],"names":[],"mappings":"","file":"GamePlayer.css"}

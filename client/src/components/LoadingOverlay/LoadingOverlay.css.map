@@ -1,9 +1,1 @@
-{
-    "version": 3,
-    "mappings": "AACK,AAAD,gBAAS,CAAC;EACN,MAAM,EAAE,KAAK;EACb,GAAG,EAAE,YAAY;EACjB,IAAI,EAAE,YAAY;EAClB,gBAAgB,EAAE,kBAAkB;EACpC,OAAO,EAAE,CAAC;CACb",
-    "sources": [
-        "LoadingOverlay.scss"
-    ],
-    "names": [],
-    "file": "LoadingOverlay.css"
-}
+{"version":3,"sources":["LoadingOverlay.scss","LoadingOverlay.css"],"names":[],"mappings":"AACI;EACI,aAAA;EACA,iBAAA;EACA,kBAAA;EACA,oCAAA;EACA,UAAA;ACAR","file":"LoadingOverlay.css"}

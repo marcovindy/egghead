@@ -1,16 +1,11 @@
 .achievement {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
 }
-
 .achievement .achievement-preview {
   position: relative;
   padding: 1.5rem;
 }
-
 .achievement .achievement-preview-tooltip {
   position: absolute;
   border: 0.5px 0 0 0 solid;
@@ -18,9 +13,7 @@
   padding: 0.5rem;
   left: 0;
 }
-
 .achievement .achievement-preview-tooltip p {
   padding: 0;
   margin: 0;
-}
-/*# sourceMappingURL=Achievements.css.map */
+}/*# sourceMappingURL=Achievements.css.map */

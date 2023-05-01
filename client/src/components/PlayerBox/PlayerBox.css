@@ -1,40 +1,24 @@
 .player-box-info {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 }
-
 .player-box-exp .progress {
   height: 1rem;
 }
-
 .player-box-avatar {
   position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  align-items: center;
+  flex-direction: row;
   border-radius: 5px 5px 0px 0px;
   height: 170px;
   border-bottom: 0.5px solid grey;
 }
-
 .player-box-avatar .rs-progress-circle {
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
+  transform: rotate(180deg);
 }
-
 .player-box-avatar .rs-progress-svg:hover .rs-progress-trail {
-  stroke: #c4c4c4 !important;
+  stroke: rgb(196, 196, 196) !important;
 }
-
 .player-box-avatar-content {
   overflow: hidden;
   position: relative;
@@ -45,17 +29,10 @@
 
 @media (max-width: 992px) {
   .player-box-info {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .player-box-avatar {
     height: 200px;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+    flex-direction: column;
   }
-}
-/*# sourceMappingURL=PlayerBox.css.map */
+}/*# sourceMappingURL=PlayerBox.css.map */

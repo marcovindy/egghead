@@ -1,5 +1,5 @@
 import React from "react";
-import './AnimatedRadiosquere.css';
+import './AnimatedSquere.css';
 
 const AnimatedSquere = () => {
 

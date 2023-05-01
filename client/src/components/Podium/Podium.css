@@ -3,64 +3,40 @@
   padding-bottom: 1rem;
   padding-top: 1rem;
 }
-
 .podium .podium-animate-appear {
-  -webkit-transform: translateY(100%);
-          transform: translateY(100%);
+  transform: translateY(100%);
 }
-
 .podium .podium-animate-appear-active {
-  -webkit-transform: translateY(0%);
-          transform: translateY(0%);
-  -webkit-transition: -webkit-transform 1s;
-  transition: -webkit-transform 1s;
+  transform: translateY(0%);
   transition: transform 1s;
-  transition: transform 1s, -webkit-transform 1s;
 }
-
 .podium .podium-step {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   background-color: #ddd;
   padding: 1rem;
   border-radius: 5px;
-  -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .podium .podium-step .trophy-icon {
   width: 2rem;
   height: 2rem;
   margin-bottom: 0.5rem;
 }
-
 .podium .podium-step .winner-name {
   font-weight: bold;
 }
-
 .podium .position-1 .podium-step {
   background-color: gold;
   height: 100%;
 }
-
 .podium .position-2 .podium-step {
   background-color: silver;
   height: 70%;
 }
-
 .podium .position-3 .podium-step {
   background-color: #cd7f32;
   height: 40%;
-}
-/*# sourceMappingURL=Podium.css.map */
+}/*# sourceMappingURL=Podium.css.map */

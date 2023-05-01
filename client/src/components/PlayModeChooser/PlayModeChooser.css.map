@@ -1,9 +1,1 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAEQ,sBAFc,CAClB,KAAK,CACD,UAAU,CAAC;EACP,OAAO,EAAE,eAAe;CAC3B;;AAJT,AAKQ,sBALc,CAClB,KAAK,CAID,UAAU,CAAC;EACP,MAAM,EAAE,OAAO;EACf,UAAU,EAAE,eAAe;CAI9B;;AAXT,AAQY,sBARU,CAClB,KAAK,CAID,UAAU,AAGL,MAAM,CAAC;EACJ,KAAK,EAAE,OAAO;CACjB",
-    "sources": [
-        "PlayModeChooser.scss"
-    ],
-    "names": [],
-    "file": "PlayModeChooser.css"
-}
+{"version":3,"sources":["PlayModeChooser.scss","PlayModeChooser.css"],"names":[],"mappings":"AAEQ;EACI,wBAAA;ACDZ;ADGQ;EACI,eAAA;EACA,2BAAA;ACDZ;ADEY;EACI,cAAA;ACAhB","file":"PlayModeChooser.css"}

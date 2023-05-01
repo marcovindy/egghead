@@ -1,6 +1,4 @@
 .profile-page-container .basicInfo {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -10,5 +8,4 @@
 
 .progress {
   height: 1.7rem !important;
-}
-/*# sourceMappingURL=Profile.css.map */
+}/*# sourceMappingURL=Profile.css.map */
