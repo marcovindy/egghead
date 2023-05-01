@@ -6,7 +6,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import Dashboard from "./pages/Dashboard";
+
+import CustomGame from "./pages/CustomGame/CustomGame";
 import Login from "./pages/Signin/Login";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Profile from "./pages/Profile/Profile";
@@ -180,7 +181,7 @@ function App() {
             <Switch>
               <Route path="/" exact component={LandingPage} />
               <Route path="/createquiz" exact component={CreateQuiz} />
-              <Route path="/customgame" exact component={Dashboard} />
+              <Route path="/customgame" exact component={CustomGame} />
               <Route path="/rankedgame" exact component={RankedGame} />
               <Route path="/lobby" exact component={JoinGame} />
               <Route path="/signup" exact component={Signup} />

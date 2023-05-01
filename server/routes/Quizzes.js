@@ -63,7 +63,7 @@ router.get("/", validateToken, async (req, res) => {
   }
 });
 
-router.get("/byuserId/:id", async (req, res) => {
+router.get("/byuserId/:id", validateToken, async (req, res) => {
   try {
     const id = req.params.id;
     const quizzes = await Quizzes.findAll({
@@ -75,6 +75,9 @@ router.get("/byuserId/:id", async (req, res) => {
         },
         {
           model: Users,
+        },
+        {
+          model: Questions,
         },
       ],
       where: { userId: id },

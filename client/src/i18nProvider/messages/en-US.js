@@ -133,5 +133,7 @@ export default {
     'answer6Label': 'Answer 6:',
     'answer7Label': 'Answer 7:',
     'answer8Label': 'Answer 8:',
+    'Loading of user profile failed': 'Loading of user profile failed',
+    'This user doesnt exist': 'This user doesnt exist',
   },
 };

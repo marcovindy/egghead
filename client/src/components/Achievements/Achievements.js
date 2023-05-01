@@ -14,10 +14,12 @@ const Achievements = ({ preview, userId }) => {
   useEffect(() => {
     const fetchAchievements = async () => {
       try {
-        const response = await axios.get(`${API_URL}/achievements`, {
-          params: { userId },
-        });
-        setAchievements(response.data);
+        if (userId) {
+          const response = await axios.get(`${API_URL}/achievements`, {
+            params: { userId },
+          });
+          setAchievements(response.data);
+        }
       } catch (error) {
         console.error('Error fetching achievements:', error);
       }
@@ -40,7 +42,6 @@ const Achievements = ({ preview, userId }) => {
               {hoveredIndex === index && (
                 <div className="achievement-preview-tooltip">
                   <p className='small'>{achievement.title}</p>
-                  {/* <p>{achievement.description}</p> */}
                 </div>
               )}
             </div>

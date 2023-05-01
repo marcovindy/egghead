@@ -47,10 +47,6 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "cascade",
     });
 
-    Users.hasMany(models.Posts, {
-      onDelete: "cascade",
-    });
-
     // Associate with Achievements
     Users.belongsToMany(models.Achievements, {
       through: "user_achievements",
