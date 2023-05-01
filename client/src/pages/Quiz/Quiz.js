@@ -252,23 +252,32 @@ function Quiz() {
     const newQuestions = [...questions];
     newQuestions[questionIndex].category = newCategory;
     setQuestions(newQuestions);
+    console.log("handle cat, new q", newQuestions);
+    setIsSaved(false);
+  };
+
+  const handleTimeLimitChange = (questionIndex, newTimeLimit) => {
+    const newQuestions = [...questions];
+    newQuestions[questionIndex].limit = newTimeLimit;
+    setQuestions(newQuestions);
+    console.log("handle cat, new q", newQuestions);
     setIsSaved(false);
   };
 
   const handleQuizSave = () => {
     window.removeEventListener("beforeunload", handleBeforeUnload);
     setIsLoading(true);
-    // Delete all questions and answers associated with the quiz ID
     axios
       .delete(`${API_URL}/questions/byquizId/${id}`)
       .then((response) => {
         console.log(response.data);
-        // Save the new questions and answers
         axios
           .post(`${API_URL}/questions/save`, {
             quizId: quizInfo.id,
             questions: questions.map((q) => ({
               question: q.question,
+              category: q.category, 
+              limit: q.limit,
               answers: q.answers.map((a) => ({
                 answer: a.text,
                 isCorrect: a.isCorrect,
@@ -285,6 +294,8 @@ function Quiz() {
       })
       .catch((error) => console.log(error));
   };
+  
+  
 
   return (
     <Container className="quiz-container mb-4">
@@ -404,10 +415,12 @@ function Quiz() {
               index={index}
               question={question}
               categories={categories}
+              quizInfo={quizInfo}
               onQuestionDelete={handleQuestionDelete}
               onAnswerEdit={handleAnswerEdit}
               onQuestionEdit={handleQuestionEdit}
               onCategoryChange={handleCategoryChange}
+              onTimeLimitChange={handleTimeLimitChange}
             />
           </Row>
           <hr />

@@ -17,7 +17,7 @@ function Play() {
   return (
     <Container className="play-container">
       <Row className="justify-content-center play-row p-3">
-        {authState.status === true ? (
+        {authState.status ? (
           <Col
             xs={12}
             md={12}

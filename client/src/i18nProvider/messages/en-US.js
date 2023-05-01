@@ -138,5 +138,6 @@ export default {
     'Playername': 'Playername',
     'Invite players by Game Link': 'Invite players by Game Link',
     'Start Game': 'Start Game',
+    'Category': 'Category',
   },
 };

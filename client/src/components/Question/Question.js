@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Trash } from "react-bootstrap-icons";
@@ -8,17 +8,22 @@ import AnimatedRadioCircle from "../AnimatedRadioCircle/AnimatedRadioCircle";
 import EditableTitle from "../EditableTitle/EditableTitle";
 import t from "../../i18nProvider/translate";
 import Select from "react-select";
+import { AuthContext } from "../../helpers/AuthContext";
 
 function Question({
   index,
   question,
   categories,
+  quizInfo,
   onQuestionDelete,
   onAnswerEdit,
   onQuestionEdit,
   onCategoryChange,
+  onTimeLimitChange,
 }) {
   const [selectedCategory, setSelectedCategory] = useState(question.category);
+
+  const { authState } = useContext(AuthContext);
 
   const handleCategoryChange = (selectedOption) => {
     setSelectedCategory(selectedOption.value);
@@ -28,6 +33,11 @@ function Question({
 
   const validationSchema = Yup.object().shape({
     text: Yup.string().required("Answer text is required"),
+    category: Yup.string().required("Please select a category"),
+    limit: Yup.number()
+      .required("Please enter a time limit")
+      .min(10, "Time limit must be at least 10")
+      .max(60, "Time limit cannot be more than 60"),
   });
 
   const handleAnswerEdit = (answerIndex, newTitle) => {
@@ -58,6 +68,13 @@ function Question({
     setShowDeleteModal(false);
   };
 
+  const handleTimeLimitChange = (event) => {
+    const newLimit = event.target.value;
+    if (newLimit >= 10 && newLimit <= 60) {
+      onTimeLimitChange(index, newLimit);
+    }
+  };
+
   const categoryOptions = categories.map((category) => ({
     value: category.name,
     label: category.name,
@@ -71,37 +88,63 @@ function Question({
     <>
       {console.log(selectedCategory)}
       <Row>
-        <Col>
+        <Col md={2}>
           <h4>Q{index + 1}:</h4>
         </Col>
-        <Col className="mb-4">
-          <Col className="mb-4">
-            <div>
-              <strong>Category:</strong>{" "}
+
+        <Col md={4} className="mb-4">
+          <div>
+            {t("Category")}:
+            {authState && authState.id === quizInfo.userId ? (
               <Select
                 value={selectedCategory}
                 options={categoryOptions}
                 onChange={handleCategoryChange}
-              />{" "}
-              | <strong>Limit:</strong> {question.limit}
-            </div>
-          </Col>
+              />
+            ) : (
+              <h3>{selectedCategory.value}</h3>
+            )}
+          </div>
         </Col>
-        <Col>
-          <button
-            className="btn btn-sm btn-danger m-1"
-            onClick={handleDeleteClick}
-          >
-            <Trash />
-          </button>
+        <Col md={4} className="mb-4">
+          <div>
+            Limit:
+            {authState && authState.id === quizInfo.userId ? (
+              <input
+                type="number"
+                min="0"
+                value={question.limit}
+                onChange={handleTimeLimitChange}
+              />
+            ) : (
+              <h3>{question.limit}</h3>
+            )}
+          </div>
+        </Col>
+
+        <Col md={2}>
+          {authState && authState.id === quizInfo.userId ? (
+            <button
+              className="btn btn-sm btn-danger m-1"
+              onClick={handleDeleteClick}
+            >
+              <Trash />
+            </button>
+          ) : (
+            ""
+          )}
         </Col>
       </Row>
       <Row className="mb-3">
         <h4>
-          <EditableTitle
-            title={question.question}
-            onTitleSave={handleQuestionEdit}
-          />
+          {authState && authState.id === quizInfo.userId ? (
+            <EditableTitle
+              title={question.question}
+              onTitleSave={handleQuestionEdit}
+            />
+          ) : (
+            question.question
+          )}
         </h4>
       </Row>
       <Row>
@@ -115,12 +158,16 @@ function Question({
                     backgroundColor: answer.isCorrect ? "green" : "#007bff",
                   }}
                 >
-                  <EditableTitle
-                    title={answer.text}
-                    onTitleSave={(newTitle) =>
-                      handleAnswerEdit(index, newTitle)
-                    }
-                  />
+                  {authState && authState.id === quizInfo.userId ? (
+                    <EditableTitle
+                      title={answer.text}
+                      onTitleSave={(newTitle) =>
+                        handleAnswerEdit(index, newTitle)
+                      }
+                    />
+                  ) : (
+                    <span>{answer.text}</span>
+                  )}
                 </div>
               </Col>
             )
