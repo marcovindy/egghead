@@ -32,7 +32,7 @@ function CreateQuiz() {
             history.push("/login");
         }
         axios
-            .get(`${API_URL}/categories`)
+            .get(`${API_URL}/categories/all`)
             .then((response) => {
                 setCategories(response.data.listOfCategories);
                 console.log("categories response.data: ", response.data.listOfCategories);

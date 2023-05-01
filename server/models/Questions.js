@@ -3,6 +3,14 @@ module.exports = (sequelize, DataTypes) => {
         question: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        category: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        limit: {
+            type: DataTypes.NUMBER,
+            allowNull: false,
         }
     });
 

@@ -26,6 +26,7 @@ const img =
 const Dashboard = ({ userId }) => {
   const MemoizedFilterBox = React.memo(FilterBox);
   const ref = useRef(null);
+  const isMounted = useRef(true);
 
   const IS_PROD = process.env.NODE_ENV === "production";
   const API_URL = IS_PROD
@@ -42,18 +43,27 @@ const Dashboard = ({ userId }) => {
     { value: "French", label: "French" },
     { value: "German", label: "German" },
   ]);
-  const [isMounted, setIsMounted] = useState(true);
+
   const [defaultCategories, setDefaultCategories] = useState([]);
 
   let history = useHistory();
   const [filterValues, setFilterValues] = useState({
     language: "",
     categories: [],
-    length: 0,
+    length: [0, 100],
+    date: "",
   });
 
+   useEffect(() => {
+    console.log("1");
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   useEffect(() => {
-    if (categories.length > 0) {
+    console.log("2");
+    if (categories && categories.length > 0) {
       const categoryNames = categories.map((c) => c.name);
       setDefaultCategories(categoryNames);
     }
@@ -66,19 +76,18 @@ const Dashboard = ({ userId }) => {
 
   const onFilterApply = useCallback(
     (filterValues) => {
+      let appliedFilters = filterValues;
       if (filterValues.categories.length === 0) {
-        setFilterValues({ ...filterValues, categories: defaultCategories });
-      } else {
-        setFilterValues(filterValues);
+        appliedFilters = { ...filterValues, categories: defaultCategories };
       }
       // Filter the quizzes based on the filter values
-      const newQuizzes = listOfQuizzes.filter((quiz) => {
+      const newQuizzes = listOfQuizzes?.filter((quiz) => {
         // Filter by language
         if (filterValues.language && quiz.language !== filterValues.language) {
           return false;
         }
         // Filter by categories
-        if (filterValues.categories.length > 0) {
+        if (filterValues.categories && filterValues.categories.length > 0) {
           const quizCategories = quiz.Categories.map((c) => c.name);
           if (
             !filterValues.categories.some((c) => quizCategories.includes(c))
@@ -86,9 +95,10 @@ const Dashboard = ({ userId }) => {
             return false;
           }
         }
+
         // Filter by number of questions
-        if (filterValues.length) {
-          const [min, max] = filterValues.length;
+        if (filterValues && filterValues.length !== undefined) {
+          const [min = 0, max = 100] = filterValues.length;
           if (quiz.Questions.length < min || quiz.Questions.length > max) {
             return false;
           }
@@ -148,8 +158,10 @@ const Dashboard = ({ userId }) => {
   );
 
   useEffect(() => {
+    console.log("3");
     onFilterApply(filterValues);
-  }, [filterValues, onFilterApply, categories]);
+  }, [filterValues, onFilterApply]);
+  
 
   const createFilterMessage = () => {
     const { language, categories, length, date } = filterValues;
@@ -193,6 +205,8 @@ const Dashboard = ({ userId }) => {
   };
 
   useEffect(() => {
+    
+    console.log("4");
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       history.push("/login");
@@ -201,10 +215,10 @@ const Dashboard = ({ userId }) => {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${API_URL}/categories`, {
+        const response = await axios.get(`${API_URL}/categories/all`, {
           headers: { accessToken },
         });
-        setCategories(response.data.listOfCategories);
+        setCategories(response.data.categories);
       } catch (error) {
         console.log("Error:", error);
       }
@@ -228,18 +242,16 @@ const Dashboard = ({ userId }) => {
         console.log("Error:", error);
       }
     };
-    
-    
 
     const socket = io(API_URL);
-    fetchQuizzes();
     fetchCategories();
+    fetchQuizzes();
 
     return () => {
-      setIsMounted(false);
+      isMounted.current = false;
       socket.disconnect();
     };
-  }, [userId, history]);
+  }, [userId, history, API_URL]);
 
   return (
     <div>
@@ -291,8 +303,9 @@ const Dashboard = ({ userId }) => {
             >
               {(status) => (
                 <div ref={ref} className={`transition ${status}`}>
+                  {console.log(categories)}
                   <MemoizedFilterBox
-                    categories={categories}
+                    categories={categories ? categories : []}
                     languageOptions={languageOptions}
                     filterValues={filterValues}
                     onFilterApply={onFilterApply}
@@ -307,85 +320,86 @@ const Dashboard = ({ userId }) => {
             {t("Add Quiz")}
           </Button>
         </div>
-        {filteredQuizzes && filteredQuizzes.map((value, key) => {
-          return (
-            <Col className="card-col" key={key}>
-              <Card className="h-100">
-                <Card.Body className="d-flex flex-column">
-                  <div className="thumb-card">
-                    {value.Questions.length} Questions
-                  </div>
-                  <Card.Img
-                    className="cursor-pointer"
-                    onClick={() => {
-                      history.push(`/quiz/${value.id}`);
-                    }}
-                    variant="top"
-                    src={img}
-                  />
-                  <div className="card-buttons">
-                    <Button
-                      onClick={() => {
-                        toast.warning(t("featureInDevelopment"));
-                      }}
-                    >
-                      <HeartFill size={24} />
-                    </Button>
-                    <Button
-                      disabled={value.Questions.length <= 0}
-                      onClick={() => {
-                        const quizId = value.id;
-                        const quizTitle = value.title;
-                        const roomName = createRoomName(quizTitle, quizId); // Generate random room name
-                        const masterName = authState.username;
-                        history.push(
-                          `/gamemaster?roomName=${roomName}&masterName=${masterName}&gameMode=CustomGame`
-                        );
-                      }}
-                    >
-                      <PlayCircleFill size={24} />
-                    </Button>
-                  </div>
-                  <Card.Title
-                    className="cursor-pointer"
-                    onClick={() => {
-                      history.push(`/quiz/${value.id}`);
-                    }}
-                  >
-                    {value.title}{" "}
-                  </Card.Title>
-                  <div className="body">
-                    <div className="username">
-                      <Link to={`/profile/${value.User.username}`}>
-                        {" "}
-                        {value.User.username}{" "}
-                      </Link>
+        {filteredQuizzes &&
+          filteredQuizzes.map((value, key) => {
+            return (
+              <Col className="card-col" key={key}>
+                <Card className="h-100">
+                  <Card.Body className="d-flex flex-column">
+                    <div className="thumb-card">
+                      {value.Questions ? value.Questions.length : 0} Questions
                     </div>
-                    <div
-                      className="quizDesc cursor-pointer"
+                    <Card.Img
+                      className="cursor-pointer"
+                      onClick={() => {
+                        history.push(`/quiz/${value.id}`);
+                      }}
+                      variant="top"
+                      src={img}
+                    />
+                    <div className="card-buttons">
+                      <Button
+                        onClick={() => {
+                          toast.warning(t("featureInDevelopment"));
+                        }}
+                      >
+                        <HeartFill size={24} />
+                      </Button>
+                      <Button
+                        disabled={value.Questions.length <= 0}
+                        onClick={() => {
+                          const quizId = value.id;
+                          const quizTitle = value.title;
+                          const roomName = createRoomName(quizTitle, quizId); // Generate random room name
+                          const masterName = authState.username;
+                          history.push(
+                            `/gamemaster?roomName=${roomName}&masterName=${masterName}&gameMode=CustomGame`
+                          );
+                        }}
+                      >
+                        <PlayCircleFill size={24} />
+                      </Button>
+                    </div>
+                    <Card.Title
+                      className="cursor-pointer"
                       onClick={() => {
                         history.push(`/quiz/${value.id}`);
                       }}
                     >
-                      {value.description}
+                      {value.title}{" "}
+                    </Card.Title>
+                    <div className="body">
+                      <div className="username">
+                        <Link to={`/profile/${value.User.username}`}>
+                          {" "}
+                          {value.User.username}{" "}
+                        </Link>
+                      </div>
+                      <div
+                        className="quizDesc cursor-pointer"
+                        onClick={() => {
+                          history.push(`/quiz/${value.id}`);
+                        }}
+                      >
+                        {value.description}
+                      </div>
+                      <ul>
+                        {value.Categories.map((category) => (
+                          <li key={category.id}>{category.name}</li>
+                        ))}
+                      </ul>
                     </div>
-                    <ul>
-                      {value.Categories.map((category) => (
-                        <li key={category.id}>{category.name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="footer mt-auto">
-                    <Col lg={6}>
-                      {value.updatedAt.slice(0, 19).replace("T", " ")}
-                    </Col>
-                    <Col lg={6}>{t("unlockedText")}</Col>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          );
-        })}
+                    <div className="footer mt-auto">
+                      <Col lg={6}>
+                        {value.updatedAt.slice(0, 19).replace("T", " ")}
+                      </Col>
+                      <Col lg={6}>{t("unlockedText")}</Col>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
       </Row>
     </div>
   );

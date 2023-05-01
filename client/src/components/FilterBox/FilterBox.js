@@ -15,7 +15,7 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
     const initialValues = {
         language: "",
         categories: [],
-        length: [minValue, maxValue],
+        length: [minValue || 0, maxValue || 100],
         date: "",
     };
 
@@ -47,7 +47,8 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [minValue, maxValue]);
+    
     
 
     const handleCategoryChange = (event) => {
@@ -175,5 +176,11 @@ const FilterBox = memo(({ onFilterApply, categories, languageOptions }) => {
         </Formik>
     );
 });
+
+FilterBox.defaultProps = {
+    categories: [],
+    languageOptions: [],
+  };
+  
 
 export default FilterBox;

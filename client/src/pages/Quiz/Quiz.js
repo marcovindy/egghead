@@ -28,6 +28,7 @@ function Quiz() {
   const [showModal, setShowModal] = useState(false);
   const history = useHistory();
   const [numAnswerFields, setNumAnswerFields] = useState(2);
+  const [categories, setCategories] = useState([]);
 
   const handleQuizDelete = () => {
     axios
@@ -47,6 +48,16 @@ function Quiz() {
       event.returnValue = "";
     }
   };
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/categories/all`)
+      .then((response) => {
+        setCategories(response.data.categories);
+        console.log("Categories", response.data.categories);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   useEffect(() => {
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -77,6 +88,8 @@ function Quiz() {
           }));
           return {
             question: question.question,
+            category: question.category,
+            limit: question.limit,
             answers: formattedAnswers,
           };
         });
@@ -165,7 +178,6 @@ function Quiz() {
       toast.success("Question has been created successfully.");
       setIsSaved(false);
     } else {
-      
       toast.error("Correct answer is required.");
     }
   };
@@ -232,6 +244,13 @@ function Quiz() {
     console.log(index);
     const newQuestions = [...questions];
     newQuestions[index].question = newQuestion;
+    setQuestions(newQuestions);
+    setIsSaved(false);
+  };
+
+  const handleCategoryChange = (questionIndex, newCategory) => {
+    const newQuestions = [...questions];
+    newQuestions[questionIndex].category = newCategory;
     setQuestions(newQuestions);
     setIsSaved(false);
   };
@@ -363,9 +382,7 @@ function Quiz() {
                     <Button
                       type="submit"
                       disabled={
-                        !values.answer1 ||
-                        !values.answer2 ||
-                        !values.question
+                        !values.answer1 || !values.answer2 || !values.question
                       }
                     >
                       {t("submitButton")}
@@ -386,9 +403,11 @@ function Quiz() {
               key={index}
               index={index}
               question={question}
+              categories={categories}
               onQuestionDelete={handleQuestionDelete}
               onAnswerEdit={handleAnswerEdit}
               onQuestionEdit={handleQuestionEdit}
+              onCategoryChange={handleCategoryChange}
             />
           </Row>
           <hr />
