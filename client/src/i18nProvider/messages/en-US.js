@@ -100,7 +100,7 @@ export default {
     'Filters': 'Filters',
     'Loading': 'Loading', 
     'Position': 'Position', 
-    'Player name': 'EmaPlayer nameil',
+    'Player name': 'Player name',
     'Score': 'Score',
     'No players in the room yet': 'No players in the room yet',
     'Question': 'Question',
@@ -135,5 +135,8 @@ export default {
     'answer8Label': 'Answer 8:',
     'Loading of user profile failed': 'Loading of user profile failed',
     'This user doesnt exist': 'This user doesnt exist',
+    'Playername': 'Playername',
+    'Invite players by Game Link': 'Invite players by Game Link',
+    'Start Game': 'Start Game',
   },
 };
