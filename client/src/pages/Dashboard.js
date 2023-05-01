@@ -8,7 +8,12 @@ import React, {
 } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Row, Col, Button } from "react-bootstrap";
-import { PlayCircleFill, HeartFill, EyeFill } from "react-bootstrap-icons";
+import {
+  PlayCircleFill,
+  HeartFill,
+  EyeFill,
+  Heart,
+} from "react-bootstrap-icons";
 import { CSSTransition } from "react-transition-group";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
@@ -54,15 +59,96 @@ const Dashboard = ({ userId }) => {
     date: "",
   });
 
-   useEffect(() => {
-    console.log("1");
+  const [likedQuizzes, setLikedQuizzes] = useState(new Set());
+  const [likeCounts, setLikeCounts] = useState({});
+
+  useEffect(() => {
+    getLikeCounts();
+    getLikedQuizzes();
+  }, [filteredQuizzes]);
+
+  const getLikedQuizzes = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/likes/user/${authState.id}`,
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+      const likedQuizIds = new Set(
+        response.data.likes.map((like) => like.quizId)
+      );
+      setLikedQuizzes(likedQuizIds);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const getLikeCounts = async () => {
+    const likeCountsData = await Promise.all(
+      filteredQuizzes.map(async (quiz) => {
+        const response = await axios.get(`${API_URL}/likes/count/${quiz.id}`);
+        return { quizId: quiz.id, count: response.data.count };
+      })
+    );
+
+    setLikeCounts(
+      likeCountsData.reduce((acc, curr) => {
+        acc[curr.quizId] = curr.count;
+        return acc;
+      }, {})
+    );
+  };
+
+  const toggleLike = (quizId) => {
+    const accessToken = localStorage.getItem("accessToken");
+    axios
+      .post(
+        `${API_URL}/likes`,
+        { userId: authState.id, quizId },
+        {
+          headers: { accessToken },
+        }
+      )
+      .then((response) => {
+        if (response.data.message === "Unliked") {
+          console.log(response.data);
+          setLikedQuizzes((prevLikedQuizzes) => {
+            const newLikedQuizzes = new Set(prevLikedQuizzes);
+            newLikedQuizzes.delete(quizId);
+            return newLikedQuizzes;
+          });
+          // Decrease the like count by 1 for the unliked quiz
+          setLikeCounts((prevLikeCounts) => ({
+            ...prevLikeCounts,
+            [quizId]: prevLikeCounts[quizId] - 1,
+          }));
+        } else {
+          console.log(response.data);
+          setLikedQuizzes((prevLikedQuizzes) => {
+            const newLikedQuizzes = new Set(prevLikedQuizzes);
+            newLikedQuizzes.add(quizId);
+            return newLikedQuizzes;
+          });
+          // Increase the like count by 1 for the liked quiz
+          setLikeCounts((prevLikeCounts) => ({
+            ...prevLikeCounts,
+            [quizId]: prevLikeCounts[quizId] + 1,
+          }));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
     return () => {
       isMounted.current = false;
     };
   }, []);
 
   useEffect(() => {
-    console.log("2");
     if (categories && categories.length > 0) {
       const categoryNames = categories.map((c) => c.name);
       setDefaultCategories(categoryNames);
@@ -158,10 +244,8 @@ const Dashboard = ({ userId }) => {
   );
 
   useEffect(() => {
-    console.log("3");
     onFilterApply(filterValues);
   }, [filterValues, onFilterApply]);
-  
 
   const createFilterMessage = () => {
     const { language, categories, length, date } = filterValues;
@@ -205,8 +289,6 @@ const Dashboard = ({ userId }) => {
   };
 
   useEffect(() => {
-    
-    console.log("4");
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       history.push("/login");
@@ -339,12 +421,24 @@ const Dashboard = ({ userId }) => {
                     />
                     <div className="card-buttons">
                       <Button
-                        onClick={() => {
-                          toast.warning(t("featureInDevelopment"));
-                        }}
+                        variant={
+                          likedQuizzes.has(value.id) ? "danger" : "primary"
+                        }
+                        onClick={() => toggleLike(value.id)}
                       >
-                        <HeartFill size={24} />
+                        {likedQuizzes.has(value.id) ? (
+                          <>
+                            <HeartFill size={24} />
+                            <span className="ml-05">{likeCounts[value.id] || 0}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Heart size={24} />
+                            <span className="ml-05">{likeCounts[value.id] || 0}</span>
+                          </>
+                        )}
                       </Button>
+
                       <Button
                         disabled={value.Questions.length <= 0}
                         onClick={() => {

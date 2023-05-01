@@ -278,6 +278,10 @@ input {
   color: #c90000 !important;
 }
 
+.ml-05 {
+  margin-left: 0.5rem !important;
+}
+
 .ml-1 {
   margin-left: 1rem !important;
 }
