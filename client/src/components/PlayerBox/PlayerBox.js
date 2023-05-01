@@ -36,8 +36,12 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
     const source = axios.CancelToken.source();
     axios.get(`${API_URL}/auth/user/byusername/${name}`, { cancelToken: source.token })
       .then((response) => {
-        setId(response.data.id);
-        setUser(response.data);
+        if (response.data) {
+          setId(response.data.id);
+          setUser(response.data);
+        } else {
+          console.log('User not found or no data received');
+        }
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
@@ -50,6 +54,7 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
       source.cancel("Request canceled by cleanup");
     };
   }, [name]);
+  
 
   return (
     <div className="w-100 mb-4 player-box">
