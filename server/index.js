@@ -124,7 +124,8 @@ const createNewRoom = async (
   masterName,
   socket,
   quizId,
-  gameMode
+  gameMode,
+  category
 ) => {
   let quiz = {};
   let questions = {};
@@ -138,7 +139,7 @@ const createNewRoom = async (
 
   if (gameMode === "RankedGame") {
     // ({ quiz, questions, questionsLength } = await fetchQuestionsForQuiz(quizId));
-    questions = await fetchRandomQuestionsFromVerifiedQuizzes();
+    questions = await fetchRandomQuestionsFromVerifiedQuizzes(category);
     questionsLength = questions.length;
   }
   const room = {
@@ -302,7 +303,7 @@ io.on("connect", (socket) => {
         "quizId = ",
         quizId
       );
-      createNewRoom(roomName, masterName, socket, quizId, gameMode);
+      createNewRoom(roomName, masterName, socket, quizId, gameMode, category);
     }
   );
 
@@ -464,7 +465,7 @@ io.on("connect", (socket) => {
     sendActiveRoomsToAll();
   });
 
-  socket.on("joinQueue.RankedGame", (username, callback) => {
+  socket.on("joinQueue.RankedGame", (username, category, callback) => {
     const gameMode = "RankedGame";
     const existingPlayer = queue.find((player) => player.username === username);
     if (existingPlayer) {
@@ -480,7 +481,7 @@ io.on("connect", (socket) => {
       masterName = players[1].username;
       const roomName = "Seriózní Testovací Kvíz-124-x0x0x0";
       const quizId = 124;
-      createNewRoom(roomName, masterName, socket, quizId, gameMode);
+      createNewRoom(roomName, masterName, socket, quizId, gameMode, category);
       players.forEach((player) => {
         const playerName = player.username;
         const playerSocket = player;
