@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import Select from "react-select";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import EditableTitle from "../../components/EditableTitle/EditableTitle";
@@ -31,6 +32,31 @@ function Quiz() {
   const [numAnswerFields, setNumAnswerFields] = useState(2);
   const [categories, setCategories] = useState([]);
   const { authState } = useContext(AuthContext);
+  const [validationSchema, setValidationSchema] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedTimeLimit, setSelectedTimeLimit] = useState(10);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      setValidationSchema(
+        Yup.object().shape({
+          question: Yup.string().required("Question is required"),
+          category: Yup.string()
+            .oneOf(
+              categories.map((category) => category.name),
+              "Category must be one of the available options"
+            )
+            .required("Category is required"),
+          limit: Yup.number()
+            .required("Time limit is required")
+            .min(10, "Time limit must be at least 10 seconds")
+            .max(60, "Time limit must be no more than 60 seconds"),
+          answer1: Yup.string().required("Answer1 is required"),
+          answer2: Yup.string().required("Answer2 is required"),
+        })
+      );
+    }
+  }, [categories]);
 
   const handleQuizDelete = () => {
     axios
@@ -50,6 +76,11 @@ function Quiz() {
       event.returnValue = "";
     }
   };
+
+  const categoryOptions = categories.map((category) => ({
+    value: category.name,
+    label: category.name,
+  }));
 
   useEffect(() => {
     axios
@@ -104,12 +135,6 @@ function Quiz() {
       });
   }, [id, API_URL]);
 
-  const validationSchema = Yup.object().shape({
-    question: Yup.string().required("Question is required"),
-    answer1: Yup.string().required("Answer1 is required"),
-    answer2: Yup.string().required("Answer2 is required"),
-  });
-
   const handleTitleSave = (newTitle) => {
     axios
       .put(
@@ -140,6 +165,8 @@ function Quiz() {
         ...questions,
         {
           question: values.question,
+          category: values.category,
+          limit: values.limit,
           answers: [
             {
               text: values.answer1,
@@ -176,6 +203,8 @@ function Quiz() {
           ].filter((answer) => answer.text),
         },
       ]);
+      setSelectedCategory(values.category);
+      setSelectedTimeLimit(values.limit);
       actions.resetForm();
       toast.success("Question has been created successfully.");
       setIsSaved(false);
@@ -321,14 +350,12 @@ function Quiz() {
       </Row>
       <Row className="mb-4">
         <Col>
-        {authState && authState.id === quizInfo.userId && (
-                <Button onClick={handleButtonClick}>
-                {" "}
-                {showForm ? "Close Form" : t("addQuestion")}
-              </Button>
-              
-            )}
-       
+          {authState && authState.id === quizInfo.userId && (
+            <Button onClick={handleButtonClick}>
+              {" "}
+              {showForm ? "Close Form" : t("addQuestion")}
+            </Button>
+          )}
         </Col>
       </Row>
       {showForm && (
@@ -339,6 +366,8 @@ function Quiz() {
                 question: "",
                 answer1: "",
                 answer2: "",
+                category: selectedCategory,
+                limit: selectedTimeLimit,
                 isCorrect_answer1: false,
                 isCorrect_answer2: false,
                 isCorrect_answer3: false,
@@ -359,6 +388,43 @@ function Quiz() {
                   />
 
                   <Form className="custom-form">
+                    <Row className="mb-3">
+                      <Col>
+                        <label htmlFor="category">{t("categoryLabel")}</label>
+                        <Select
+                          name="category"
+                          options={categoryOptions}
+                          value={categoryOptions.find(
+                            (option) => option.value === selectedCategory
+                          )}
+                          onChange={(selectedOption) =>
+                            setFieldValue("category", selectedOption.value)
+                          }
+                          placeholder="-- Select a category --"
+                        />
+                        <ErrorMessage
+                          className="ml-1   text-color-red"
+                          component="div"
+                          name="category"
+                        />
+                      </Col>
+                      <Col>
+                        <label htmlFor="limit">{t("timeLimitLabel")}</label>
+                        <Field
+                          type="number"
+                          name="limit"
+                          min="10"
+                          value={selectedTimeLimit}
+                        />
+
+                        <ErrorMessage
+                          className="ml-1   text-color-red"
+                          component="div"
+                          name="limit"
+                        />
+                      </Col>
+                    </Row>
+
                     <Row className="mb-3">
                       <Col>
                         <label htmlFor="question">{t("questionLabel")}</label>

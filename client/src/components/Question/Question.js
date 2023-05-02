@@ -48,9 +48,6 @@ function Question({
   const handleAnswerEdit = (answerIndex, newTitle) => {
     if (typeof answerIndex === "number" && typeof newTitle === "string") {
       onAnswerEdit(index, { index: answerIndex, text: newTitle });
-      console.log(newTitle, answerIndex);
-    } else {
-      console.log(newTitle, answerIndex);
     }
   };
 
@@ -119,7 +116,8 @@ function Question({
             {authState && authState.id === quizInfo.userId ? (
               <input
                 type="number"
-                min="0"
+                min="10"
+                max="60"
                 value={question.limit}
                 onChange={handleTimeLimitChange}
               />

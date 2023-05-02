@@ -24,17 +24,18 @@ const AnswerField = ({
     <label
       className={values[name] && !disabled ? "checkbox" : "checkbox disabled"}
     >
-      <span>{t("correctAnswerLabel")}</span>
-      <Field
-        type="checkbox"
-        name={`isCorrect_${name}`}
-        onChange={() =>
-          setFieldValue(`isCorrect_${name}`, !values[`isCorrect_${name}`])
-        }
-        checked={values[`isCorrect_${name}`]}
-        disabled={!values[name] || disabled}
-      />
-      <AnimatedSquere />
+      <div className="mb-5">
+        <Field
+          type="checkbox"
+          name={`isCorrect_${name}`}
+          onChange={() =>
+            setFieldValue(`isCorrect_${name}`, !values[`isCorrect_${name}`])
+          }
+          checked={values[`isCorrect_${name}`]}
+          disabled={!values[name] || disabled}
+        />
+        <AnimatedSquere />
+      </div>
     </label>
   </div>
 );

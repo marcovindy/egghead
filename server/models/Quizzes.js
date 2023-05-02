@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Quizzes = sequelize.define("Quizzes", {
     title: {
       type: DataTypes.STRING,
+      default: "Untitled",
       allowNull: false,
     },
     language: {
@@ -11,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     verificated: {
       type: DataTypes.BOOLEAN, 

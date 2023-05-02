@@ -13,6 +13,7 @@ import {
   HeartFill,
   EyeFill,
   Heart,
+  StarFill,
 } from "react-bootstrap-icons";
 import { CSSTransition } from "react-transition-group";
 import Card from "react-bootstrap/Card";
@@ -24,6 +25,7 @@ import t from "../i18nProvider/translate";
 import { uuid } from "short-uuid";
 import "../assets/styles/Cards/Cards.css";
 import FilterBox from "../components/FilterBox/FilterBox";
+import Select from "react-select";
 
 const img =
   "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
@@ -47,6 +49,9 @@ const Dashboard = ({ userId }) => {
     { value: "Czech", label: "Czech" },
     { value: "French", label: "French" },
     { value: "German", label: "German" },
+    { value: "Spanish", label: "Spanish" },
+    { value: "Russian", label: "Russian" },
+    { value: "Ukrainian", label: "Ukrainian" },
   ]);
 
   const [defaultCategories, setDefaultCategories] = useState([]);
@@ -411,6 +416,10 @@ const Dashboard = ({ userId }) => {
                     <div className="thumb-card">
                       {value.Questions ? value.Questions.length : 0} Questions
                     </div>
+                    <div className="thumb-card">
+                      {value.Questions ? value.Questions.length : 0} Questions
+                    </div>
+
                     <Card.Img
                       className="cursor-pointer"
                       onClick={() => {
@@ -429,12 +438,16 @@ const Dashboard = ({ userId }) => {
                         {likedQuizzes.has(value.id) ? (
                           <>
                             <HeartFill size={24} />
-                            <span className="ml-05">{likeCounts[value.id] || 0}</span>
+                            <span className="ml-05">
+                              {likeCounts[value.id] || 0}
+                            </span>
                           </>
                         ) : (
                           <>
                             <Heart size={24} />
-                            <span className="ml-05">{likeCounts[value.id] || 0}</span>
+                            <span className="ml-05">
+                              {likeCounts[value.id] || 0}
+                            </span>
                           </>
                         )}
                       </Button>
@@ -478,16 +491,22 @@ const Dashboard = ({ userId }) => {
                         {value.description}
                       </div>
                       <ul>
+                        {value && value.verificated && (
+                          <li>
+                            <StarFill color="white" />
+                          </li>
+                        )}
                         {value.Categories.map((category) => (
                           <li key={category.id}>{category.name}</li>
                         ))}
                       </ul>
                     </div>
                     <div className="footer mt-auto">
-                      <Col lg={6}>
-                        {value.updatedAt.slice(0, 19).replace("T", " ")}
+                      <Col lg={12}>
+                        {" "}
+                        {t("Created At")}{" "}
+                        {value.createdAt.slice(0, 19).replace("T", " ")}
                       </Col>
-                      <Col lg={6}>{t("unlockedText")}</Col>
                     </div>
                   </Card.Body>
                 </Card>

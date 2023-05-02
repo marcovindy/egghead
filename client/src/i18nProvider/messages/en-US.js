@@ -139,5 +139,7 @@ export default {
     'Invite players by Game Link': 'Invite players by Game Link',
     'Start Game': 'Start Game',
     'Category': 'Category',
+    'timeLimitLabel': 'timeLimitLabel',
+    'categoryLabel': 'categoryLabel',
   },
 };
