@@ -21,7 +21,6 @@ const EndGame = ({
   gameMode,
   roomName,
 }) => {
-  let history = useHistory();
   const { authState } = useContext(AuthContext);
   const IS_PROD = process.env.NODE_ENV === "production";
   const API_URL = IS_PROD
@@ -36,7 +35,7 @@ const EndGame = ({
 
   const playerScore = currentPlayer ? currentPlayer.score : 0;
 
-  const gameModeMultiplier = gameMode === "RankedGame" ? 2 : 1;
+  const gameModeMultiplier = gameMode === "RankedGame" ? 2 : players.length === 1 ? 0 : 1;
   const adjustedEarnings = earnings * gameModeMultiplier;
 
   const saveExperience = async () => {

@@ -78,7 +78,7 @@ app.get("*", (req, res) => {
 
 // SOCKET
 const rooms = [];
-const queue = []; // fronta hráčů
+const queues = {}; // fronta hráčů
 
 function joinRoom(socket, room, playerName, gameMode) {
   socket.join(room.id, () => {
@@ -302,7 +302,9 @@ io.on("connect", (socket) => {
         masterName,
         "quizId = ",
         quizId
+
       );
+      category = undefined;
       createNewRoom(roomName, masterName, socket, quizId, gameMode, category);
     }
   );
@@ -329,7 +331,7 @@ io.on("connect", (socket) => {
 
   socket.on("ready", (callback) => {
     const room = rooms[socket.roomName];
-    if (room.sockets.length > 1) {
+    if (room.sockets.length > 0) {
       for (const client of room.sockets) {
         client.emit("initGame");
         callback({ res: "Game started - Question is being showed to players" });
@@ -358,7 +360,6 @@ io.on("connect", (socket) => {
 
         room.categories = categories;
       }
-      console.log("sendQuizInfo", quizInfo);
       // Update activeRooms list
       sendActiveRoomsToAll();
     } else {
@@ -373,7 +374,6 @@ io.on("connect", (socket) => {
       const room = rooms[socket.roomName];
       const round = 0;
       room.questions = questions;
-      console.log(room.questions);
       room.questionsLength = questionsLength;
       room.round = round;
       room.activated = true;
@@ -389,7 +389,6 @@ io.on("connect", (socket) => {
 
   socket.on("startTimerTest", () => {
     startTimerTest(socket);
-    console.log("startTimerTest");
   });
 
   socket.on(
@@ -427,7 +426,6 @@ io.on("connect", (socket) => {
     }
     callback();
   });
- 
 
   socket.on("disconnect", () => {
     console.log("User left with socket id", socket.id);
@@ -465,42 +463,102 @@ io.on("connect", (socket) => {
     sendActiveRoomsToAll();
   });
 
-  socket.on("joinQueue.RankedGame", (username, category, callback) => {
-    const gameMode = "RankedGame";
-    const existingPlayer = queue.find((player) => player.username === username);
-    if (existingPlayer) {
-      callback({ res: `Hráč ${username} již čeká ve frontě.` });
-      return;
+  function updateQueueLengths() {
+    const queueLengths = {};
+    for (const category in queues) {
+      queueLengths[category] = queues[category].length;
     }
-    socket.username = username; // uložení jména hráče do objektu socketu
-    queue.push(socket);
-    io.emit("queueUpdate.RankedGame", queue.length);
-    if (queue.length === 2) {
-      const players = queue.splice(0, 4);
-      io.emit("queueUpdate.RankedGame", queue.length);
-      masterName = players[1].username;
-      const roomName = "Seriózní Testovací Kvíz-124-x0x0x0";
-      const quizId = 124;
-      createNewRoom(roomName, masterName, socket, quizId, gameMode, category);
-      players.forEach((player) => {
-        const playerName = player.username;
-        const playerSocket = player;
-        playerSocket.emit("gameReady.RankedGame", roomName, playerName);
-      });
+    io.emit("queueUpdate.RankedGame", queueLengths);
+  }
 
-      callback({ res: `Hra nalezena.` });
-      return;
+  socket.on(
+    "joinQueue.RankedGame",
+    (username, selectedCategories, callback) => {
+      for (const category of selectedCategories) {
+        if (!queues[category]) {
+          queues[category] = [];
+        }
+        const existingPlayer = queues[category].find(
+          (player) => player.username === username
+        );
+        if (existingPlayer) {
+          callback({ res: `Hráč ${username} již čeká ve frontě.` });
+          return;
+        }
+        socket.username = username;
+        queues[category].push(socket);
+        updateQueueLengths();
+      }
+
+      console.log(queues);
+
+      for (const [category, queue] of Object.entries(queues)) {
+        if (queue.length >= 2) {
+          const players = queue.splice(0, 4);
+          console.log(category, queue);
+          const uuid = uuidv1().replace(/-/g, "");
+          const roomName = category + uuid.substr(0, 6);
+          createNewRoom(
+            roomName,
+            players[0].username,
+            socket,
+            "",
+            "RankedGame",
+            category
+          );
+          // console.log(players);
+          players.forEach((player) => {
+            // console.log("----------------- Player -----\n ", player);
+            const playerName = player.username;
+            const playerSocket = player;
+            // console.log("playerSocket: ", playerSocket);
+            console.log("playerName: ", playerName);
+            // console.log("roomName: ", roomName);
+            playerSocket.emit("gameReady.RankedGame", roomName, playerName);
+            removePlayerFromAllQueues(player.id);
+          });
+          callback({ res: `Hra nalezena.` });
+          return;
+        } else {
+          callback({ res: `Hledám hru, prosím čekejte.` });
+          return;
+        }
+      }
+    }
+  );
+
+  function removePlayerFromAllQueues(playerId) {
+    for (const category in queues) {
+      const index = queues[category].findIndex(
+        (player) => player.id === playerId
+      );
+      if (index !== -1) {
+        queues[category].splice(index, 1);
+        updateQueueLengths();
+      }
+    }
+  }
+
+  socket.on("leaveQueue.RankedGame", (username) => {
+    let playerRemoved = false;
+
+    for (const category in queues) {
+      const index = queues[category].findIndex(
+        (player) => player.id === socket.id
+      );
+
+      if (index !== -1) {
+        queues[category].splice(index, 1);
+        updateQueueLengths();
+        playerRemoved = true;
+      }
+      io.emit("queueUpdate.RankedGame", queues[category].length);
+    }
+
+    if (playerRemoved) {
+      console.log(`Hráč ${username} opustil frontu.`);
     } else {
-      callback({ res: `Hledám hru, prosím čekejte.` });
-      return;
-    }
-  });
-
-  socket.on("leaveQueue.RankedGame", () => {
-    const index = queue.indexOf(socket);
-    if (index !== -1) {
-      queue.splice(index, 1);
-      io.emit("queueUpdate.RankedGame", queue.length);
+      console.log(`Hráč ${username} nebyl nalezen ve frontách.`);
     }
   });
 

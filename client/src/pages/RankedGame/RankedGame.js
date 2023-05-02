@@ -38,25 +38,24 @@ const RankedGame = () => {
   const [serverResMsg, setServerResMsg] = useState("");
   const [isInQueue, setIsInQueue] = useState(false);
   const [nameOfRoom, setNameOfRoom] = useState("");
-  const [numOfPlayersInQueue, setNumOfPlayersInQueue] = useState(0);
+  const [numOfPlayersInQueue, setNumOfPlayersInQueue] = useState({});
   const [showModal, setShowModal] = useState(false);
   const IS_PROD = process.env.NODE_ENV === "production";
   const API_URL = IS_PROD
     ? "https://testing-egg.herokuapp.com"
     : "http://localhost:5000";
-  console.log(process.env.NODE_ENV, API_URL);
   const timerRef = useRef(null);
 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const handleCategoryChange = (event) => {
-      const { options } = event.target;
-      const selectedOptions = [];
-      for (let i = 0; i < options.length; i++) {
-          if (options[i].selected) {
-              selectedOptions.push(options[i].value);
-          }
+    const { options } = event.target;
+    const selectedOptions = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selectedOptions.push(options[i].value);
       }
-      setSelectedCategories(selectedOptions);
+    }
+    setSelectedCategories(selectedOptions);
   };
 
   useEffect(() => {
@@ -78,7 +77,6 @@ const RankedGame = () => {
       const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}&gameMode=RankedGame`;
       setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
       setNameOfRoom(roomName);
-      console.log("Hra", roomName, " vytvořena, hráči", playerName, url);
       let countdown = 5;
       timerRef.current = setInterval(() => {
         console.log(`Přesměrování za ${countdown} sekund.`);
@@ -93,7 +91,7 @@ const RankedGame = () => {
 
     socket.on("userLeft.RankedGame", () => {
       setServerResMsg(
-        "Jiný hráč odešel z čekací fronty. Budete přepojen do nové fronty."
+        "Hráč se bohužel odpojil ze hry. Připojte se prosím znovu do fronty."
       );
       clearInterval(timerRef.current);
       setTime(null);
@@ -150,8 +148,10 @@ const RankedGame = () => {
           <Modal.Title>Vyhledávání hry</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {serverResMsg ? serverResMsg.toString() : ""} Hráčů ve frontě{" "}
-          {numOfPlayersInQueue}.
+          {serverResMsg ? serverResMsg.toString() : ""} Hráčů ve frontě:{" "}
+          {Object.entries(numOfPlayersInQueue)
+            .map(([category, count]) => `${category}: ${count}`)
+            .join(", ")}
           {time ? <h2>Přesměrování do hry proběhne za {time}</h2> : ""}
         </Modal.Body>
         <Modal.Footer>

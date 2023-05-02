@@ -8,7 +8,7 @@ const quizzesApiUrl = isProduction
   : "https://testing-egg.herokuapp.com/quizzes";
 
 async function fetchVerifiedQuizzes() {
-  console.log(quizzesApiUrl, process.env.NODE_ENV);
+  // console.log(quizzesApiUrl, process.env.NODE_ENV);
   try {
     const response = await axios.get(`${quizzesApiUrl}/verified`);
     const verifiedQuizzes = response.data.quizzes;

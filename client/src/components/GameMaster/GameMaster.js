@@ -354,7 +354,7 @@ const GameMaster = () => {
                 </div>
               ) : (
                 <div className="p-5">
-                  {playerCount >= 2 ? (
+                  {playerCount >= 1 ? (
                     <Button variant="primary" size="md" onClick={InitGame}>
                       {t('Start Game')}
                     </Button>

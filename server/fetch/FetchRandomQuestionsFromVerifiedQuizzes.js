@@ -3,11 +3,11 @@ const fetchQuestionsForQuiz = require("./FetchQuestionsForQuiz");
 async function fetchRandomQuestionsFromVerifiedQuizzes(category) {
   try {
     const verifiedQuizzes = await fetchVerifiedQuizzes();
-    console.log(verifiedQuizzes);
+    // console.log(verifiedQuizzes);
     const allQuestions = [];
 
     for (const quiz of verifiedQuizzes) {
-      console.log(quiz);
+      // console.log(quiz);
       const { questions } = await fetchQuestionsForQuiz(quiz.id, category);
       allQuestions.push(...questions);
     }
@@ -25,7 +25,7 @@ async function fetchRandomQuestionsFromVerifiedQuizzes(category) {
       }
     }
 
-    console.log("Qs: ", randomQuestions);
+    // console.log("Qs: ", randomQuestions);
     return randomQuestions;
   } catch (error) {
     console.error(
