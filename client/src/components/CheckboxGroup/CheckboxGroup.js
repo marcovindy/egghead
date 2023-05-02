@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import "./CheckBoxGroup.css";
+import "../../assets/styles/CheckBox/CheckBox.css";
 
 const CheckboxGroup = ({ name, options }) => {
   const chunkArray = (array, chunkSize) => {

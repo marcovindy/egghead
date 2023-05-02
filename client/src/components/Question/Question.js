@@ -26,9 +26,14 @@ function Question({
   const { authState } = useContext(AuthContext);
 
   const handleCategoryChange = (selectedOption) => {
-    setSelectedCategory(selectedOption.value);
-    console.log(selectedOption.value);
-    onCategoryChange(index, selectedOption.value);
+    setSelectedCategory(selectedOption);
+    if (
+      categoryOptions.some((option) => option.value === selectedOption.value)
+    ) {
+      onCategoryChange(index, selectedOption.value);
+    } else {
+      console.log("Invalid category selected");
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -72,6 +77,8 @@ function Question({
     const newLimit = event.target.value;
     if (newLimit >= 10 && newLimit <= 60) {
       onTimeLimitChange(index, newLimit);
+    } else {
+      console.log("Invalid limit value");
     }
   };
 

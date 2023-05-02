@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useParams, useHistory } from "react-router-dom";
@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import t from "../../i18nProvider/translate";
 import { Trash } from "react-bootstrap-icons";
+import { AuthContext } from "../../helpers/AuthContext";
 
 import AnswerField from "../../components/QuizComponents/AnswerField/AnswerField";
 
@@ -29,6 +30,7 @@ function Quiz() {
   const history = useHistory();
   const [numAnswerFields, setNumAnswerFields] = useState(2);
   const [categories, setCategories] = useState([]);
+  const { authState } = useContext(AuthContext);
 
   const handleQuizDelete = () => {
     axios
@@ -276,7 +278,7 @@ function Quiz() {
             quizId: quizInfo.id,
             questions: questions.map((q) => ({
               question: q.question,
-              category: q.category, 
+              category: q.category,
               limit: q.limit,
               answers: q.answers.map((a) => ({
                 answer: a.text,
@@ -294,8 +296,6 @@ function Quiz() {
       })
       .catch((error) => console.log(error));
   };
-  
-  
 
   return (
     <Container className="quiz-container mb-4">
@@ -303,10 +303,14 @@ function Quiz() {
         <Col>
           <h2>
             {t("Quiz Title")}:{" "}
-            <EditableTitle
-              title={quizInfo.title}
-              onTitleSave={handleTitleSave}
-            />
+            {authState && authState.id === quizInfo.userId ? (
+              <EditableTitle
+                title={quizInfo.title}
+                onTitleSave={handleTitleSave}
+              />
+            ) : (
+              quizInfo.title
+            )}
           </h2>
         </Col>
       </Row>
@@ -317,10 +321,14 @@ function Quiz() {
       </Row>
       <Row className="mb-4">
         <Col>
-          <Button onClick={handleButtonClick}>
-            {" "}
-            {showForm ? "Close Form" : t("addQuestion")}
-          </Button>
+        {authState && authState.id === quizInfo.userId && (
+                <Button onClick={handleButtonClick}>
+                {" "}
+                {showForm ? "Close Form" : t("addQuestion")}
+              </Button>
+              
+            )}
+       
         </Col>
       </Row>
       {showForm && (
