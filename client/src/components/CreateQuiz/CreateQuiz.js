@@ -135,7 +135,7 @@ function CreateQuiz() {
                 </Field>
               </div>
               <div className="categories-group p-5">
-                <label>Categories: </label>
+                <label>{t('Categories')}: </label>
                 <ErrorMessage
                   className="ml-1   text-color-red"
                   name="categories"
@@ -152,7 +152,7 @@ function CreateQuiz() {
               </div>
               <div className="d-flex flex-column">
                 {error && <span className="error">{error}</span>}
-                <label>Description: </label>
+                <label>{t('Description')}: </label>
                 <ErrorMessage
                   className="ml-1   text-color-red"
                   name="description"
@@ -167,7 +167,7 @@ function CreateQuiz() {
                   rows="5"
                 />
                 <div className="d-flex justify-content-center">
-                  <Button type="submit"> Create Quiz</Button>
+                  <Button type="submit">{t('Create Quiz')}</Button>
                 </div>
               </div>
             </Form>

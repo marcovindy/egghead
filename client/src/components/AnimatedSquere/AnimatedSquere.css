@@ -61,7 +61,7 @@ input:checked + .square {
 .square--outer {
   width: 40px;
   height: 40px;
-  border: 4px solid green;
+  border: 4px solid #0d6efd;
 }
 
 .square--inner {
@@ -70,7 +70,7 @@ input:checked + .square {
   position: absolute;
   width: 28px;
   height: 28px;
-  background: green;
+  background: #0d6efd;
 }
 
 @keyframes square--inner__in {

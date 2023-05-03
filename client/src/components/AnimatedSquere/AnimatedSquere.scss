@@ -1,5 +1,6 @@
 $square-size: 40px;
 $border-size: 4px;
+$color: #0d6efd;
 
 .custom-form {
     .col-lg-6, .col-12 {
@@ -75,7 +76,7 @@ animation-timing-function: ease;
 .square--outer {
 width: $square-size;
 height: $square-size;
-border: $border-size solid green;
+border: $border-size solid $color;
 }
 
 .square--inner {
@@ -84,7 +85,7 @@ left: $square-size * 0.15;
 position: absolute;
 width: $square-size * 0.7;
 height: $square-size * 0.7;
-background: green;
+background: $color;
 }
 
 @keyframes square--inner__in {

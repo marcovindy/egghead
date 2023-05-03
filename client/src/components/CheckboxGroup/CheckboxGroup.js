@@ -19,7 +19,7 @@ const CheckboxGroup = ({ name, options }) => {
         <div key={`chunk-${chunkIndex}`} className="row w-100 pt-1 pb-1">
           {chunk.map((option) => (
             <div className="col-md-4 p-2" key={option}>
-              <label className="d-flex justify-content-between p-2 ">
+              <label className="cursor-pointer d-flex justify-content-between p-2 border-green background-green">
                 <span className="p-2 cursor-pointer">{option}</span>
                 <div>
                   <Field

@@ -142,5 +142,8 @@ export default {
     'timeLimitLabel': 'timeLimitLabel',
     'categoryLabel': 'categoryLabel',
     'Created At': 'Created At',
+    'Looking for opponents': 'Looking for opponents',
+    'Players in queues': 'Players in queues',
+    'You will be redirect to the game': 'You will be redirect to the game',
   },
 };

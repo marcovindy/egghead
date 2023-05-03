@@ -141,6 +141,7 @@ const createNewRoom = async (
     // ({ quiz, questions, questionsLength } = await fetchQuestionsForQuiz(quizId));
     questions = await fetchRandomQuestionsFromVerifiedQuizzes(category);
     questionsLength = questions.length;
+    console.log("questions fetched:", questions);
   }
   const room = {
     id: uuidv1(),
@@ -157,6 +158,7 @@ const createNewRoom = async (
   };
 
   rooms[roomName] = room;
+  console.log("room created:", room);
   joinRoom(socket, room, masterName, gameMode);
 
   // Update activeRooms list
@@ -185,9 +187,10 @@ const addCorrectAnswersRandomly = (gameOptionsArray, correctAnswers) => {
   }
   return gameOptionsArray;
 };
+
 const nextQuestion = (socket, round, questions) => {
   const room = rooms[socket.roomName];
-  if (room.questions[round - 1].question) {
+  if (room && room.questions && room.questions[round - 1].question) {
     const gameQuestion = room.questions[round - 1].question;
     const answers = room.questions[round - 1].answers;
     const correctAnswers = answers
@@ -219,38 +222,40 @@ const nextQuestion = (socket, round, questions) => {
 
 const startTimerTest = (socket) => {
   const room = rooms[socket.roomName];
+  if (room) {
+    console.log("Starting timer test", room);
+    const questions = room.questions;
+    var timeLeftTest = questionDuration;
 
-  const questions = room.questions;
-  var timeLeftTest = questionDuration;
-
-  const timerInterval = setInterval(() => {
-    res = Object.values(room.players);
-    timeLeftTest--;
-    room.timeLeft = timeLeftTest;
-    for (const player of Object.values(room.players)) {
-      io.to(player.id).emit(
-        "timerTick",
-        timeLeftTest,
-        questionDuration,
-        player
-      );
-    }
-    if (timeLeftTest === 0) {
-      clearInterval(timerInterval);
-
-      if (room.round < room.questionsLength) {
-        room.round++;
-        const round = room.round;
-        timeLeftTest = questionDuration;
-        nextQuestion(socket, round, questions);
-        startTimerTest(socket);
-      } else {
-        res = Object.values(room.players);
-        io.to(socket.roomId).emit("gameEnded", res);
-        gameEnded(socket);
+    const timerInterval = setInterval(() => {
+      res = Object.values(room.players);
+      timeLeftTest--;
+      room.timeLeft = timeLeftTest;
+      for (const player of Object.values(room.players)) {
+        io.to(player.id).emit(
+          "timerTick",
+          timeLeftTest,
+          questionDuration,
+          player
+        );
       }
-    }
-  }, 1000);
+      if (timeLeftTest === 0) {
+        clearInterval(timerInterval);
+
+        if (room.round < room.questionsLength) {
+          room.round++;
+          const round = room.round;
+          timeLeftTest = questionDuration;
+          nextQuestion(socket, round, questions);
+          startTimerTest(socket);
+        } else {
+          res = Object.values(room.players);
+          io.to(socket.roomId).emit("gameEnded", res);
+          gameEnded(socket);
+        }
+      }
+    }, 1000);
+  }
 };
 
 const updateScore = (socket, playerName) => {
@@ -302,7 +307,6 @@ io.on("connect", (socket) => {
         masterName,
         "quizId = ",
         quizId
-
       );
       category = undefined;
       createNewRoom(roomName, masterName, socket, quizId, gameMode, category);
@@ -474,6 +478,7 @@ io.on("connect", (socket) => {
   socket.on(
     "joinQueue.RankedGame",
     (username, selectedCategories, callback) => {
+      console.log(selectedCategories);
       for (const category of selectedCategories) {
         if (!queues[category]) {
           queues[category] = [];
@@ -491,19 +496,37 @@ io.on("connect", (socket) => {
       }
 
       for (const [category, queue] of Object.entries(queues)) {
+        console.log(category, queue.length);
         if (queue.length >= 2) {
           const players = queue.splice(0, 4);
-          console.log(category, queue);
-          const uuid = uuidv1().replace(/-/g, "");
-          const roomName = category + uuid.substr(0, 6);
-          createNewRoom(
-            roomName,
-            players[0].username,
-            socket,
-            "",
-            "RankedGame",
-            category
+
+          // Find an existing room with the same category and less than 2 players
+          const existingRoom = Object.values(rooms).find(
+            (room) =>
+              room.category === category &&
+              room.gameMode === "RankedGame" &&
+              Object.keys(room.players).length < 2
           );
+
+          let roomName;
+
+          if (existingRoom) {
+            // If an existing room is found, use its name
+            roomName = existingRoom.name;
+          } else {
+            // If no existing room is found, create a new room
+            const uuid = uuidv1().replace(/-/g, "");
+            roomName = category + uuid.substr(0, 6);
+            createNewRoom(
+              roomName,
+              players[0].username,
+              socket,
+              "",
+              "RankedGame",
+              category
+            );
+          }
+
           // console.log(players);
           players.forEach((player) => {
             // console.log("----------------- Player -----\n ", player);
@@ -519,7 +542,6 @@ io.on("connect", (socket) => {
           return;
         } else {
           callback({ res: `Hledám hru, prosím čekejte.` });
-          return;
         }
       }
     }

@@ -1,5 +1,8 @@
 $square-size: 40px;
 $border-size: 4px;
+$color: #fff;
+$color-border: #0d6efd;
+
 
 .custom-form {
     .col-lg-6, .col-12 {
@@ -75,7 +78,8 @@ animation-timing-function: ease;
 .square--outer {
 width: $square-size;
 height: $square-size;
-border: $border-size solid green;
+border-radius: 0.5rem;
+border: $border-size solid $color-border;
 }
 
 .square--inner {
@@ -154,4 +158,18 @@ animation-fill-mode: forwards;
 input[type="text"]:disabled {
     background: grey !important;
     cursor: not-allowed;
+}
+
+.border-green {
+  border: 1px solid $color-border ;
+  border-radius: 1rem;
+  background: $color-border ;
+}
+
+.background-white {
+    background-color: white;
+}
+
+.background-green {
+  background-color: $color ;
 }

@@ -27,8 +27,10 @@ const GameQuestion = ({
   useEffect(() => {
     if (showAnswer) {
       const newOptionClasses = currentOptions.map((option) => {
-        const isCorrect = correctAnswers.includes(encodeURIComponent(option));
+        const isCorrect = correctAnswers.includes(option); 
         const isSelected = playerChoice === option;
+        console.log("Hrac vybral ", playerChoice, "option:", option, "Spravna je ", correctAnswers);
+        console.log("sprane?", isCorrect);
         return `option${isCorrect ? " correct" : ""}${
           isSelected ? " selected" : ""
         }`;
@@ -36,6 +38,8 @@ const GameQuestion = ({
       setOptionClasses(newOptionClasses);
     }
   }, [showAnswer, playerChoice, currentOptions]);
+  
+  
 
   const clickOption = (event) => {
     const choice = event.target.innerText;
@@ -61,15 +65,16 @@ const GameQuestion = ({
         <h2>
           {t("Question")} {currentRound}
         </h2>
-      </div>
+        <h3>{currentQuestion ? currentQuestion.question : "Questions wasn't found."}</h3>
+        </div>
       <div className="options-container">
         {currentOptions
           .filter((option) => option !== "")
           .map((option, index) => (
             <div
-              className={optionClasses[index]}
-              key={index}
-              onClick={clickActivated ? clickOption : null}
+            className={optionClasses[index]}
+            key={index}
+            onClick={clickActivated ? clickOption : null}
             >
               {decodeURIComponent(option)}
             </div>
