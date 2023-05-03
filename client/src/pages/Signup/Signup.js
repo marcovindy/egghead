@@ -44,6 +44,10 @@ function Signup() {
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/,
                 "Password should contain at least one uppercase letter, one lowercase letter, and one number"
             )
+            .matches(
+                /[!@#$%^&*(),.?":{}|<>]/,
+                "New password must have at least one special character"
+              )
             .required("Password is required"),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")

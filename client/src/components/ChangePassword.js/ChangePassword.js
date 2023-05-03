@@ -16,8 +16,10 @@ function ChangePassword() {
     oldPassword: Yup.string().required("Old password is required"),
     newPassword: Yup.string()
       .required("New password is required")
-      .matches(/[a-z]/, "New password must have at least one lowercase letter")
-      .matches(/[A-Z]/, "New password must have at least one uppercase letter")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/,
+        "Password should contain at least one uppercase letter, one lowercase letter, and one number"
+      )
       .matches(
         /[!@#$%^&*(),.?":{}|<>]/,
         "New password must have at least one special character"
