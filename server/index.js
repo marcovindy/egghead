@@ -490,8 +490,6 @@ io.on("connect", (socket) => {
         updateQueueLengths();
       }
 
-      console.log(queues);
-
       for (const [category, queue] of Object.entries(queues)) {
         if (queue.length >= 2) {
           const players = queue.splice(0, 4);

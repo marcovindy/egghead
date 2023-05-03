@@ -141,5 +141,6 @@ export default {
     'Category': 'Category',
     'timeLimitLabel': 'timeLimitLabel',
     'categoryLabel': 'categoryLabel',
+    'Created At': 'Created At',
   },
 };

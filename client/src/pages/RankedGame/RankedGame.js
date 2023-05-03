@@ -35,6 +35,7 @@ const RankedGame = () => {
   let history = useHistory();
 
   const [time, setTime] = useState();
+  const [error, setError] = useState("");
   const [serverResMsg, setServerResMsg] = useState("");
   const [isInQueue, setIsInQueue] = useState(false);
   const [nameOfRoom, setNameOfRoom] = useState("");
@@ -45,8 +46,37 @@ const RankedGame = () => {
     ? "https://testing-egg.herokuapp.com"
     : "http://localhost:5000";
   const timerRef = useRef(null);
-
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("accessToken")) {
+      history.push("/login");
+    }
+    axios
+      .get(`${API_URL}/categories/all`)
+      .then((response) => {
+        setCategories(response.data.categories);
+      })
+      .catch((error) => {
+        setError("Error fetching categories");
+        console.log("Categories error: ", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/categories/all`);
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [API_URL]);
+
   const handleCategoryChange = (event) => {
     const { options } = event.target;
     const selectedOptions = [];
@@ -165,8 +195,11 @@ const RankedGame = () => {
         <Form.Group controlId="categorySelect">
           <Form.Label>Vyberte kategorie:</Form.Label>
           <Form.Control as="select" multiple onChange={handleCategoryChange}>
-            <option value="History">History</option>
-            <option value="Geography">Geography</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
           </Form.Control>
         </Form.Group>
       </Form>
