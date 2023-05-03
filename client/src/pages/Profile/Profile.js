@@ -55,13 +55,13 @@ function Profile() {
           setUser(response.data);
           setError(null);
         } else {
-          setError(`${t('This user doesnt exist')}: ${username}`);
+          setError(`${t("This user doesnt exist")}: ${username}`);
         }
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
         } else {
-          setError(`${t('Loading of user profile failed')}: ${error.message}`);
+          setError(`${t("Loading of user profile failed")}: ${error.message}`);
         }
       });
     return () => {
@@ -100,7 +100,7 @@ function Profile() {
         <h1>{error}</h1>
       </div>
     );
-  } 
+  }
 
   return (
     <Container>
@@ -109,10 +109,14 @@ function Profile() {
           <Col lg={6} md={12}>
             <div className="avatarBox">
               <Image
-                src={require(`../../assets/images/userAvatars/${user.avatar}`)}
-                alt={user.avatar}
+                src={
+                  user.avatar &&
+                  require(`../../assets/images/userAvatars/${user.avatar}`)
+                }
+                alt={user.avatar || "default-avatar"}
                 width="200px"
               />
+
               <div className="d-flex p-3">
                 <Badge level={user.level} />
                 <ProgressBar now={progress} label={`${progress} %`} />
@@ -158,7 +162,7 @@ function Profile() {
             </button>
           </>
         )}
-        <Dashboard userId={id ? id : undefined}/>
+        <Dashboard userId={id ? id : undefined} />
         <Row>
           <Achievements preview={false} userId={id} />
         </Row>

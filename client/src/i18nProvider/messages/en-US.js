@@ -145,5 +145,7 @@ export default {
     'Looking for opponents': 'Looking for opponents',
     'Players in queues': 'Players in queues',
     'You will be redirect to the game': 'You will be redirect to the game',
+    'Your password has been changed!': 'Your password has been changed!',
+    'Wrong Password Entered!': 'Wrong Password Entered!',
   },
 };

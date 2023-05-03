@@ -4,17 +4,19 @@ const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
-const { updateExperience } = require('../controllers/experienceController');
-const { updateLevel } = require('../controllers/updateLevelController');
-const { registerUser } = require('../controllers/users/RegisterUserController');
-const { loginUser } = require('../controllers/users/LoginUserController');
-const { getLeaderboard } = require("../controllers/users/LeaderboardController");
-
+const { updateExperience } = require("../controllers/experienceController");
+const { updateLevel } = require("../controllers/updateLevelController");
+const { registerUser } = require("../controllers/users/RegisterUserController");
+const { loginUser } = require("../controllers/users/LoginUserController");
+const { changePassword } = require("../controllers/users/ChangePasswordController");
+const {
+  getLeaderboard,
+} = require("../controllers/users/LeaderboardController");
 
 // Použití kontroleru pro registraci uživatele
-router.post('/signup', registerUser);
+router.post("/signup", registerUser);
 
-router.post('/login', loginUser);
+router.post("/login", loginUser);
 
 router.get("/auth", validateToken, (req, res) => {
   return res.json(req.user);
@@ -41,12 +43,22 @@ router.get("/user/byusername/:username", async (req, res) => {
   return res.json(basicInfo);
 });
 
+router.put("/changepassword", validateToken, changePassword);
+
 router.put("/changepassword", validateToken, async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await Users.findOne({ where: { username: req.user.username } });
 
+  console.log("user:", user);
+  console.log("oldPassword:", oldPassword);
+  console.log("user.password:", user.password);
+  console.log("newPassword:", newPassword);
+
   bcrypt.compare(oldPassword, user.password).then(async (match) => {
-    if (!match) return res.json({ error: "Wrong Password Entered!" });
+    if (!match) {
+      console.log("Wrong Password Entered!");
+      return res.json({ error: "Wrong Password Entered!" });
+    }
 
     bcrypt.hash(newPassword, 10).then((hash) => {
       Users.update(
@@ -58,9 +70,9 @@ router.put("/changepassword", validateToken, async (req, res) => {
   });
 });
 
-router.post('/update/experience', updateExperience);
+router.post("/update/experience", updateExperience);
 
-router.post('/update/level', updateLevel);
+router.post("/update/level", updateLevel);
 
 router.get("/leaderboard", getLeaderboard);
 

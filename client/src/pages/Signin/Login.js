@@ -53,10 +53,8 @@ function Login() {
       .catch((error) => {
         if (error.response && error.response.data) {
           toast.error(error.response.data.error);
-          console.log(error.response.data.error);
         } else {
           toast.error("Error");
-          console.log(error.response.data.error);
         }
       });
   };

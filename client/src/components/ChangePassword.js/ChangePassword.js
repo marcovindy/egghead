@@ -1,53 +1,94 @@
-import React, { useState } from "react";
+import React from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
 import t from "../../i18nProvider/translate";
+import { toast } from "react-toastify";
+
 function ChangePassword() {
   const IS_PROD = process.env.NODE_ENV === "production";
-  const API_URL = IS_PROD ? "https://testing-egg.herokuapp.com" : "http://localhost:5000";
+  const API_URL = IS_PROD
+    ? "https://testing-egg.herokuapp.com"
+    : "http://localhost:5000";
 
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-
-  const changePassword = () => {
-    axios
-      .put(
-        API_URL,
-        {
-          oldPassword: oldPassword,
-          newPassword: newPassword,
-        },
-        {
-          headers: {
-            accessToken: localStorage.getItem("accessToken"),
-          },
-        }
+  const validationSchema = Yup.object().shape({
+    oldPassword: Yup.string().required("Old password is required"),
+    newPassword: Yup.string()
+      .required("New password is required")
+      .matches(/[a-z]/, "New password must have at least one lowercase letter")
+      .matches(/[A-Z]/, "New password must have at least one uppercase letter")
+      .matches(
+        /[!@#$%^&*(),.?":{}|<>]/,
+        "New password must have at least one special character"
       )
-      .then((response) => {
-        if (response.data.error) {
-          alert(response.data.error);
-        }
-      });
-  };
+      .min(8, "New password must have at least 8 characters"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      oldPassword: "",
+      newPassword: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      axios
+        .put(
+          `${API_URL}/auth/changepassword`,
+          { oldPassword: values.oldPassword, newPassword: values.newPassword },
+          {
+            headers: {
+              accessToken: localStorage.getItem("accessToken"),
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data.error) {
+            let errorMessage = t(response.data.error);
+            toast.error(errorMessage);
+          } else {
+            let successMessage = t(response.data.message);
+            toast.success(successMessage);
+          }
+        });
+    },
+  });
 
   return (
-    <div>
-      <h1>{t('Change Your Password')}</h1>
-      <input
-        type="text"
-        placeholder="Old Password..."
-        onChange={(event) => {
-          setOldPassword(event.target.value);
-        }}
-      />
-      <input
-        type="text"
-        placeholder="New Password..."
-        onChange={(event) => {
-          setNewPassword(event.target.value);
-        }}
-      />
-      <button onClick={changePassword}>{t('saveButton')}</button>
-    </div>
+    <Container>
+      <Row>
+        <Col>
+          <h1>{t("Change Your Password")}</h1>
+          <form onSubmit={formik.handleSubmit}>
+            <div>
+              <input
+                type="password"
+                name="oldPassword"
+                placeholder="Old Password..."
+                value={formik.values.oldPassword}
+                onChange={formik.handleChange}
+              />
+              {formik.errors.oldPassword && formik.touched.oldPassword && (
+                <p>{formik.errors.oldPassword}</p>
+              )}
+            </div>
+            <div>
+              <input
+                type="password"
+                name="newPassword"
+                placeholder="New Password..."
+                value={formik.values.newPassword}
+                onChange={formik.handleChange}
+              />
+              {formik.errors.newPassword && formik.touched.newPassword && (
+                <p className="text-danger">{formik.errors.newPassword}</p>
+              )}
+            </div>
+            <Button type="submit">{t("saveButton")}</Button>
+          </form>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
