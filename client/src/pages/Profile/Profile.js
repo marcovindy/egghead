@@ -185,11 +185,10 @@ function Profile() {
           </Col>
           <Col lg={6} md={12}>
             <div className="infoBox">
-              {" "}
+              
               {authState.username !== username ? (
                 <h2>
-                  {" "}
-                  {t("Username")}: {username}{" "}
+                  {t("Username")}: {username}
                 </h2>
               ) : (
                 <>
