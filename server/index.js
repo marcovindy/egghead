@@ -7,10 +7,6 @@ const path = require("path");
 const uuidv1 = require("uuid/v1");
 const axios = require("axios");
 require("dotenv").config();
-// const questionsApiUrl = 'http://localhost:5000/questions';
-// const quizzesApiUrl = 'http://localhost:5000/quizzes';
-
-questionDuration = 10;
 
 const PORT = process.env.PORT;
 const server = http.createServer(app);
@@ -27,13 +23,9 @@ const io = socketio(server, {
 app.use(express.json());
 const whitelist = [
   "https://testing-egg.herokuapp.com",
-  "https://testing-egg.herokuapp.com/auth",
   "http://testing-egg.herokuapp.com",
-  "http://localhost:5000/auth",
   "http://localhost:3000",
   "http://localhost:5000",
-  "http://localhost:5000",
-  "http://localhost:5000/auth/auth",
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -68,17 +60,17 @@ app.use("/stats", statsRouter);
 const achievementsRouter = require("./routes/Achievements");
 app.use("/achievements", achievementsRouter);
 
-const fetchRandomQuestionsFromVerifiedQuizzes = require("./fetch/FetchRandomQuestionsFromVerifiedQuizzes");
-
 // Serve any static files
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
+const fetchRandomQuestionsFromVerifiedQuizzes = require("./fetch/FetchRandomQuestionsFromVerifiedQuizzes");
+
 // SOCKET
 const rooms = [];
-const queues = {}; // fronta hráčů
+const queues = {};
 
 function joinRoom(socket, room, playerName, gameMode) {
   socket.join(room.id, () => {
@@ -101,7 +93,6 @@ function joinRoom(socket, room, playerName, gameMode) {
 
     const allPlayersInRoom = Object.values(room.players);
     io.to(room.id).emit("playerData", allPlayersInRoom);
-    // Update activeRooms list
     sendActiveRoomsToAll();
   });
 }
@@ -112,7 +103,7 @@ const sendActiveRoomsToAll = () => {
       id,
       name,
       players: Object.values(players),
-      categories: categories || [], // sets categories to an empty array if it's undefined
+      categories: categories || [],
       round: round || 0,
     })
   );
@@ -159,7 +150,6 @@ const createNewRoom = async (
   console.log("room created:", room);
   joinRoom(socket, room, masterName, gameMode);
 
-  // Update activeRooms list
   sendActiveRoomsToAll();
 };
 
@@ -213,7 +203,7 @@ const startTimerTest = (socket, questionLimit) => {
   if (room) {
     room.questionLimit = questionLimit;
     const questions = room.questions;
-    var timeLeftTest = questionLimit;
+    let timeLeftTest = questionLimit;
 
     const timerInterval = setInterval(() => {
       res = Object.values(room.players);
@@ -245,6 +235,7 @@ const updateScore = (socket, playerName) => {
   const room = rooms[socket.roomName];
   const remainingTime = room.timeLeft;
   const remainingPercentage = remainingTime / room.questionLimit;
+
   room.players[playerName].score += 1000 + 1000 * remainingPercentage;
   res = Object.values(room.players);
   socket.emit("getRoomPlayers", res);
@@ -257,11 +248,8 @@ const gameEnded = (socket) => {
   const room = rooms[socket.roomName];
   const gameMode = room.gameMode;
   const players = Object.values(room.players);
-
-  // Sort players by their scores in descending order
   const sortedPlayers = players.sort((a, b) => b.score - a.score);
 
-  // Emit the final ranking to each player
   sortedPlayers.forEach((player, index) => {
     io.to(player.id).emit("finalRanking", {
       position: index + 1,
@@ -273,13 +261,8 @@ const gameEnded = (socket) => {
 
 // Create new room
 io.on("connect", (socket) => {
-  console.log("'--------------------------------'");
-  console.log("new connection", socket.id);
-
   socket.emit("newConn", { msg: "welcome" });
-
   socket.on("showActiveRooms", sendActiveRoomsToAll);
-
   socket.on(
     "createRoom",
     ({ roomName, masterName, quizId, gameMode }, callback) => {
@@ -288,7 +271,6 @@ io.on("connect", (socket) => {
     }
   );
 
-  // Join existing room
   socket.on("joinRoom", ({ joinRoomName, playerName }, callback) => {
     const room = rooms[joinRoomName];
     if (!room) {
@@ -304,7 +286,6 @@ io.on("connect", (socket) => {
     }
     joinRoom(socket, room, playerName);
 
-    // Send updated list of active rooms to all clients
     sendActiveRoomsToAll();
   });
 
@@ -321,10 +302,6 @@ io.on("connect", (socket) => {
       });
     }
   });
-
-  // socket.on('showQuestion', ({ gameQuestion, gameOptionsArray, gameRound }) => {
-  //   socket.broadcast.to(socket.roomId).emit('currentRound', { question: `${gameQuestion}` }, gameOptionsArray, gameRound);
-  // });
 
   socket.on("sendQuizInfo", (quizInfo) => {
     if (rooms && rooms[socket.roomName]) {
@@ -469,7 +446,6 @@ io.on("connect", (socket) => {
         if (queue.length >= 2) {
           const players = queue.splice(0, 4);
 
-          // Find an existing room with the same category and less than 2 players
           const existingRoom = Object.values(rooms).find(
             (room) =>
               room.category === category &&
@@ -480,10 +456,8 @@ io.on("connect", (socket) => {
           let roomName;
 
           if (existingRoom) {
-            // If an existing room is found, use its name
             roomName = existingRoom.name;
           } else {
-            // If no existing room is found, create a new room
             const uuid = uuidv1().replace(/-/g, "");
             roomName = category + uuid.substr(0, 6);
             createNewRoom(
@@ -496,14 +470,10 @@ io.on("connect", (socket) => {
             );
           }
 
-          // console.log(players);
           players.forEach((player) => {
-            // console.log("----------------- Player -----\n ", player);
             const playerName = player.username;
             const playerSocket = player;
-            // console.log("playerSocket: ", playerSocket);
             console.log("playerName: ", playerName);
-            // console.log("roomName: ", roomName);
             playerSocket.emit("gameReady.RankedGame", roomName, playerName);
             removePlayerFromAllQueues(player.id);
           });
