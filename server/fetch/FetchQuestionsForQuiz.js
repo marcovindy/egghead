@@ -21,6 +21,7 @@ async function fetchQuestionsForQuiz(quizId, category) {
         }));
         return {
           question: question.question,
+          limit: question.limit,
           category: question.category,
           answers: formattedAnswers,
         };

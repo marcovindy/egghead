@@ -138,10 +138,8 @@ const createNewRoom = async (
   }
 
   if (gameMode === "RankedGame") {
-    // ({ quiz, questions, questionsLength } = await fetchQuestionsForQuiz(quizId));
     questions = await fetchRandomQuestionsFromVerifiedQuizzes(category);
     questionsLength = questions.length;
-    console.log("questions fetched:", questions);
   }
   const room = {
     id: uuidv1(),
@@ -163,16 +161,6 @@ const createNewRoom = async (
 
   // Update activeRooms list
   sendActiveRoomsToAll();
-};
-const getUser = (socketId) => {
-  for (const room of Object.values(rooms)) {
-    for (const player of Object.values(room.players)) {
-      if (player.id === socketId) {
-        return player;
-      }
-    }
-  }
-  return null;
 };
 
 const addCorrectAnswersRandomly = (gameOptionsArray, correctAnswers) => {
@@ -220,24 +208,19 @@ const nextQuestion = (socket, round, questions) => {
   }
 };
 
-const startTimerTest = (socket) => {
+const startTimerTest = (socket, questionLimit) => {
   const room = rooms[socket.roomName];
   if (room) {
-    console.log("Starting timer test", room);
+    room.questionLimit = questionLimit;
     const questions = room.questions;
-    var timeLeftTest = questionDuration;
+    var timeLeftTest = questionLimit;
 
     const timerInterval = setInterval(() => {
       res = Object.values(room.players);
       timeLeftTest--;
       room.timeLeft = timeLeftTest;
       for (const player of Object.values(room.players)) {
-        io.to(player.id).emit(
-          "timerTick",
-          timeLeftTest,
-          questionDuration,
-          player
-        );
+        io.to(player.id).emit("timerTick", timeLeftTest, questionLimit, player);
       }
       if (timeLeftTest === 0) {
         clearInterval(timerInterval);
@@ -245,9 +228,9 @@ const startTimerTest = (socket) => {
         if (room.round < room.questionsLength) {
           room.round++;
           const round = room.round;
-          timeLeftTest = questionDuration;
+          timeLeftTest = questionLimit;
           nextQuestion(socket, round, questions);
-          startTimerTest(socket);
+          startTimerTest(socket, room.questions[round - 1].limit);
         } else {
           res = Object.values(room.players);
           io.to(socket.roomId).emit("gameEnded", res);
@@ -261,7 +244,7 @@ const startTimerTest = (socket) => {
 const updateScore = (socket, playerName) => {
   const room = rooms[socket.roomName];
   const remainingTime = room.timeLeft;
-  const remainingPercentage = remainingTime / 20;
+  const remainingPercentage = remainingTime / room.questionLimit;
   room.players[playerName].score += 1000 + 1000 * remainingPercentage;
   res = Object.values(room.players);
   socket.emit("getRoomPlayers", res);
@@ -300,14 +283,6 @@ io.on("connect", (socket) => {
   socket.on(
     "createRoom",
     ({ roomName, masterName, quizId, gameMode }, callback) => {
-      console.log(
-        "createRoom custom game emit from master, roomName = ",
-        roomName,
-        "masterName = ",
-        masterName,
-        "quizId = ",
-        quizId
-      );
       category = undefined;
       createNewRoom(roomName, masterName, socket, quizId, gameMode, category);
     }
@@ -382,7 +357,7 @@ io.on("connect", (socket) => {
       room.round = round;
       room.activated = true;
       console.log("sendQuizInfo", room);
-      // Update activeRooms list
+      console.log("questions", room.questions);
       sendActiveRoomsToAll();
     } else {
       return socket.emit("createRoomError", {
@@ -391,21 +366,15 @@ io.on("connect", (socket) => {
     }
   });
 
-  socket.on("startTimerTest", () => {
-    startTimerTest(socket);
+  socket.on("startTimerTest", (questionLimit) => {
+    console.log("startTimerTest", questionLimit);
+    startTimerTest(socket, questionLimit);
   });
 
   socket.on(
     "playerChoice",
     ({ playerName, choice, gameRound }, correctAnswers) => {
       const room = rooms[socket.roomName];
-      // room.sockets[0].emit(
-      //   "playerChoice",
-      //   playerName,
-      //   choice,
-      //   gameRound,
-      //   correctAnswers
-      // );
       if (correctAnswers.includes(choice)) {
         updateScore(socket, playerName);
       }
@@ -590,7 +559,7 @@ io.on("connect", (socket) => {
   socket.on("start.RankedGame", (joinRoomName) => {
     if (rooms[joinRoomName] && !rooms[joinRoomName].activated) {
       rooms[joinRoomName].activated = true;
-      startTimerTest(socket);
+      startTimerTest(socket, 10);
     }
   });
 });

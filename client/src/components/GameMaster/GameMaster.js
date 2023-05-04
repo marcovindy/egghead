@@ -43,8 +43,7 @@ const GameMaster = () => {
   const [gameReady, setGameReady] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
 
-  const [timeLeft, setTimeLeft] = useState(0); // Nastavíme 20 sekund do další otázky
-  const [isGameRunning, setIsGameRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0); 
 
   const [questionsAreLoading, setQuestionsAreLoading] = useState(true);
 
@@ -157,6 +156,8 @@ const GameMaster = () => {
           }));
           return {
             question: question.question,
+            limit: question.limit,
+            category: question.category,
             answers: formattedAnswers,
           };
         });
@@ -193,7 +194,7 @@ const GameMaster = () => {
       await new Promise((resolve) => {
         socket.on("initGame", resolve);
       });
-      socket.emit("startTimerTest");
+      socket.emit("startTimerTest", 10);
 
       socket.on("nextQuestion", () => {
         console.log("nextQuestion has been sent ");
@@ -242,9 +243,10 @@ const GameMaster = () => {
 
     socket.on("timerTick", (timeLeftTest, duration) => {
       setDuration(duration);
+      console.log(duration);
       const elapsed = duration - timeLeftTest;
       setTimeLeft(duration - elapsed);
-      console.log(duration - elapsed);
+      console.log("elapsed time", duration - elapsed);
       setTimerStarted(true);
     });
 
@@ -296,7 +298,7 @@ const GameMaster = () => {
         ) : (
           <div>
             <div className="game-link-container mb-5">
-              <h3>{t('Invite players by Game Link')}:</h3>
+              <h3>{t("Invite players by Game Link")}:</h3>
               <div className="d-flex justify-content-center">
                 <div className="border p-3">
                   {createGameLink()}{" "}
@@ -356,7 +358,7 @@ const GameMaster = () => {
                 <div className="p-5">
                   {playerCount >= 1 ? (
                     <Button variant="primary" size="md" onClick={InitGame}>
-                      {t('Start Game')}
+                      {t("Start Game")}
                     </Button>
                   ) : (
                     <Button
@@ -392,7 +394,7 @@ const GameMaster = () => {
                   <ListOfPlayers playersInRoom={playersInRoom} />
                 </Col>
               )}
-              { isRoomCreated && socket && (
+              {isRoomCreated && socket && (
                 <Col lg={6} sm={12}>
                   <Chat socket={socket} />
                 </Col>
