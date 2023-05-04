@@ -151,5 +151,17 @@ export default {
     
     'Join Queue': 'Join Queue!',
     'Username must be between 3 and 20 characters and contain only letters and numbers': 'Username must be between 3 and 20 characters and contain only letters and numbers',
-  },
+    'Reset Categories': 'Reset Categories',
+    'Select All': 'Select All',
+    'Date': 'Date',
+    'Length': 'Length',
+    'Categories': 'Categories',
+    'Level': 'Level',
+    'Level': 'Level',
+    'Level': 'Level',
+    'Level': 'Level',
+    'Level': 'Level',
+    'Level': 'Level',
+    'Level': 'Level',
+ },
 };
