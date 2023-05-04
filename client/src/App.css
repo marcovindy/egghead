@@ -396,3 +396,11 @@ input {
   top: 0;
   right: 0;
 }
+
+.radius-05, .radius-05:hover {
+  border-radius: 0.5rem !important;
+}
+
+.radius-1, .radius-1:hover {
+  border-radius: 1rem !important;
+}

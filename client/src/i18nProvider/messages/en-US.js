@@ -147,5 +147,9 @@ export default {
     'You will be redirect to the game': 'You will be redirect to the game',
     'Your password has been changed!': 'Your password has been changed!',
     'Wrong Password Entered!': 'Wrong Password Entered!',
+    
+    
+    'Join Queue': 'Join Queue!',
+    'Username must be between 3 and 20 characters and contain only letters and numbers': 'Username must be between 3 and 20 characters and contain only letters and numbers',
   },
 };

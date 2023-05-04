@@ -15,6 +15,8 @@ import Badge from "../../components/Badge/Badge";
 import t from "../../i18nProvider/translate";
 import "./Profile.css";
 import Dashboard from "../Dashboard";
+import EditableTitle from "../../components/EditableTitle/EditableTitle";
+import { toast } from "react-toastify";
 
 const img =
   "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
@@ -102,6 +104,64 @@ function Profile() {
     );
   }
 
+  const checkUserExists = async (newName) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/auth/user/byusername/${newName}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error checking user exists:", error);
+    }
+    return null;
+  };
+
+  const validateName = (name) => {
+    const namePattern = /^[A-Za-z0-9]{3,20}$/;
+    return namePattern.test(name);
+  };
+
+  const logoutAndRedirect = () => {
+    localStorage.removeItem("accessToken");
+    history.push("/login");
+    toast.success(t("logout-success"));
+  };
+
+  const handleNameSave = async (newTitle) => {
+    const newName = newTitle.trim();
+    if (validateName(newName)) {
+      const userExists = await checkUserExists(newName);
+      if (!userExists) {
+        axios
+          .put(
+            `${API_URL}/auth/changename`,
+            { newUsername: newName },
+            { headers: { accessToken: localStorage.getItem("accessToken") } }
+          )
+          .then((response) => {
+            if (response.data.success) {
+              toast.success(response.data.message);
+              logoutAndRedirect();
+            } else {
+              toast.error(response.data.message);
+            }
+          })
+          .catch((error) => {
+            const ErrorMessage = t("Error changing name:");
+            console.error(ErrorMessage, error);
+          });
+      } else {
+        const ErrorMessage = t("Username already exists.");
+        toast.error(ErrorMessage);
+      }
+    } else {
+      const ErrorMessage = t(
+        "Username must be between 3 and 20 characters and contain only letters and numbers"
+      );
+      toast.error(ErrorMessage);
+    }
+  };
+
   return (
     <Container>
       <div className="profile-page-container">
@@ -126,20 +186,32 @@ function Profile() {
           <Col lg={6} md={12}>
             <div className="infoBox">
               {" "}
-              <h1>
-                {" "}
-                {t("Username")}: {username}{" "}
-              </h1>
-              {authState.username === username && (
-                <button
-                  className="a-button"
-                  onClick={() => {
-                    history.push("/changepassword");
-                  }}
-                >
+              {authState.username !== username ? (
+                <h2>
                   {" "}
-                  {t("Change Your Password")}
-                </button>
+                  {t("Username")}: {username}{" "}
+                </h2>
+              ) : (
+                <>
+                  <h2>
+                    {t("Username")}
+                    <EditableTitle
+                      title={username}
+                      onTitleSave={handleNameSave}
+                    />
+                  </h2>
+                  <div className="mt-2">
+                    <button
+                      className="a-button"
+                      onClick={() => {
+                        history.push("/changepassword");
+                      }}
+                    >
+                      {" "}
+                      {t("Change Your Password")}
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           </Col>

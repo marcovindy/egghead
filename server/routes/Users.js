@@ -1,3 +1,5 @@
+// auth.js
+
 const express = require("express");
 const router = express.Router();
 const { Users } = require("../models");
@@ -9,11 +11,11 @@ const { updateLevel } = require("../controllers/updateLevelController");
 const { registerUser } = require("../controllers/users/RegisterUserController");
 const { loginUser } = require("../controllers/users/LoginUserController");
 const { changePassword } = require("../controllers/users/ChangePasswordController");
+const { changeName } = require("../controllers/users/ChangeNameController");
 const {
   getLeaderboard,
 } = require("../controllers/users/LeaderboardController");
 
-// Použití kontroleru pro registraci uživatele
 router.post("/signup", registerUser);
 
 router.post("/login", loginUser);
@@ -33,7 +35,7 @@ router.get("/basicinfo/:id", async (req, res) => {
 });
 
 router.get("/user/byusername/:username", async (req, res) => {
-  const { username } = req.params; // Destructure username from params
+  const { username } = req.params;
 
   const basicInfo = await Users.findOne({
     where: { username },
@@ -43,32 +45,12 @@ router.get("/user/byusername/:username", async (req, res) => {
   return res.json(basicInfo);
 });
 
+
+
 router.put("/changepassword", validateToken, changePassword);
 
-router.put("/changepassword", validateToken, async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
-  const user = await Users.findOne({ where: { username: req.user.username } });
+router.put("/changename", validateToken, changeName);
 
-  console.log("user:", user);
-  console.log("oldPassword:", oldPassword);
-  console.log("user.password:", user.password);
-  console.log("newPassword:", newPassword);
-
-  bcrypt.compare(oldPassword, user.password).then(async (match) => {
-    if (!match) {
-      console.log("Wrong Password Entered!");
-      return res.json({ error: "Wrong Password Entered!" });
-    }
-
-    bcrypt.hash(newPassword, 10).then((hash) => {
-      Users.update(
-        { password: hash },
-        { where: { username: req.user.username } }
-      );
-      return res.json("SUCCESS");
-    });
-  });
-});
 
 router.post("/update/experience", updateExperience);
 

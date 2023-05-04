@@ -9,7 +9,7 @@ import React, {
 import { useHistory, Link } from "react-router-dom";
 import { Row, Button, Container, Modal, Col, Spinner } from "react-bootstrap";
 
-import { PlayCircleFill, HeartFill, EyeFill } from "react-bootstrap-icons";
+import { PlayCircleFill, HeartFill, EyeFill, PlayFill } from "react-bootstrap-icons";
 import { CSSTransition } from "react-transition-group";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
@@ -180,7 +180,7 @@ const RankedGame = () => {
       >
         {({ resetForm, setFieldValue }) => (
           <Form>
-            <Row>
+            <div className="pb-2 d-flex">
               <div className="categories-group p-5">
                 <label>{t("Categories")}: </label>
                 <ErrorMessage
@@ -197,11 +197,11 @@ const RankedGame = () => {
                   )}
                 </div>
               </div>
-            </Row>
-            <Row>
-              <Col lg={6} sm={12}>
+            </div>
+            <Row className="pt-2">
+              <Col lg={6} sm={12} className="p-2">
                 <Button
-                  className="ml-2"
+                  className="ml-2 m-2"
                   variant="secondary"
                   onClick={() => selectAllCategories(setFieldValue)}
                   disabled={isInQueue}
@@ -209,7 +209,7 @@ const RankedGame = () => {
                   {t("Select All")}
                 </Button>
                 <Button
-                  className="ml-2"
+                  className="ml-2 m-2"
                   variant="secondary"
                   onClick={() => handleReset(resetForm)}
                   disabled={isInQueue}
@@ -217,9 +217,9 @@ const RankedGame = () => {
                   {t("Reset Categories")}
                 </Button>
               </Col>
-              <Col lg={6} sm={12}>
-                <Button type="submit" disabled={isInQueue}>
-                  {t("Join Queue")}
+              <Col lg={6} sm={12} className="p-4">
+                <Button className="button-perspective radius-05" type="submit" disabled={isInQueue}>
+                  {t("Join Queue")} <PlayFill size={22} color="white" />
                 </Button>
               </Col>
             </Row>

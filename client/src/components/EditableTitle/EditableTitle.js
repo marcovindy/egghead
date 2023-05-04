@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { PencilFill } from 'react-bootstrap-icons';
 import { useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 function EditableTitle({ title, onTitleSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -21,8 +22,17 @@ function EditableTitle({ title, onTitleSave }) {
     }
   };
 
+  const validateTitle = (title) => {
+    const forbiddenChars = /[-&|]/;
+    return !forbiddenChars.test(title);
+  };
+
   const handleTitleChange = (event) => {
-    setNewTitle(event.target.value);
+    if (validateTitle(event.target.value)) {
+      setNewTitle(event.target.value);
+    } else {
+      toast.error("Title cannot contain '-', '&' or '|'");
+    }
   };
 
   const handleTitleSave = () => {

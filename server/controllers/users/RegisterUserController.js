@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 // Definice asynchronní funkce registerUser, která zpracovává registraci uživatele
 const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, avatar } = req.body;
 
   try {
     // Zašifruje heslo pomocí bcrypt s 10 iteracemi salting procesu
@@ -13,6 +13,7 @@ const registerUser = async (req, res) => {
       username: username,
       email: email,
       password: hash,
+      avatar: avatar,
     });
 
     // Pokud je registrace úspěšná, odešle zpět zprávu o úspěchu
