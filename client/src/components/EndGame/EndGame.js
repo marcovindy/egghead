@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Container, Button, Table, Modal, Alert } from "react-bootstrap";
 import { toast } from "react-toastify";
-import axios from "axios";
 
 import t from "../../i18nProvider/translate";
 import { AuthContext } from "../../helpers/AuthContext";
@@ -10,6 +9,12 @@ import { AuthContext } from "../../helpers/AuthContext";
 import "./EndGame.css";
 import ListOfPlayers from "../ListOfPlayers/ListOfPlayers";
 import Podium from "../Podium/Podium";
+import {
+  updateEarnings,
+  getUserByUsername,
+  updateUserLevel,
+  saveQuizStats,
+} from "../../services/api";
 
 const EndGame = ({
   socket,
@@ -22,12 +27,10 @@ const EndGame = ({
   roomName,
 }) => {
   const { authState } = useContext(AuthContext);
-  const IS_PROD = process.env.NODE_ENV === "production";
-  const API_URL = IS_PROD
-    ? "https://testing-egg.herokuapp.com"
-    : "http://localhost:5000";
   const [areExpAdded, setAreExpAdded] = useState(false);
   const [levelUp, setLevelUp] = useState(false);
+  const [isHandlingExperienceAndLevel, setIsHandlingExperienceAndLevel] =
+    useState(false);
 
   const currentPlayer = players.find(
     (player) => player.username === playerName
@@ -51,8 +54,12 @@ const EndGame = ({
     const rankPoints = {};
     const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
 
+    let prevScore = -1;
+    let prevRank = -1;
+    let prevPoints = -1;
+
     sortedPlayers.forEach((player, index) => {
-      const rank = index + 1;
+      const rank = player.score === prevScore ? prevRank : index + 1;
       const points = totalPlayers - rank;
 
       if (index === 0) {
@@ -62,27 +69,32 @@ const EndGame = ({
       } else {
         rankPoints[player.username] = points;
       }
+
+      if (player.score !== prevScore) {
+        prevScore = player.score;
+        prevRank = rank;
+        prevPoints = points;
+      }
     });
 
     return rankPoints;
   };
 
-  const rankPoints = calculateRankPoints();
-
+  const rankPoints = calculateRankPoints(); // Přesunuto za definicí funkce
   const playerScore = currentPlayer ? currentPlayer.score : 0;
-  const baseEarnings = calculateEarnings(playerScore, isDraw);
+  const baseEarnings = calculateEarnings(playerScore, isDraw); // Přesunuto za definicí funkce
   const adjustedEarnings = baseEarnings * gameModeMultiplier;
 
-  const saveExperience = async () => {
+  const saveEarnings = async () => {
     try {
       const playerRankPoints = rankPoints[playerName] || 0;
       if (!areExpAdded && adjustedEarnings > 0) {
-        await axios.post(`${API_URL}/auth/update/earnings`, {
-          username: playerName,
-          experience: adjustedEarnings,
-          rank: playerRankPoints,
-          gameMode: gameMode,
-        });
+        await updateEarnings(
+          playerName,
+          adjustedEarnings,
+          playerRankPoints,
+          gameMode
+        );
         setAreExpAdded(true);
         toast(`⭐ ${adjustedEarnings} Experience points added successfully!`);
       }
@@ -93,16 +105,12 @@ const EndGame = ({
 
   const checkLevelUp = async () => {
     try {
-      const user = await axios.get(
-        `${API_URL}/auth/user/byusername/${playerName}`
-      );
-      const currentExperience = user.data.experience;
-      const currentLevel = user.data.level;
+      const user = await getUserByUsername(playerName);
+      const currentExperience = user.experience;
+      const currentLevel = user.level;
       const requiredExpForNextLevel = (100 * currentLevel) / 2;
       if (currentExperience >= requiredExpForNextLevel) {
-        await axios.post(`${API_URL}/auth/update/level`, {
-          username: playerName,
-        });
+        await updateUserLevel(playerName);
         toast("⬆️ Level up!");
         setLevelUp(true);
         console.log(currentExperience, " z ", requiredExpForNextLevel);
@@ -114,39 +122,52 @@ const EndGame = ({
   };
 
   const saveQuizStats = async () => {
-    const userIdResponse = await axios.get(
-      `${API_URL}/auth/user/byusername/${playerName}`
-    );
-    const userId = userIdResponse.data.id;
-    console.log("userId: ", userId, "room", socket);
-    try {
-      // await axios.post(`${API_URL}/stats/saveStats`, {
-      //     userId: userId,
-      //     quizId: socket.rooms[roomName].quizId,
-      //     score: playerScore,
-      //     experience: adjustedEarnings,
-      //     questions: rounds,
-      //     rank: 0,
-      //     timeSpend: currentPlayer.time_spent,
-      // });
-      // console.log('Quiz stats saved successfully!');
-    } catch (error) {
-      console.error("Failed to save quiz stats:", error);
-      toast.error("Failed to save quiz stats");
-    }
+    // const userIdResponse = await axios.get(
+    //   `${API_URL}/auth/user/byusername/${playerName}`
+    // );
+    // const userId = userIdResponse.data.id;
+    // console.log("userId: ", userId, "room", socket);
+    // try {
+    //   await axios.post(`${API_URL}/stats/saveStats`, {
+    //     userId: userId,
+    //     quizId: socket.rooms[roomName].quizId,
+    //     score: playerScore,
+    //     experience: adjustedEarnings,
+    //     questions: rounds,
+    //     rank: 0,
+    //     timeSpend: currentPlayer.time_spent,
+    //   });
+    //   console.log("Quiz stats saved successfully!");
+    // } catch (error) {
+    //   console.error("Failed to save quiz stats:", error);
+    //   toast.error("Failed to save quiz stats");
+    // }
   };
 
   useEffect(() => {
     const handleExperienceAndLevel = async () => {
-      await saveExperience();
+      setIsHandlingExperienceAndLevel(true);
+      await saveEarnings();
       await checkLevelUp();
-      await saveQuizStats();
+      // await saveQuizStats(playerName, playerScore, adjustedEarnings, rounds, currentPlayer.time_spent, roomName, socket);
+      setIsHandlingExperienceAndLevel(false);
     };
-    authState &&
+    if (
+      authState &&
       authState.username &&
       adjustedEarnings &&
+      !areExpAdded &&
+      !isHandlingExperienceAndLevel
+    ) {
       handleExperienceAndLevel();
-  }, [adjustedEarnings, rankPoints]);
+    }
+  }, [
+    authState,
+    adjustedEarnings,
+    rankPoints,
+    areExpAdded,
+    isHandlingExperienceAndLevel,
+  ]);
 
   return (
     <Container>
