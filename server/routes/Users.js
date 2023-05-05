@@ -6,7 +6,7 @@ const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
-const { updateExperience } = require("../controllers/experienceController");
+const { updateEarnings } = require("../controllers/EarningsController");
 const { updateLevel } = require("../controllers/updateLevelController");
 const { registerUser } = require("../controllers/users/RegisterUserController");
 const { loginUser } = require("../controllers/users/LoginUserController");
@@ -52,7 +52,7 @@ router.put("/changepassword", validateToken, changePassword);
 router.put("/changename", validateToken, changeName);
 
 
-router.post("/update/experience", updateExperience);
+router.post("/update/earnings", updateEarnings);
 
 router.post("/update/level", updateLevel);
 

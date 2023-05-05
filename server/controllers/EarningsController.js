@@ -1,9 +1,10 @@
 const { Users } = require('../models');
 
-exports.updateExperience = async (req, res) => {
-  const { username, experience, gameMode } = req.body;
+exports.updateEarnings = async (req, res) => {
+  const { username, experience, gameMode, rank } = req.body;
   try {
     const user = await Users.findOne({ where: { username } });
+
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -11,9 +12,10 @@ exports.updateExperience = async (req, res) => {
 
 
     const updatedExperience = (user.experience + experience);
-    console.log(user.experience, experience, updatedExperience);
+    const updatedRank = (user.rank + rank);
+    console.log( username,"exps", user.experience, experience, updatedExperience, "rank", user.rank, rank, updatedRank);
 
-    await user.update({ experience: updatedExperience });
+    await user.update({ experience: updatedExperience, rank: updatedRank});
 
     res.status(200).send('Experience updated successfully');
   } catch (error) {

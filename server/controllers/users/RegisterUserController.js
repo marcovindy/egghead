@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
 
     // Podle chybové zprávy rozhodne, jaký typ chyby se vyskytl, a vrátí odpovídající chybovou zprávu
     if (error.errors[0].message === 'email must be unique') {
-      return res.status(400).json({ message: 'User with that email already exists' });
+      return res.status(409).json({ message: 'User with that email already exists' });
     } else if (error.errors[0].message === 'username must be unique') {
       return res.status(400).json({ message: 'User with that username already exists' });
     } else {

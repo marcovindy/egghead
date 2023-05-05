@@ -33,17 +33,54 @@ const EndGame = ({
     (player) => player.username === playerName
   );
 
-  const playerScore = currentPlayer ? currentPlayer.score : 0;
+  const gameModeMultiplier = gameMode === "RankedGame" ? 2 : 1;
+  const totalPlayers = players.length;
+  const isDraw = new Set(players.map((player) => player.score)).size === 1;
 
-  const gameModeMultiplier = gameMode === "RankedGame" ? 2 : players.length === 1 ? 0 : 1;
-  const adjustedEarnings = earnings * gameModeMultiplier;
+  const calculateEarnings = (playerScore, isDraw) => {
+    if (playerScore === 0) {
+      return (rounds / position) * 0.5;
+    }
+    if (isDraw) {
+      return rounds / totalPlayers;
+    }
+    return rounds / position;
+  };
+
+  const calculateRankPoints = () => {
+    const rankPoints = {};
+    const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+
+    sortedPlayers.forEach((player, index) => {
+      const rank = index + 1;
+      const points = totalPlayers - rank;
+
+      if (index === 0) {
+        rankPoints[player.username] = points + 6;
+      } else if (index === totalPlayers - 1) {
+        rankPoints[player.username] = points - 3;
+      } else {
+        rankPoints[player.username] = points;
+      }
+    });
+
+    return rankPoints;
+  };
+
+  const rankPoints = calculateRankPoints();
+
+  const playerScore = currentPlayer ? currentPlayer.score : 0;
+  const baseEarnings = calculateEarnings(playerScore, isDraw);
+  const adjustedEarnings = baseEarnings * gameModeMultiplier;
 
   const saveExperience = async () => {
     try {
+      const playerRankPoints = rankPoints[playerName] || 0;
       if (!areExpAdded && adjustedEarnings > 0) {
-        await axios.post(`${API_URL}/auth/update/experience`, {
+        await axios.post(`${API_URL}/auth/update/earnings`, {
           username: playerName,
           experience: adjustedEarnings,
+          rank: playerRankPoints,
           gameMode: gameMode,
         });
         setAreExpAdded(true);
@@ -72,7 +109,6 @@ const EndGame = ({
       }
       console.log(currentExperience, " >= ", requiredExpForNextLevel);
     } catch (error) {
-      console.error("Failed to check level up:", error);
       toast.error("Failed to check level up");
     }
   };
@@ -106,8 +142,11 @@ const EndGame = ({
       await checkLevelUp();
       await saveQuizStats();
     };
-    if (authState && authState.username) handleExperienceAndLevel();
-  }, [adjustedEarnings]);
+    authState &&
+      authState.username &&
+      adjustedEarnings &&
+      handleExperienceAndLevel();
+  }, [adjustedEarnings, rankPoints]);
 
   return (
     <Container>
