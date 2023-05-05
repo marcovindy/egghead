@@ -1,4 +1,4 @@
-const { Users } = require('../models');
+const { Users } = require('../../models');
 
 exports.updateLevel = async (req, res) => {
   const { username } = req.body;

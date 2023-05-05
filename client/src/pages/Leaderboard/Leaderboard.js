@@ -49,7 +49,7 @@ const Leaderboard = () => {
     };
 
     const highlightUserRow = (user) => {
-        return user.id === currentUser.id ? { backgroundColor: '#a6e4ff' } : {};
+        return user.id === currentUser.id ? { backgroundColor: '#A3E8C8' } : {};
     };
 
     const handleSortChange = (sortOption) => {

@@ -54,8 +54,9 @@ const Dashboard = ({ userId }) => {
     { value: "Ukrainian", label: "Ukrainian" },
   ]);
 
+  const [filterMessage, setFilterMessage] = useState("");
   const [defaultCategories, setDefaultCategories] = useState([]);
-
+  const [filterSpecies, setFilterSpecies] = useState({});
   let history = useHistory();
   const [filterValues, setFilterValues] = useState({
     language: "",
@@ -117,7 +118,6 @@ const Dashboard = ({ userId }) => {
       )
       .then((response) => {
         if (response.data.message === "Unliked") {
-          console.log(response.data);
           setLikedQuizzes((prevLikedQuizzes) => {
             const newLikedQuizzes = new Set(prevLikedQuizzes);
             newLikedQuizzes.delete(quizId);
@@ -129,7 +129,6 @@ const Dashboard = ({ userId }) => {
             [quizId]: prevLikeCounts[quizId] - 1,
           }));
         } else {
-          console.log(response.data);
           setLikedQuizzes((prevLikedQuizzes) => {
             const newLikedQuizzes = new Set(prevLikedQuizzes);
             newLikedQuizzes.add(quizId);
@@ -145,6 +144,13 @@ const Dashboard = ({ userId }) => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const filterByCategory = (category) => {
+    setFilterValues((prevState) => ({
+      ...prevState,
+      categories: [category],
+    }));
   };
 
   useEffect(() => {
@@ -167,6 +173,7 @@ const Dashboard = ({ userId }) => {
 
   const onFilterApply = useCallback(
     (filterValues) => {
+      setFilterSpecies(filterValues);
       let appliedFilters = filterValues;
       if (filterValues.categories.length === 0) {
         appliedFilters = { ...filterValues, categories: defaultCategories };
@@ -252,37 +259,39 @@ const Dashboard = ({ userId }) => {
     onFilterApply(filterValues);
   }, [filterValues, onFilterApply]);
 
-  const createFilterMessage = () => {
-    const { language, categories, length, date } = filterValues;
-    const messageParts = [];
+  useEffect(() => {
+    if (filterSpecies) {
+      const { language, categories, length, date } = filterSpecies;
+      const messageParts = [];
+      console.log(filterSpecies);
+      if (language) {
+        messageParts.push(`language: ${language}`);
+      }
 
-    if (language) {
-      messageParts.push(`language: ${language}`);
-    }
+      if (date) {
+        messageParts.push(`date: ${date}`);
+      }
 
-    if (date) {
-      messageParts.push(`date: ${date}`);
-    }
+      if (categories && categories.length > 0) {
+        const categoryNames = categories.map((category) => category);
+        messageParts.push(`categories: ${categoryNames.join(", ")}`);
+      }
 
-    if (categories && categories.length > 0) {
-      const categoryNames = categories.map((category) => category);
-      messageParts.push(`categories: ${categoryNames.join(", ")}`);
-    }
+      if (length) {
+        const [minLength, maxLength] = length;
+        if (minLength > 0 || maxLength < 100) {
+          const lengthMessage = `${minLength} - ${maxLength} questions`;
+          messageParts.push(`length: ${lengthMessage}`);
+        }
+      }
 
-    if (length) {
-      const [minLength, maxLength] = length;
-      if (minLength > 0 || maxLength < 100) {
-        const lengthMessage = `${minLength} - ${maxLength} questions`;
-        messageParts.push(`length: ${lengthMessage}`);
+      if (messageParts.length > 0) {
+        setFilterMessage(messageParts.join(", "));
+      } else {
+        setFilterMessage("");
       }
     }
-
-    if (messageParts.length > 0) {
-      return `Applid Filters: ${messageParts.join("; ")}`;
-    } else {
-      return "";
-    }
-  };
+  }, [filterSpecies, filterValues]);
 
   const resetFilters = () => {
     setFilteredQuizzes(listOfQuizzes);
@@ -353,8 +362,8 @@ const Dashboard = ({ userId }) => {
               className="d-flex flex-column justify-content-center align-items-center"
             >
               <h5 className="mb-0">
-                {createFilterMessage()
-                  ? createFilterMessage()
+                {filterMessage
+                  ? filterMessage
                   : t("No filter has been applied.")}
               </h5>
             </Col>
@@ -363,14 +372,13 @@ const Dashboard = ({ userId }) => {
               lg={6}
               className="d-flex flex-column  flex-lg-row justify-content-end z-index-1"
             >
-              {createFilterMessage() ? (
+              {filterMessage ? (
                 <Button
                   className="m-2"
                   variant="primary"
                   onClick={resetFilters}
                 >
-                  {" "}
-                  {t("Reset Filters")}{" "}
+                  {t("Reset Filters")}
                 </Button>
               ) : (
                 ""
@@ -390,7 +398,6 @@ const Dashboard = ({ userId }) => {
             >
               {(status) => (
                 <div ref={ref} className={`transition ${status}`}>
-                  {console.log(categories)}
                   <MemoizedFilterBox
                     categories={categories ? categories : []}
                     languageOptions={languageOptions}
@@ -497,7 +504,12 @@ const Dashboard = ({ userId }) => {
                           </li>
                         )}
                         {value.Categories.map((category) => (
-                          <li key={category.id}>{category.name}</li>
+                          <li
+                            key={category.id}
+                            onClick={() => filterByCategory(category.name)}
+                          >
+                            {category.name}
+                          </li>
                         ))}
                       </ul>
                     </div>

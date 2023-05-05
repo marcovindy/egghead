@@ -6,8 +6,8 @@ const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
-const { updateEarnings } = require("../controllers/EarningsController");
-const { updateLevel } = require("../controllers/updateLevelController");
+const { updateEarnings } = require("../controllers/users/EarningsController");
+const { updateLevel } = require("../controllers/users/updateLevelController");
 const { registerUser } = require("../controllers/users/RegisterUserController");
 const { loginUser } = require("../controllers/users/LoginUserController");
 const {
