@@ -35,6 +35,8 @@ function Quiz() {
   const [validationSchema, setValidationSchema] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedTimeLimit, setSelectedTimeLimit] = useState(10);
+  const [userRole, setUserRole] = useState();
+  const [isVerified, setIsVerified] = useState(quizInfo.verificated === 1);
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -62,16 +64,36 @@ function Quiz() {
     axios
       .delete(`${API_URL}/quizzes/delete/byquizId/${id}`)
       .then((response) => {
-        console.log(response.data);
         toast.success("Quiz has been deleted successfully.");
         history.push("/customgame");
       })
       .catch((error) => console.log(error));
   };
 
+  const fetchUserRole = async (username) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/auth/user/byusername/${username}`
+      );
+      return response.data.role;
+    } catch (error) {}
+    return null;
+  };
+
+  useEffect(() => {
+    const getUserRole = async () => {
+      if (authState) {
+        console.log(authState.username);
+        const role = await fetchUserRole(authState.username);
+        setUserRole(role);
+        console.log(role);
+      }
+    };
+    getUserRole();
+  }, [authState]);
+
   const handleBeforeUnload = (event) => {
     if (!isSaved) {
-      // only prevent unload if questions are not saved
       event.preventDefault();
       event.returnValue = "";
     }
@@ -87,7 +109,6 @@ function Quiz() {
       .get(`${API_URL}/categories/all`)
       .then((response) => {
         setCategories(response.data.categories);
-        console.log("Categories", response.data.categories);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -113,7 +134,6 @@ function Quiz() {
     axios
       .get(`${API_URL}/questions/byquizId/${id}`)
       .then((response) => {
-        console.log(response);
         const formattedQuestions = response.data.questions.map((question) => {
           const formattedAnswers = question.Answers.map((answer) => ({
             text: answer.answer,
@@ -235,11 +255,6 @@ function Quiz() {
     return null;
   };
 
-  useEffect(() => {
-    console.log("quizInfo: ", quizInfo);
-    console.log("questions: ", questions);
-  }, [questions]);
-
   const handleQuestionDelete = (index) => {
     const newQuestions = [...questions];
     newQuestions.splice(index, 1);
@@ -250,12 +265,9 @@ function Quiz() {
     if (!newAnswer) {
       return;
     }
-    console.log(newAnswer);
-    console.log(index);
     const newQuestions = [...questions];
     newQuestions[index].answers = newQuestions[index].answers.map(
       (answer, i) => {
-        console.log("newAnswer.index", newAnswer.index);
         if (i === newAnswer.index) {
           return { text: newAnswer.text, isCorrect: answer.isCorrect };
         } else {
@@ -271,8 +283,6 @@ function Quiz() {
     if (!newQuestion) {
       return;
     }
-    console.log(newQuestion);
-    console.log(index);
     const newQuestions = [...questions];
     newQuestions[index].question = newQuestion;
     setQuestions(newQuestions);
@@ -283,7 +293,6 @@ function Quiz() {
     const newQuestions = [...questions];
     newQuestions[questionIndex].category = newCategory;
     setQuestions(newQuestions);
-    console.log("handle cat, new q", newQuestions);
     setIsSaved(false);
   };
 
@@ -291,7 +300,6 @@ function Quiz() {
     const newQuestions = [...questions];
     newQuestions[questionIndex].limit = newTimeLimit;
     setQuestions(newQuestions);
-    console.log("handle cat, new q", newQuestions);
     setIsSaved(false);
   };
 
@@ -301,7 +309,6 @@ function Quiz() {
     axios
       .delete(`${API_URL}/questions/byquizId/${id}`)
       .then((response) => {
-        console.log(response.data);
         axios
           .post(`${API_URL}/questions/save`, {
             quizId: quizInfo.id,
@@ -316,12 +323,29 @@ function Quiz() {
             })),
           })
           .then((response) => {
-            console.log(response.data);
             toast.success("Quiz questions have been saved successfully.");
             setIsSaved(true);
             setIsLoading(false);
           })
           .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleQuizVerification = () => {
+    axios
+      .put(
+        `${API_URL}/quizzes/verify/byquizId/${id}`,
+        { verificated: isVerified ? 0 : 1 },
+        { headers: { accessToken: localStorage.getItem("accessToken") } }
+      )
+      .then((response) => {
+        setIsVerified(!isVerified);
+        toast.success(
+          `Quiz has been ${
+            isVerified ? "unverified" : "verified"
+          } successfully.`
+        );
       })
       .catch((error) => console.log(error));
   };
@@ -500,6 +524,17 @@ function Quiz() {
           <hr />
         </div>
       ))}
+      {userRole === 1 && (
+        <Button
+          style={{ position: "fixed", bottom: 80, right: 20 }}
+          onClick={() => {
+            handleQuizVerification();
+          }}
+        >
+          {isVerified ? t("unverificationButton") : t("verificationButton")}
+        </Button>
+      )}
+
       <Button
         variant="danger"
         style={{ position: "fixed", bottom: 20, left: 20 }}

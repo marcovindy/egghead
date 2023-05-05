@@ -3,6 +3,7 @@ const router = express.Router();
 const { Quizzes, Categories, Users, Answers, Questions } = require('../models');
 
 const { validateToken } = require("../middlewares/AuthMiddleware");
+const { verifyQuiz } = require('../controllers/quizzes/VerifyQuizController');
 router.post('/create', validateToken, async (req, res) => {
   const { title, categoryIds } = req.body;
   let { language, description } = req.body;
@@ -15,7 +16,6 @@ router.post('/create', validateToken, async (req, res) => {
     return res.status(400).json({ message: 'Invalid data' });
   }
 
-console.log(title, description, categoryIds, userId, language);
   try {
     // Create a new quiz object
     const quiz = await Quizzes.create({
@@ -37,6 +37,10 @@ console.log(title, description, categoryIds, userId, language);
     res.status(500).json({ message: 'Failed to create quiz' });
   }
 });
+
+
+
+router.put("/verify/byquizId/:id", validateToken, verifyQuiz);
 
 router.get("/", validateToken, async (req, res) => {
   try {

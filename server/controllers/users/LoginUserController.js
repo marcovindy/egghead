@@ -18,7 +18,7 @@ const loginUser = async (req, res) => {
                     { username: user.username, id: user.id },
                     "importantsecret"
                 );
-                return res.json({ token: accessToken, username: username, id: user.id, email: user.email, experience: user.experience, level: user.level });
+                return res.json({ token: accessToken, username: username, id: user.id, email: user.email, experience: user.experience, level: user.level, role: user.role });
             });
         } else {
             return res.status(404).json({ error: 'An error occurred' });

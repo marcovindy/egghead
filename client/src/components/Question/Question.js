@@ -90,7 +90,6 @@ function Question({
 
   return (
     <>
-      {console.log(selectedCategory)}
       <Row>
         <Col md={2}>
           <h4>Q{index + 1}:</h4>

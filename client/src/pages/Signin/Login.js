@@ -46,6 +46,7 @@ function Login() {
           email: response.data.email,
           experience: response.data.experience,
           level: response.data.level,
+          role: response.data.role,
           status: true,
         });
         history.push("/play");
