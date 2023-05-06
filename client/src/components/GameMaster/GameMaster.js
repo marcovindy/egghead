@@ -26,7 +26,7 @@ const GameMaster = () => {
   const [masterName, setMasterName] = useState("");
 
   const [serverResMsg, setServerResMsg] = useState({
-    res: "When at least 2 players are in the room, click Start Game",
+    res: "For now you are able to play game solo or you can wait for the others",
   });
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -43,7 +43,7 @@ const GameMaster = () => {
   const [gameReady, setGameReady] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
 
-  const [timeLeft, setTimeLeft] = useState(0); 
+  const [timeLeft, setTimeLeft] = useState(0);
 
   const [questionsAreLoading, setQuestionsAreLoading] = useState(true);
 
@@ -308,12 +308,16 @@ const GameMaster = () => {
                 </div>
               </div>
             </div>
-            <h2>
-              {t("hello")} {masterName}!
-            </h2>
-            <div className="serverRes">
-              <strong>{serverResMsg.res}</strong>
-            </div>
+            {gameStarted === false && (
+              <>
+                <h2>
+                  {t("hello")} {masterName}!
+                </h2>
+                <div className="serverRes">
+                  <strong>{serverResMsg.res}</strong>
+                </div>
+              </>
+            )}
 
             <div className="button-container">
               {gameStarted === true ? (
@@ -331,6 +335,17 @@ const GameMaster = () => {
                     />
                   ) : (
                     <div>
+                      <div>
+                        <h3>
+                          {t("Num of questions")}: {totalQuestions}
+                        </h3>
+                        <ProgressBar
+                          className="num-of-questions-bar"
+                          max={totalQuestions}
+                          now={currentQuestion}
+                          label={`${currentQuestion}/${totalQuestions} Questions`}
+                        />
+                      </div>
                       <h3>
                         {t("Time left")}: {timeLeft}
                       </h3>
@@ -376,17 +391,6 @@ const GameMaster = () => {
                   )}
                 </div>
               )}
-            </div>
-            <div>
-              <h3>
-                {t("Num of questions")}: {totalQuestions}
-              </h3>
-              <ProgressBar
-                className="num-of-questions-bar"
-                max={totalQuestions}
-                now={currentQuestion}
-                label={`${currentQuestion}/${totalQuestions} Questions`}
-              />
             </div>
             <Row>
               {!gameEnded && (

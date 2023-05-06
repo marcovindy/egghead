@@ -31,11 +31,8 @@ const API_URL = IS_PROD
 const GamePlayer = ({ location }) => {
   const [joinRoomName, setJoinRoomName] = useState("");
   const [playerName, setPlayerName] = useState("");
-  const [roomPlayer, setRoomPlayer] = useState([]);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
   const [playersInRoom, setPlayersInRoom] = useState([]);
   const [playerCount, setPlayerCount] = useState([]);
   const [gameStart, setGameStart] = useState(false);
@@ -47,9 +44,6 @@ const GamePlayer = ({ location }) => {
   const [players, setPlayers] = useState([]);
   const [gameEnd, setGameEnd] = useState(false);
   const [player, setPlayer] = useState("");
-  const [playersInfo, setPlayersInfo] = useState([]);
-  const [playersScore, setPlayersScore] = useState([]);
-  const [score, setScore] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [duration, setDuration] = useState(10);
   const progress = 100 - ((duration - timeLeft) / duration) * 100;
@@ -58,11 +52,9 @@ const GamePlayer = ({ location }) => {
   const [currentQuestionNum, setCurrentQuestionNum] = useState(0);
   const [gameMode, setGameMode] = useState("");
   const [roomExist, setRoomExist] = useState(false);
-
   const [position, setPosition] = useState(0);
   const [earnings, setEarnings] = useState(0);
   const [quizId, setquizId] = useState(0);
-
   const history = useHistory();
 
   const { authState } = useContext(AuthContext);
