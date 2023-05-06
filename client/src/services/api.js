@@ -20,11 +20,22 @@ export const updateEarnings = async (
   });
 };
 
-export const getUserByUsername = async (playerName) => {
+export const getUserByUsername = async (playerName, cancelToken) => {
   const response = await axios.get(
-    `${API_URL}/auth/user/byusername/${playerName}`
+    `${API_URL}/auth/user/byusername/${playerName}`,
+    { cancelToken: cancelToken }
   );
-  return response.data;
+  console.log(response);
+
+  if (response.status === 200) {
+    return response;
+  } else {
+    return null;
+  }
+};
+
+export const checkUserExists = (newName) => {
+  return axios.get(`${API_URL}/auth/user/byusername/${newName}`);
 };
 
 export const updateUserLevel = async (playerName) => {
@@ -41,4 +52,32 @@ export const updateQuizDescription = async (quizId, newDescription) => {
     },
     { headers: { accessToken: localStorage.getItem("accessToken") } }
   );
+};
+
+export const getQuizzesByUserId = (id, cancelToken) => {
+  return axios.get(`${API_URL}/quizzes/byuserId/${id}`, {
+    cancelToken: cancelToken.token,
+  });
+};
+
+export const changeUserName = (newName, accessToken) => {
+  return axios.put(
+    `${API_URL}/auth/changename`,
+    { newUsername: newName },
+    { headers: { accessToken: accessToken } }
+  );
+};
+
+export const updateUserDescription = async (
+  userId,
+  newDescription,
+  accessToken
+) => {
+  const response = await axios.put(
+    `${API_URL}/auth/user/byuserId/${userId}/description`,
+    { description: newDescription },
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+
+  return response.data;
 };

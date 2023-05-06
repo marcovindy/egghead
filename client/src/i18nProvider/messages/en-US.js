@@ -163,9 +163,13 @@ export default {
     
     'timeLimitLabel': 'timeLimitLabel',
     'categoryLabel': 'categoryLabel',
+    'Description': 'Description',
     'Quiz Title': 'Quiz Title',
     'Quiz Title': 'Quiz Title',
-
-  
+    'Quiz Title': 'Quiz Title',
+    'Quiz Title': 'Quiz Title',
+    'Quiz Title': 'Quiz Title',
+    
+    
  },
 };
