@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Switch, Link, NavLink } from "react-router-dom";
-import { Navbar, Container, Nav, Row, Col, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Row, Col, Button, Image } from "react-bootstrap";
 import Select from "react-select";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -132,7 +132,7 @@ function App() {
 
                     <Navbar.Brand className=' d-none d-lg-block'>
                       <NavLink className='px-3 navlink' to='/'>
-                        <img className='hm-50px' src={Logo} />
+                        <Image className='hm-50px' alt="Logo" src={Logo} />
                       </NavLink>
                     </Navbar.Brand>
                     <Nav className='justify-content-end'>

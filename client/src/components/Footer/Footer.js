@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Button, Container } from "react-bootstrap";
+import { Row, Col, Button, Container, Image } from "react-bootstrap";
 import { Discord, Github } from 'react-bootstrap-icons';
 import Logo from "../../assets/images/trivia.png";
 
@@ -9,7 +9,7 @@ const Footer = () => (
       <Row className="justify-content-between container p-2 w-100 mw-100">
         <div className="col-md-4 col-xs-12 d-flex align-items-center mobile-justify-content-center">
           <a href="/" className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-            <img className='hm-50px' src={Logo} />
+            <Image className='hm-50px' alt="Logo" src={Logo} />
           </a>
           <span className="mb-3 mb-md-0 text-muted">© 2023 Marek Vaníček</span>
         </div>

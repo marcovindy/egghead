@@ -41,7 +41,7 @@ const LandingPage = () => {
               </Link>
             </div>
             {!currentUser && (
-              <Link className="m-2" to="/registration">
+              <Link className="m-2" to="/signup">
                 <Button variant="primary" size="lg">
                   {t("Sign up")}
                 </Button>

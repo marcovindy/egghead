@@ -82,7 +82,7 @@ function Signup() {
         <Col md={6} xs={12} className="background p-5 col-left">
           <h1>{t("sign-in-text-1")}</h1>
           <p>{t("sign-in-text-2")}</p>
-          <Image src={imgEggL} rounded />
+          <Image src={imgEggL}   alt="SignupImg" rounded />
           <Link to="/login" className="a-button" id="signIn">
             {t("Log in")}
           </Link>

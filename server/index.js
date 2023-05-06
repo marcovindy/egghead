@@ -5,8 +5,8 @@ const socketio = require("socket.io");
 const http = require("http");
 const path = require("path");
 const uuidv1 = require("uuid/v1");
-const axios = require("axios");
-require("dotenv").config();
+const compression = require("compression");
+
 
 const PORT = process.env.PORT;
 const server = http.createServer(app);
@@ -20,6 +20,7 @@ const io = socketio(server, {
   },
 });
 
+app.use(compression());
 app.use(express.json());
 const whitelist = [
   "https://testing-egg.herokuapp.com",
