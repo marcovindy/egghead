@@ -6,19 +6,29 @@ const http = require("http");
 const path = require("path");
 const uuidv1 = require("uuid/v1");
 const compression = require("compression");
-
+require('dotenv').config();
 
 const PORT = process.env.PORT;
 const server = http.createServer(app);
 const io = socketio(server, {
   pingInterval: 10000, // check how often
-  pingTimeout: 60000, // until close connection
-  cookie: false,
+  pingTimeout: 80000, // until close connection
   cors: {
     origin: process.env.ORIGIN,
     credentials: true,
   },
 });
+
+// Middleware to force HTTPS
+const forceHttps = (req, res, next) => {
+  if (req.headers['x-forwarded-proto'] !== 'https' && process.env.NODE_ENV === 'production') {
+    return res.redirect(`https://${req.hostname}${req.url}`);
+  }
+  next();
+};
+
+// Use the forceHttps middleware
+app.use(forceHttps);
 
 app.use(compression());
 app.use(express.json());
