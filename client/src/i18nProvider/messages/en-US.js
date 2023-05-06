@@ -159,8 +159,12 @@ export default {
     'verificationButton': 'Verify Quiz',
     'unverificationButton': 'Unverify Quiz',
     'Quiz Description': 'Quiz Description',
-
-
+    
+    
+    'timeLimitLabel': 'timeLimitLabel',
+    'categoryLabel': 'categoryLabel',
+    'Quiz Title': 'Quiz Title',
+    'Quiz Title': 'Quiz Title',
 
   
  },

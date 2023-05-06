@@ -251,7 +251,28 @@ function Quiz() {
       ]);
       setSelectedCategory(values.category);
       setSelectedTimeLimit(values.limit);
-      actions.resetForm();
+      actions.resetForm({
+        values: {
+          ...actions.initialValues,
+          question: "",
+          answer1: "",
+          answer2: "",
+          answer3: "",
+          answer4: "",
+          answer5: "",
+          answer6: "",
+          answer7: "",
+          answer8: "",
+          isCorrect_answer1: false,
+          isCorrect_answer2: false,
+          isCorrect_answer3: false,
+          isCorrect_answer4: false,
+          isCorrect_answer5: false,
+          isCorrect_answer6: false,
+          isCorrect_answer7: false,
+          isCorrect_answer8: false,
+        },
+      });
       toast.success("Question has been created successfully.");
       setIsSaved(false);
     } else {
@@ -440,8 +461,8 @@ function Quiz() {
                 question: "",
                 answer1: "",
                 answer2: "",
-                category: selectedCategory,
-                limit: selectedTimeLimit,
+                category: "",
+                limit: 0,
                 isCorrect_answer1: false,
                 isCorrect_answer2: false,
                 isCorrect_answer3: false,
@@ -468,9 +489,6 @@ function Quiz() {
                         <Select
                           name="category"
                           options={categoryOptions}
-                          value={categoryOptions.find(
-                            (option) => option.value === selectedCategory
-                          )}
                           onChange={(selectedOption) =>
                             setFieldValue("category", selectedOption.value)
                           }
@@ -488,7 +506,6 @@ function Quiz() {
                           type="number"
                           name="limit"
                           min="10"
-                          value={selectedTimeLimit}
                         />
 
                         <ErrorMessage

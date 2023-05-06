@@ -90,7 +90,7 @@ const PlayModeChooser = () => {
           {renderButton('Custom Game', 'customgame')}
         </Col>
         <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
-          {renderButton('Random Game', 'randomgame')}
+          {renderButton('Coming soon', 'randomgame')}
         </Col>
       </Row>
 
