@@ -76,7 +76,17 @@ export const updateUserDescription = async (
   const response = await axios.put(
     `${API_URL}/auth/user/byuserId/${userId}/description`,
     { description: newDescription },
-    { headers: { Authorization: `Bearer ${accessToken}` } }
+    { headers: { accessToken: accessToken } }
+  );
+
+  return response.data;
+};
+
+export const updateQuizLanguage = async (quizId, newLanguage, accessToken) => {
+  const response = await axios.put(
+    `${API_URL}/quizzes/byquizId/${quizId}/language`,
+    { language: newLanguage },
+    { headers: { accessToken: accessToken } }
   );
 
   return response.data;

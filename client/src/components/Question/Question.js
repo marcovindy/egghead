@@ -21,6 +21,7 @@ function Question({
   onCategoryChange,
   onTimeLimitChange,
   onAnswerDelete,
+  type,
 }) {
   const [selectedCategory, setSelectedCategory] = useState(question.category);
 
@@ -137,6 +138,7 @@ function Question({
             <EditableTitle
               title={question.question}
               onTitleSave={handleQuestionEdit}
+              type={type}
             />
           ) : (
             question.question
@@ -162,6 +164,7 @@ function Question({
                         onTitleSave={(newTitle) =>
                           handleAnswerEdit(answerIndex, newTitle)
                         }
+                      
                       />
                       </Col>
                     <Col>

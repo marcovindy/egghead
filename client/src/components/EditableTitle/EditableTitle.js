@@ -4,7 +4,7 @@ import { PencilFill } from "react-bootstrap-icons";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-function EditableTitle({ title, onTitleSave }) {
+function EditableTitle({ title, onTitleSave, type }) {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const ref = useRef(null);
@@ -28,7 +28,12 @@ function EditableTitle({ title, onTitleSave }) {
   };
 
   const handleTitleChange = (event) => {
-    if (event.target.value.length <= 30) {
+    let limitLength = 30;
+    console.log(type);
+    if (type === "question") {
+      limitLength = 100;
+    }
+    if (event.target.value.length <= limitLength) {
       if (validateTitle(event.target.value)) {
         setNewTitle(event.target.value);
       } else {

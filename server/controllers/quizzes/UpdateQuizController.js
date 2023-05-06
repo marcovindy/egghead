@@ -16,6 +16,25 @@ const updateQuizDescription = async (req, res) => {
   }
 };
 
+
+const updateQuizLanguage = async (req, res) => {
+    const { quizId } = req.params;
+    const { language } = req.body;
+    console.log(language);
+    console.log(quizId);
+    try {
+      await Quizzes.update(
+        { language },
+        { where: { id: quizId } }
+      );
+      res.status(200).json({ message: 'Quiz language updated successfully' });
+    } catch (error) {
+      console.error('Error updating quiz description:', error);
+      res.status(500).json({ error: 'Error updating quiz language' });
+    }
+  };
+  
+
 module.exports = {
-  updateQuizDescription,
+  updateQuizDescription, updateQuizLanguage,
 };

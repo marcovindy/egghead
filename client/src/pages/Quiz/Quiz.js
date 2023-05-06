@@ -16,6 +16,7 @@ import { Trash } from "react-bootstrap-icons";
 import { AuthContext } from "../../helpers/AuthContext";
 import { updateQuizDescription } from "../../services/api";
 import AnswerField from "../../components/QuizComponents/AnswerField/AnswerField";
+import LanguageSelector from "../../components/QuizComponents/LanguageSelector/LanguageSelector";
 
 function Quiz() {
   const API_URL =
@@ -39,6 +40,18 @@ function Quiz() {
   const [userRole, setUserRole] = useState();
   const [isVerified, setIsVerified] = useState(false);
   const [description, setDescription] = useState("");
+  const [showLanguageSelector, setShowLanguageSelector] = useState(
+    quizInfo.language || ""
+  );
+  const [languageOptions, setLanguageOptions] = useState([
+    { value: "English", label: "English" },
+    { value: "Czech", label: "Czech" },
+    { value: "French", label: "French" },
+    { value: "German", label: "German" },
+    { value: "Spanish", label: "Spanish" },
+    { value: "Russian", label: "Russian" },
+    { value: "Ukrainian", label: "Ukrainian" },
+  ]);
 
   const handleDescriptionSave = async (newDescription) => {
     try {
@@ -60,7 +73,9 @@ function Quiz() {
     if (categories.length > 0) {
       setValidationSchema(
         Yup.object().shape({
-          question: Yup.string().required("Question is required"),
+          question: Yup.string()
+            .max(100, "Characters limit is 100")
+            .required("Question is required"),
           category: Yup.string()
             .oneOf(
               categories.map((category) => category.name),
@@ -71,8 +86,12 @@ function Quiz() {
             .required("Time limit is required")
             .min(10, "Time limit must be at least 10 seconds")
             .max(60, "Time limit must be no more than 60 seconds"),
-          answer1: Yup.string().required("Answer1 is required"),
-          answer2: Yup.string().required("Answer2 is required"),
+          answer1: Yup.string()
+            .max(100, "Characters limit is 100")
+            .required("Answer1 is required"),
+          answer2: Yup.string()
+            .max(100, "Characters limit is 100")
+            .required("Answer2 is required"),
         })
       );
     }
@@ -116,7 +135,6 @@ function Quiz() {
     setQuestions(newQuestions);
     setIsSaved(false);
   };
-  
 
   const handleBeforeUnload = (event) => {
     if (!isSaved) {
@@ -414,34 +432,57 @@ function Quiz() {
       })
       .catch((error) => console.log(error));
   };
+  
 
   return (
     <Container className="quiz-container mb-4">
       <Row>
         <Col>
           <h2>
-            {t("Quiz Title")}:{" "}
             {authState && authState.id === quizInfo.userId ? (
-              <EditableTitle
-                title={quizInfo.title}
-                onTitleSave={handleTitleSave}
-              />
+              <>
+                {t("Quiz Title")}:
+                <EditableTitle
+                  title={quizInfo.title}
+                  onTitleSave={handleTitleSave}
+                />
+              </>
             ) : (
               quizInfo.title
             )}
           </h2>
           <div>
-            {t("Quiz Description")}:{" "}
             {authState && authState.id === quizInfo.userId ? (
-              <EditableDescription
-                description={description}
-                onDescriptionSave={handleDescriptionSave}
-              />
+              <>
+                {t("Quiz Description")}:{" "}
+                <EditableDescription
+                  description={description}
+                  onDescriptionSave={handleDescriptionSave}
+                />
+              </>
             ) : (
               description
             )}
           </div>
         </Col>
+      </Row>
+      <Row className="mb-4 justify-content-center">
+        {authState && authState.id === quizInfo.userId ? (
+          <>
+            <h3 onClick={() => setShowLanguageSelector(true)}>
+              {quizInfo.language}
+            </h3>
+            {showLanguageSelector && (
+               <LanguageSelector
+               quizInfo={quizInfo}
+               setQuizInfo={setQuizInfo}
+               languageOptions={languageOptions}
+             />
+            )}
+          </>
+        ) : (
+          quizInfo.language
+        )}
       </Row>
       <Row className="mb-4">
         <Col>
@@ -502,11 +543,7 @@ function Quiz() {
                       </Col>
                       <Col>
                         <label htmlFor="limit">{t("timeLimitLabel")}</label>
-                        <Field
-                          type="number"
-                          name="limit"
-                          min="10"
-                        />
+                        <Field type="number" name="limit" min="10" />
 
                         <ErrorMessage
                           className="ml-1   text-color-red"
@@ -524,7 +561,8 @@ function Quiz() {
                           name="question"
                           placeholder="What's your question?"
                           as="textarea"
-                          rows="5"
+                          rows="3"
+                          max="100"
                           autoComplete="off"
                         />
                         <div className="text-danger">
@@ -587,6 +625,7 @@ function Quiz() {
               onCategoryChange={handleCategoryChange}
               onTimeLimitChange={handleTimeLimitChange}
               onAnswerDelete={handleAnswerDelete}
+              type="question"
             />
           </Row>
           <hr />

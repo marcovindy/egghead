@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import {  Row, Col, Button } from 'react-bootstrap';
+import {  Row, Col, Button, Container } from 'react-bootstrap';
 import { PlayCircleFill } from 'react-bootstrap-icons';
 import Card from 'react-bootstrap/Card';
 import io from "socket.io-client";
@@ -44,7 +44,7 @@ const CustomGame = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <Row>
         <h2>{t('activeRoomsTitle')}</h2>
         <Col span={8} className="card-col">
@@ -93,7 +93,7 @@ const CustomGame = () => {
         </Col>
       </Row>
       <Dashboard/>
-    </div >
+    </Container >
   );
 }
 

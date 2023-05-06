@@ -3,7 +3,7 @@ const router = express.Router();
 const { Quizzes, Categories, Users, Answers, Questions } = require('../models');
 
 const { validateToken } = require("../middlewares/AuthMiddleware");
-const { updateQuizDescription } = require('../controllers/quizzes/UpdateQuizController');
+const { updateQuizDescription, updateQuizLanguage } = require('../controllers/quizzes/UpdateQuizController');
 const { verifyQuiz } = require('../controllers/quizzes/VerifyQuizController');
 router.post('/create', validateToken, async (req, res) => {
   const { title, categoryIds } = req.body;
@@ -40,6 +40,8 @@ router.post('/create', validateToken, async (req, res) => {
 });
 
 router.put('/byquizId/:quizId/description', validateToken, updateQuizDescription);
+
+router.put('/byquizId/:quizId/language', validateToken, updateQuizLanguage);
 
 router.put("/verify/byquizId/:id", validateToken, verifyQuiz);
 
