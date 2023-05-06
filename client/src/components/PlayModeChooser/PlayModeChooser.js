@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Row, Col, Button, Modal, Image } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
-import { InfoCircleFill } from 'react-bootstrap-icons';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { Row, Col, Button, Modal, Image } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
+import { InfoCircleFill } from "react-bootstrap-icons";
+import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 
 import t from "../../i18nProvider/translate";
 
-import './PlayModeChooser.css';
-import '../../assets/styles/Cards/Cards.css';
+import "./PlayModeChooser.css";
+import "../../assets/styles/Cards/Cards.css";
 
 const PlayModeChooser = () => {
   let history = useHistory();
@@ -17,13 +17,13 @@ const PlayModeChooser = () => {
   const [selectedModeDescription, setSelectedModeDescription] = useState(null);
 
   const availableImages = [
-    'rankedgame.png',
-    'customgame.png',
-    'randomgame.png',
+    "rankedgame.webp",
+    "customgame.webp",
+    "randomgame.webp",
   ];
 
   const getImagePath = (mode) => {
-    const imageFilename = `${mode}.png`;
+    const imageFilename = `${mode}.webp`;
     if (availableImages.includes(imageFilename)) {
       return require(`../../assets/images/gameMode/${imageFilename}`);
     }
@@ -43,54 +43,56 @@ const PlayModeChooser = () => {
   };
 
   const handleButtonClick = (gamemode) => {
-    if (gamemode === 'customgame' || gamemode === 'rankedgame') {
+    if (gamemode === "customgame" || gamemode === "rankedgame") {
       history.push(`/${gamemode}`);
     } else {
-      toast.warning(t('featureInDevelopment'));
+      toast.warning(t("featureInDevelopment"));
     }
   };
 
   const renderButton = (label, mode) => (
     <>
-        <Card>
-          <Card.Body className='cursor-pointer' onClick={() => handleButtonClick(mode)}>
-            {getImagePath(mode) && (
-              <Card.Img variant="top" src={getImagePath(mode)} alt={label} />
-            )}
-            <Card.Title>{label}</Card.Title>
-
-          </Card.Body>
-          <Card.Footer>
+      <Card>
+        <Card.Body
+          className="cursor-pointer"
+          onClick={() => handleButtonClick(mode)}
+        >
+          {getImagePath(mode) && (
+            <Card.Img variant="top" src={getImagePath(mode)} alt={label} />
+          )}
+          <Card.Title>{label}</Card.Title>
+        </Card.Body>
+        <Card.Footer>
           <InfoCircleFill
-          size={24}
-          className="info-icon"
-          onClick={() =>
-            handleShowModal(
-              label,
-              mode === 'rankedgame'
-                ? 'Play random quiz and earn XP and coins!'
-                : mode === 'customgame'
-                  ? 'Play custom quiz from our egghead community.'
-                  : 'This mode is not available now.'
-            )
-          }
-        />
-          </Card.Footer>
-        </Card>
+            size={24}
+            className="info-icon"
+            onClick={() =>
+              handleShowModal(
+                label,
+                mode === "rankedgame"
+                  ? "Play random quiz and earn XP and coins!"
+                  : mode === "customgame"
+                  ? "Play custom quiz from our egghead community."
+                  : "This mode is not available now."
+              )
+            }
+          />
+        </Card.Footer>
+      </Card>
     </>
   );
 
   return (
     <>
-      <Row className='p-0 d-flex play-mode-chooser-row'>
+      <Row className="p-0 d-flex play-mode-chooser-row">
         <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
-          {renderButton('Ranked Game', 'rankedgame')}
+          {renderButton("Ranked Game", "rankedgame")}
         </Col>
         <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
-          {renderButton('Custom Game', 'customgame')}
+          {renderButton("Custom Game", "customgame")}
         </Col>
         <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
-          {renderButton('Coming soon', 'randomgame')}
+          {renderButton("Coming soon", "randomgame")}
         </Col>
       </Row>
 
