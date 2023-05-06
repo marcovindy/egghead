@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import Select from "react-select";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import EditableTitle from "../../components/EditableTitle/EditableTitle";
+import EditableDescription from "../../components/EditableDescription/EditableDescription";
 import Question from "../../components/Question/Question";
 import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
 import "./Quiz.css";
@@ -13,7 +14,7 @@ import { toast } from "react-toastify";
 import t from "../../i18nProvider/translate";
 import { Trash } from "react-bootstrap-icons";
 import { AuthContext } from "../../helpers/AuthContext";
-
+import { updateQuizDescription } from "../../services/api";
 import AnswerField from "../../components/QuizComponents/AnswerField/AnswerField";
 
 function Quiz() {
@@ -34,9 +35,26 @@ function Quiz() {
   const { authState } = useContext(AuthContext);
   const [validationSchema, setValidationSchema] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedTimeLimit, setSelectedTimeLimit] = useState(10);
+  const [selectedTimeLimit, setSelectedTimeLimit] = useState();
   const [userRole, setUserRole] = useState();
-  const [isVerified, setIsVerified] = useState(quizInfo.verificated === 1);
+  const [isVerified, setIsVerified] = useState(false);
+  const [description, setDescription] = useState("");
+
+  const handleDescriptionSave = async (newDescription) => {
+    try {
+      await updateQuizDescription(quizInfo.id, newDescription);
+      setDescription(newDescription);
+    } catch (error) {
+      console.error("Error updating quiz description:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (quizInfo) {
+      setDescription(quizInfo.description);
+      setIsVerified(quizInfo.verificated === 1);
+    }
+  }, [quizInfo]);
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -262,7 +280,7 @@ function Quiz() {
   };
 
   const handleAnswerEdit = (index, newAnswer) => {
-    if (!newAnswer) {
+    if (!newAnswer || (authState.id !== quizInfo.userId && userRole !== 1)) {
       return;
     }
     const newQuestions = [...questions];
@@ -302,10 +320,12 @@ function Quiz() {
     setQuestions(newQuestions);
     setIsSaved(false);
   };
-
   const handleQuizSave = () => {
     window.removeEventListener("beforeunload", handleBeforeUnload);
     setIsLoading(true);
+    const categories = questions.map((q) => q.category);
+    const uniqueCategories = Array.from(new Set(categories));
+
     axios
       .delete(`${API_URL}/questions/byquizId/${id}`)
       .then((response) => {
@@ -324,6 +344,22 @@ function Quiz() {
           })
           .then((response) => {
             toast.success("Quiz questions have been saved successfully.");
+            axios
+              .put(
+                `${API_URL}/quizzes/categories/byquizId/${id}`,
+                { categories: uniqueCategories },
+                {
+                  headers: {
+                    accessToken: localStorage.getItem("accessToken"),
+                  },
+                }
+              )
+              .then((response) => {
+                toast.success(response.data.message);
+                setIsSaved(true);
+                setIsLoading(false);
+              })
+              .catch((error) => console.log(error));
             setIsSaved(true);
             setIsLoading(false);
           })
@@ -365,11 +401,17 @@ function Quiz() {
               quizInfo.title
             )}
           </h2>
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
-          <h4>{t("category")}</h4>
+          <div>
+            {t("Quiz Description")}:{" "}
+            {authState && authState.id === quizInfo.userId ? (
+              <EditableDescription
+                description={description}
+                onDescriptionSave={handleDescriptionSave}
+              />
+            ) : (
+              description
+            )}
+          </div>
         </Col>
       </Row>
       <Row className="mb-4">
@@ -535,23 +577,28 @@ function Quiz() {
         </Button>
       )}
 
-      <Button
-        variant="danger"
-        style={{ position: "fixed", bottom: 20, left: 20 }}
-        onClick={() => setShowModal(true)}
-      >
-        <Trash />
-      </Button>
+      {authState && (authState.id === quizInfo.userId || userRole === 1) && (
+        <Button
+          variant="danger"
+          style={{ position: "fixed", bottom: 20, left: 20 }}
+          onClick={() => setShowModal(true)}
+        >
+          <Trash />
+        </Button>
+      )}
 
-      <Button
-        className={isSaved ? "disabled" : "pulse"}
-        style={{ position: "fixed", bottom: 20, right: 20 }}
-        onClick={() => {
-          handleQuizSave();
-        }}
-      >
-        {t("saveButton")}
-      </Button>
+      {authState && (authState.id === quizInfo.userId || userRole === 1) && (
+        <Button
+          className={isSaved ? "disabled" : "pulse"}
+          style={{ position: "fixed", bottom: 20, right: 20 }}
+          onClick={() => {
+            handleQuizSave();
+          }}
+        >
+          {t("saveButton")}
+        </Button>
+      )}
+
       <LoadingOverlay isLoading={isLoading} />
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>

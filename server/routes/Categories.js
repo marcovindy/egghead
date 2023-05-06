@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Categories } = require("../models");
+const { Categories, Quizzes } = require("../models");
 
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
@@ -13,5 +13,6 @@ router.get("/all", async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 module.exports = router;

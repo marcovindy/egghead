@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
-import { PencilFill } from 'react-bootstrap-icons';
+import React, { useState, useRef, useEffect } from "react";
+import { Button } from "react-bootstrap";
+import { PencilFill } from "react-bootstrap-icons";
 import { useParams } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 function EditableTitle({ title, onTitleSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -26,12 +26,16 @@ function EditableTitle({ title, onTitleSave }) {
     const forbiddenChars = /[-&|]/;
     return !forbiddenChars.test(title);
   };
-
+  
   const handleTitleChange = (event) => {
-    if (validateTitle(event.target.value)) {
-      setNewTitle(event.target.value);
+    if (event.target.value.length <= 30) {
+      if (validateTitle(event.target.value)) {
+        setNewTitle(event.target.value);
+      } else {
+        toast.error("Title cannot contain '-', '&' or '|'");
+      }
     } else {
-      toast.error("Title cannot contain '-', '&' or '|'");
+      toast.error("Title cannot be longer than 30 characters");
     }
   };
 
@@ -46,11 +50,12 @@ function EditableTitle({ title, onTitleSave }) {
         <div>
           <input type="text" value={newTitle} onChange={handleTitleChange} />
           <button onClick={handleTitleSave}>Save</button>
-         
         </div>
       ) : (
         <div>
-          <span className='cursor-pointer' onClick={() => setIsEditing(true)}>{title} <PencilFill size={16}/></span> 
+          <span className="cursor-pointer" onClick={() => setIsEditing(true)}>
+            {title} <PencilFill size={16} />
+          </span>
         </div>
       )}
     </div>

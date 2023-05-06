@@ -102,5 +102,17 @@ export default {
     'Are you sure you want to delete this question?': 'Jste si jisti, že chcete smazat tuto otázku?',
 
     'log in': 'anmelden',
+    
+'Join Queue': 'Warteschlange beitreten',
+'Username must be between 3 and 20 characters and contain only letters and numbers': 'Benutzername muss zwischen 3 und 20 Zeichen lang sein und darf nur Buchstaben und Zahlen enthalten',
+'Reset Categories': 'Kategorien zurücksetzen',
+'Select All': 'Alle auswählen',
+'Date': 'Datum',
+'Length': 'Länge',
+'Categories': 'Kategorien',
+'Level': 'Level',
+'verificationButton': 'Quiz verifizieren',
+'unverificationButton': 'Quiz nicht mehr verifizieren',
+'Quiz Description': 'Quiz Beschreibung',
   },
 };

@@ -6,7 +6,12 @@ const API_URL = IS_PROD
   ? "https://testing-egg.herokuapp.com"
   : "http://localhost:5000";
 
-export const updateEarnings = async (playerName, adjustedEarnings, playerRankPoints, gameMode) => {
+export const updateEarnings = async (
+  playerName,
+  adjustedEarnings,
+  playerRankPoints,
+  gameMode
+) => {
   await axios.post(`${API_URL}/auth/update/earnings`, {
     username: playerName,
     experience: adjustedEarnings,
@@ -16,7 +21,9 @@ export const updateEarnings = async (playerName, adjustedEarnings, playerRankPoi
 };
 
 export const getUserByUsername = async (playerName) => {
-  const response = await axios.get(`${API_URL}/auth/user/byusername/${playerName}`);
+  const response = await axios.get(
+    `${API_URL}/auth/user/byusername/${playerName}`
+  );
   return response.data;
 };
 
@@ -26,16 +33,12 @@ export const updateUserLevel = async (playerName) => {
   });
 };
 
-export const saveQuizStats = async (playerName, playerScore, adjustedEarnings, rounds, timeSpend, roomName, socket) => {
-  const user = await getUserByUsername(playerName);
-  const userId = user.id;
-  // await axios.post(`${API_URL}/stats/saveStats`, {
-  //   userId: userId,
-  //   quizId: socket.rooms[roomName].quizId,
-  //   score: playerScore,
-  //   experience: adjustedEarnings,
-  //   questions: rounds,
-  //   rank: 0,
-  //   timeSpend: timeSpend,
-  // });
+export const updateQuizDescription = async (quizId, newDescription) => {
+  await axios.put(
+    `${API_URL}/quizzes/byquizId/${quizId}/description`,
+    {
+      description: newDescription,
+    },
+    { headers: { accessToken: localStorage.getItem("accessToken") } }
+  );
 };

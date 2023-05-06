@@ -139,6 +139,16 @@ export default {
     'Looking for opponents': 'Hledání protihráčů',
     'Players in queues': 'Hráči ve frontách',
     'You will be redirect to the game': 'Budete přesměrováni na hru',
- 
+    'Join Queue': 'Připojit se ke frontě',
+    'Username must be between 3 and 20 characters and contain only letters and numbers': 'Uživatelské jméno musí být mezi 3 a 20 znaky a obsahovat pouze písmena a čísla',
+    'Reset Categories': 'Resetovat kategorie',
+    'Select All': 'Vybrat vše',
+    'Date': 'Datum',
+    'Length': 'Délka',
+    'Categories': 'Kategorie',
+    'Level': 'Úroveň',
+    'verificationButton': 'Ověřit kvíz',
+    'unverificationButton': 'Zrušit ověření kvízu',
+    'Quiz Description': 'Popis kvízu',
   },
 };

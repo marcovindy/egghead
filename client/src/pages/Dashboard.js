@@ -28,7 +28,7 @@ import FilterBox from "../components/FilterBox/FilterBox";
 import Select from "react-select";
 
 const img =
-  "https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832__340.jpg";
+  "https://cdn.shutterstock.com/shutterstock/videos/880294/thumb/1.jpg?i10c=img.resize(height:160)";
 
 const Dashboard = ({ userId }) => {
   const MemoizedFilterBox = React.memo(FilterBox);
@@ -489,15 +489,7 @@ const Dashboard = ({ userId }) => {
                           {value.User.username}{" "}
                         </Link>
                       </div>
-                      <div
-                        className="quizDesc cursor-pointer"
-                        onClick={() => {
-                          history.push(`/quiz/${value.id}`);
-                        }}
-                      >
-                        {value.description}
-                      </div>
-                      <ul>
+                      <ul className="flex-wrap">
                         {value && value.verificated && (
                           <li>
                             <StarFill color="white" />

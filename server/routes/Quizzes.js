@@ -3,6 +3,7 @@ const router = express.Router();
 const { Quizzes, Categories, Users, Answers, Questions } = require('../models');
 
 const { validateToken } = require("../middlewares/AuthMiddleware");
+const { updateQuizDescription } = require('../controllers/quizzes/UpdateQuizController');
 const { verifyQuiz } = require('../controllers/quizzes/VerifyQuizController');
 router.post('/create', validateToken, async (req, res) => {
   const { title, categoryIds } = req.body;
@@ -38,7 +39,7 @@ router.post('/create', validateToken, async (req, res) => {
   }
 });
 
-
+router.put('/byquizId/:quizId/description', validateToken, updateQuizDescription);
 
 router.put("/verify/byquizId/:id", validateToken, verifyQuiz);
 
@@ -164,5 +165,43 @@ router.get("/verified", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+
+router.put("/categories/byquizId/:id", validateToken, async (req, res) => {
+  const quizId = req.params.id;
+  const { categories } = req.body;
+
+  try {
+    const quiz = await Quizzes.findOne({ where: { id: quizId } });
+
+    if (quiz) {
+      const existingCategories = await Categories.findAll({
+        where: { name: categories },
+      });
+
+      const newCategoryNames = categories.filter(
+        (category) =>
+          !existingCategories.some(
+            (existingCategory) => existingCategory.name === category
+          )
+      );
+
+      const newCategories = await Categories.bulkCreate(
+        newCategoryNames.map((name) => ({ name }))
+      );
+
+      const allCategories = [...existingCategories, ...newCategories];
+
+      await quiz.setCategories(allCategories);
+      return res.json({ message: "Categories updated successfully." });
+    } else {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 module.exports = router;

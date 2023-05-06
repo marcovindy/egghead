@@ -60,7 +60,13 @@ function CreateQuiz() {
   }, []);
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("You must input a title!"),
+    title: Yup.string()
+      .max(30, "Title must be at most 30 characters")
+      .required("You must input a title!"),
+    description: Yup.string().max(
+      200,
+      "Description must be at most 100 characters"
+    ),
     categories: Yup.array().min(1, "You must select at least one category!"),
   });
 
@@ -135,7 +141,7 @@ function CreateQuiz() {
                 </Field>
               </div>
               <div className="categories-group p-5">
-                <label>{t('Categories')}: </label>
+                <label>{t("Categories")}: </label>
                 <ErrorMessage
                   className="ml-1   text-color-red"
                   name="categories"
@@ -152,7 +158,7 @@ function CreateQuiz() {
               </div>
               <div className="d-flex flex-column">
                 {error && <span className="error">{error}</span>}
-                <label>{t('Description')}: </label>
+                <label>{t("Description")}: </label>
                 <ErrorMessage
                   className="ml-1   text-color-red"
                   name="description"
@@ -167,7 +173,7 @@ function CreateQuiz() {
                   rows="5"
                 />
                 <div className="d-flex justify-content-center">
-                  <Button type="submit">{t('Create Quiz')}</Button>
+                  <Button type="submit">{t("Create Quiz")}</Button>
                 </div>
               </div>
             </Form>
