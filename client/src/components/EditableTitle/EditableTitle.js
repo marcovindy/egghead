@@ -26,7 +26,7 @@ function EditableTitle({ title, onTitleSave }) {
     const forbiddenChars = /[-&|]/;
     return !forbiddenChars.test(title);
   };
-  
+
   const handleTitleChange = (event) => {
     if (event.target.value.length <= 30) {
       if (validateTitle(event.target.value)) {
@@ -45,17 +45,17 @@ function EditableTitle({ title, onTitleSave }) {
   };
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="d-flex h-100  flex-column justify-content-center">
       {isEditing ? (
         <div>
           <input type="text" value={newTitle} onChange={handleTitleChange} />
           <button onClick={handleTitleSave}>Save</button>
         </div>
       ) : (
-        <div>
-          <span className="cursor-pointer" onClick={() => setIsEditing(true)}>
-            {title} <PencilFill size={16} />
-          </span>
+        <div className="d-flex w-100 h-100 justify-content-center">
+          <div className="cursor-pointer d-flex flex-column justify-content-center" onClick={() => setIsEditing(true)}>
+            <span>{title} <PencilFill size={16} /></span>
+          </div>
         </div>
       )}
     </div>

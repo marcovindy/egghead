@@ -20,6 +20,7 @@ function Question({
   onQuestionEdit,
   onCategoryChange,
   onTimeLimitChange,
+  onAnswerDelete,
 }) {
   const [selectedCategory, setSelectedCategory] = useState(question.category);
 
@@ -35,15 +36,6 @@ function Question({
       console.log("Invalid category selected");
     }
   };
-
-  const validationSchema = Yup.object().shape({
-    text: Yup.string().required("Answer text is required"),
-    category: Yup.string().required("Please select a category"),
-    limit: Yup.number()
-      .required("Please enter a time limit")
-      .min(10, "Time limit must be at least 10")
-      .max(60, "Time limit cannot be more than 60"),
-  });
 
   const handleAnswerEdit = (answerIndex, newTitle) => {
     if (typeof answerIndex === "number" && typeof newTitle === "string") {
@@ -129,10 +121,10 @@ function Question({
         <Col md={2}>
           {authState && authState.id === quizInfo.userId ? (
             <button
-              className="btn btn-sm btn-danger m-1"
+              className="btn m-1"
               onClick={handleDeleteClick}
             >
-              <Trash />
+              <Trash color="black"/>
             </button>
           ) : (
             ""
@@ -153,9 +145,9 @@ function Question({
       </Row>
       <Row>
         {question.answers.map(
-          (answer, index) =>
+          (answer, answerIndex) =>
             answer.text !== "" && (
-              <Col key={index} lg={6} className="mb-3">
+              <Col key={answerIndex} xs={12} lg={6} className="mb-3">
                 <div
                   className="p-3 text-light w-100"
                   style={{
@@ -163,12 +155,24 @@ function Question({
                   }}
                 >
                   {authState && authState.id === quizInfo.userId ? (
-                    <EditableTitle
-                      title={answer.text}
-                      onTitleSave={(newTitle) =>
-                        handleAnswerEdit(index, newTitle)
-                      }
-                    />
+                    <div className="d-flex">
+                      <Col xs={10} sm={11} >
+                      <EditableTitle
+                        title={answer.text}
+                        onTitleSave={(newTitle) =>
+                          handleAnswerEdit(answerIndex, newTitle)
+                        }
+                      />
+                      </Col>
+                    <Col>
+                    <button
+                        className="btn btn-sm m-1"
+                        onClick={() => onAnswerDelete(index, answerIndex)}
+                      >
+                        <Trash />
+                      </button>
+                      </Col>
+                      </div>
                   ) : (
                     <span>{answer.text}</span>
                   )}

@@ -110,6 +110,14 @@ function Quiz() {
     getUserRole();
   }, [authState]);
 
+  const handleAnswerDelete = (questionIndex, answerIndex) => {
+    const newQuestions = [...questions];
+    newQuestions[questionIndex].answers.splice(answerIndex, 1);
+    setQuestions(newQuestions);
+    setIsSaved(false);
+  };
+  
+
   const handleBeforeUnload = (event) => {
     if (!isSaved) {
       event.preventDefault();
@@ -561,6 +569,7 @@ function Quiz() {
               onQuestionEdit={handleQuestionEdit}
               onCategoryChange={handleCategoryChange}
               onTimeLimitChange={handleTimeLimitChange}
+              onAnswerDelete={handleAnswerDelete}
             />
           </Row>
           <hr />
