@@ -405,6 +405,10 @@ input {
   border-radius: 1rem !important;
 }
 
+.max-width-300px {
+  max-width: 300px!important;
+}
+
 .max-width-580px {
   max-width: 580px!important;
 }

@@ -418,7 +418,7 @@ const Dashboard = ({ userId }) => {
           filteredQuizzes.map((value, key) => {
             return (
               <Col className="card-col" key={key}>
-                <Card className="h-100">
+                <Card className="h-100 max-width-300px">
                   <Card.Body className="d-flex flex-column">
                     <div className="thumb-card">
                       {value.Questions ? value.Questions.length : 0} Questions
