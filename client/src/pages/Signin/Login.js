@@ -102,6 +102,7 @@ function Login() {
           <h1>{t('sign-up-text-1')}</h1>
           <p>{t('sign-up-text-2')}</p>
           <Image
+          className="max-width-580px"  
           alt="LoginImg"
             src=
             {imgEggR}

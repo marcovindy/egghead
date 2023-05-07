@@ -404,3 +404,7 @@ input {
 .radius-1, .radius-1:hover {
   border-radius: 1rem !important;
 }
+
+.max-width-580px {
+  max-width: 580px!important;
+}

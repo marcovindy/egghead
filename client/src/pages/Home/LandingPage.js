@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Image } from "react-bootstrap";
 import "./LandingPage.css";
-import mainImage from "../../assets/images/MainImage.png";
-import egg3Image from "../../assets/images/egg3.png";
+import mainImage from "../../assets/images/MainImage.webp";
+import egg3Image from "../../assets/images/egg3.webp";
 import { FaDiscord } from "react-icons/fa";
 
 import t from "../../i18nProvider/translate";
@@ -49,7 +49,7 @@ const LandingPage = () => {
             )}
           </Col>
           <Col md={6} xs={12}>
-            <img src={mainImage} alt="MainImage" />
+            <Image src={mainImage} className="max-width-580px"  alt="MainImage" />
           </Col>
         </Row>
         <div className="blob-container">
@@ -57,7 +57,7 @@ const LandingPage = () => {
         </div>
         <Row>
           <Col md={6} xs={12}>
-            <img src={egg3Image} alt="egg3" />
+            <Image src={egg3Image} className="max-width-580px"  alt="egg3" />
           </Col>
           <Col
             md={6}

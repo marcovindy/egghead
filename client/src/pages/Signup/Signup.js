@@ -6,9 +6,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import axios from "axios";
 
-import AvatarImg from "../../assets/images/egg1.png";
-
-import imgEggL from "../../assets/images/egg1.png";
+import imgEggL from "../../assets/images/egg1.webp";
 
 import "./Signup.css";
 
@@ -82,7 +80,7 @@ function Signup() {
         <Col md={6} xs={12} className="background p-5 col-left">
           <h1>{t("sign-in-text-1")}</h1>
           <p>{t("sign-in-text-2")}</p>
-          <Image src={imgEggL}   alt="SignupImg" rounded />
+          <Image src={imgEggL} className="max-width-580px"  alt="SignupImg" rounded />
           <Link to="/login" className="a-button" id="signIn">
             {t("Log in")}
           </Link>
