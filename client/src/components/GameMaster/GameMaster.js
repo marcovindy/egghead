@@ -342,8 +342,8 @@ const GameMaster = () => {
                         <ProgressBar
                           className="num-of-questions-bar"
                           max={totalQuestions}
-                          now={currentQuestion}
-                          label={`${currentQuestion}/${totalQuestions} Questions`}
+                          now={currentQuestionNum}
+                          label={`${currentQuestionNum}/${totalQuestions} Questions`}
                         />
                       </div>
                       <h3>
