@@ -25,7 +25,7 @@ function Signup() {
     password: "",
     confirmPassword: "",
     email: "",
-    avatar: "default-avatar.png",
+    avatar: "default-avatar.webp",
     description: "No description provided.",
   };
 
