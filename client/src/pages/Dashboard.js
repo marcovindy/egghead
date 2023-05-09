@@ -331,12 +331,18 @@ const Dashboard = ({ userId }) => {
             headers: { accessToken },
           });
         }
-        setListOfQuizzes(response.data.quizzes);
-        setFilteredQuizzes(response.data.quizzes);
+        const quizzes = response.data.quizzes;
+        // Filtrujte kvízy pouze od uživatele s userId z prop, pokud je userId předán
+        const filteredQuizzes = userId
+          ? quizzes.filter((quiz) => quiz.User.id === userId)
+          : quizzes;
+        setListOfQuizzes(filteredQuizzes);
+        setFilteredQuizzes(filteredQuizzes);
       } catch (error) {
         console.log("Error:", error);
       }
     };
+
 
     const socket = io(API_URL);
     fetchCategories();

@@ -74,7 +74,7 @@ function Quiz() {
       setValidationSchema(
         Yup.object().shape({
           question: Yup.string()
-            .max(100, "Characters limit is 100")
+            .max(200, "Characters limit is 200")
             .required("Question is required"),
           category: Yup.string()
             .oneOf(
@@ -562,7 +562,7 @@ function Quiz() {
                           placeholder="What's your question?"
                           as="textarea"
                           rows="3"
-                          max="100"
+                          max="200"
                           autoComplete="off"
                         />
                         <div className="text-danger">

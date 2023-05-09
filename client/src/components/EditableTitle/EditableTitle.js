@@ -31,7 +31,7 @@ function EditableTitle({ title, onTitleSave, type }) {
     let limitLength = 30;
     console.log(type);
     if (type === "question") {
-      limitLength = 100;
+      limitLength = 200;
     }
     if (event.target.value.length <= limitLength) {
       if (validateTitle(event.target.value)) {
@@ -40,7 +40,12 @@ function EditableTitle({ title, onTitleSave, type }) {
         toast.error("Title cannot contain '-', '&' or '|'");
       }
     } else {
-      toast.error("Title cannot be longer than 30 characters");
+      if (type === "question") {
+        toast.error("Title cannot be longer than 200 characters");
+      } else {
+        toast.error("Title cannot be longer than 30 characters");
+      }
+      
     }
   };
 
