@@ -169,10 +169,6 @@ export default {
     'Copy': 'Copy',
     'No players in the room yet...': 'No players in the room yet...',
     'Quiz Title': 'Quiz Title',
-    'Quiz Title': 'Quiz Title',
-    'Quiz Title': 'Quiz Title',
-    'Quiz Title': 'Quiz Title',
-    'Quiz Title': 'Quiz Title',
     
     
  },
