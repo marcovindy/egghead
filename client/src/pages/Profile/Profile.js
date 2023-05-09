@@ -63,8 +63,6 @@ function Profile() {
           setId(response.data.id);
           setUser(response.data);
           setError(null);
-          console.log("getUserbyUsername", response.data);
-          // Sem se nikdy program nedostane, ani když existuje uživatel
         } else {
           setError(`${t("This user doesnt exist")}: ${username}`);
           console.log("This user doesnt exist", username);

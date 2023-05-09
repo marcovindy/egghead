@@ -150,7 +150,13 @@ export default {
 'verificationButton': 'Ověřit kvíz',
 'unverificationButton': 'Zrušit ověření kvízu',
 'Quiz Description': 'Popis kvízu',
-
+'categoryLabel': 'Categoría',
+'Description': 'Descripción',
+'timeLimitLabel': 'Límite de tiempo',
+'categoryLabel': 'Categoría',
+'Copy': 'Copiar',
+'No players in the room yet...': 'Todavía no hay jugadores en la sala...',
+'Quiz Title': 'Título del cuestionario',
 
     },
 };

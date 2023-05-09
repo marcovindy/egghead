@@ -1,4 +1,5 @@
 import React from 'react';
+import t from "../../i18nProvider/translate";
 
 const Scoreboard = (playersInRoom) => {
   return (
@@ -10,16 +11,16 @@ const Scoreboard = (playersInRoom) => {
 
             <p className="p-players">
 
-              Playername: {playerInfo.username}
+              {t('Playername')}:{playerInfo.username}
 
             </p>
             <p className="p-players">
-              Score: {playerInfo.score}
+            {t('Score')}: {playerInfo.score}
             </p>
           </div>
         ))
       ) : (
-        <p>No players in the room yet...</p>
+        <p>{t('No players in the room yet...')}</p>
       )}
     </div>
   );

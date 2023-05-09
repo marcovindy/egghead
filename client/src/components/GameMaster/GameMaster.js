@@ -303,7 +303,7 @@ const GameMaster = () => {
                 <div className="border p-3">
                   {createGameLink()}{" "}
                   <Button variant="primary" size="sm" onClick={copyGameLink}>
-                    Copy
+                    {t('Copy')}
                   </Button>
                 </div>
               </div>

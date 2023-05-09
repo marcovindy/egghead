@@ -149,5 +149,14 @@ export default {
 'verificationButton': 'Перевірити квіз',
 'unverificationButton': 'Скасувати перевірку квізу',
 'Quiz Description': 'Опис квізу',
+'categoryLabel': 'Kategorie',
+'Description': 'Popis',
+'timeLimitLabel': 'Časový limit',
+'categoryLabel': 'Kategorie',
+'Copy': 'Kopírovat',
+'No players in the room yet...': 'Zatím zde nejsou žádní hráči...',
+'Quiz Title': 'Název kvízu',
+
+
     },
 };

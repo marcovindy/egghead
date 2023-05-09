@@ -8,7 +8,7 @@
     "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Marek Vaníček",
   "license": "ISC",
   "dependencies": {
     "concurrently": "^6.4.0"

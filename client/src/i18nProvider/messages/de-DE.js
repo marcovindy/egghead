@@ -114,5 +114,14 @@ export default {
 'verificationButton': 'Quiz verifizieren',
 'unverificationButton': 'Quiz nicht mehr verifizieren',
 'Quiz Description': 'Quiz Beschreibung',
+'categoryLabel': 'Kategorie',
+'Description': 'Popis',
+'timeLimitLabel': 'Časový limit',
+'categoryLabel': 'Kategorie',
+'Copy': 'Kopírovat',
+'No players in the room yet...': 'Zatím zde nejsou žádní hráči...',
+'Quiz Title': 'Název kvízu',
+
+
   },
 };

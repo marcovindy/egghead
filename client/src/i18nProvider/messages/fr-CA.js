@@ -149,5 +149,12 @@ export default {
 'verificationButton': 'Vérifier le Quiz',
 'unverificationButton': 'Annuler la vérification du Quiz',
 'Quiz Description': 'Description du Quiz',
+'categoryLabel': 'Categoría',
+'Description': 'Descripción',
+'timeLimitLabel': 'Límite de tiempo',
+'categoryLabel': 'Categoría',
+'Copy': 'Copiar',
+'No players in the room yet...': 'Todavía no hay jugadores en la sala...',
+'Quiz Title': 'Título del cuestionario',
   },
 };

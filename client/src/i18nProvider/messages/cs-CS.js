@@ -102,7 +102,7 @@ export default {
     'Correct answer is': 'Správná odpověď je',
     'Delete Question': 'Smazat otázku',
     'Are you sure you want to delete this question?': 'Jste si jisti, že chcete smazat tuto otázku?',
- 
+
     'log in': 'přihlásit',
     'Go back': 'Zpět',
     'Num of questions': 'Počet otázek',
@@ -150,5 +150,14 @@ export default {
     'verificationButton': 'Ověřit kvíz',
     'unverificationButton': 'Zrušit ověření kvízu',
     'Quiz Description': 'Popis kvízu',
+    'categoryLabel': 'Kategorie',
+    'Description': 'Popis',
+    'timeLimitLabel': 'Časový limit',
+    'categoryLabel': 'Kategorie',
+    'Copy': 'Kopírovat',
+    'No players in the room yet...': 'Zatím zde nejsou žádní hráči...',
+    'Quiz Title': 'Název kvízu',
+
+
   },
 };
