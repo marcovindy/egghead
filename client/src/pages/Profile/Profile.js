@@ -65,13 +65,11 @@ function Profile() {
           setError(null);
         } else {
           setError(`${t("This user doesnt exist")}: ${username}`);
-          console.log("This user doesnt exist", username);
         }
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
         } else {
-          console.log("err", error.message);
           setError(`${t("Loading of user profile failed")}: ${error.message}`);
         }
       });
@@ -104,7 +102,6 @@ function Profile() {
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log("Request canceled by cleanup:", error.message);
         } else {
           throw error;
         }

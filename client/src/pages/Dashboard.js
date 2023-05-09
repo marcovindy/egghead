@@ -263,7 +263,6 @@ const Dashboard = ({ userId }) => {
     if (filterSpecies) {
       const { language, categories, length, date } = filterSpecies;
       const messageParts = [];
-      console.log(filterSpecies);
       if (language) {
         messageParts.push(`language: ${language}`);
       }
