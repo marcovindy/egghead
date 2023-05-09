@@ -25,7 +25,6 @@ export const getUserByUsername = async (playerName, cancelToken) => {
     `${API_URL}/auth/user/byusername/${playerName}`,
     { cancelToken: cancelToken }
   );
-  console.log(response);
 
   if (response.status === 200) {
     return response;
