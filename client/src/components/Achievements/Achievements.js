@@ -31,26 +31,28 @@ const Achievements = ({ preview, userId }) => {
     <div>
 
       {preview ? (
-        <div className='achievement'>
-          {achievements.map((achievement, index) => (
-            <div className="achievement-preview"
-              key={achievement.title}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(-1)}
-            >
-              <Trophy size={35} />
-              {hoveredIndex === index && (
-                <div className="achievement-preview-tooltip">
-                  <p className='small'>{achievement.title}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        ""
+        // <div className='achievement'>
+        //   {achievements.map((achievement, index) => (
+        //     <div className="achievement-preview"
+        //       key={achievement.title}
+        //       onMouseEnter={() => setHoveredIndex(index)}
+        //       onMouseLeave={() => setHoveredIndex(-1)}
+        //     >
+        //       <Trophy size={35} />
+        //       {hoveredIndex === index && (
+        //         <div className="achievement-preview-tooltip">
+        //           <p className='small'>{achievement.title}</p>
+        //         </div>
+        //       )}
+        //     </div>
+        //   ))}
+        // </div>
       ) : (
-        <>
+        <div>
+     
           <h2>Achievements</h2>
-          {achievements.map((achievement) => (
+          {/* {achievements.map((achievement) => (
             <AchievementCard
               key={achievement.title}
               title={achievement.title}
@@ -58,8 +60,11 @@ const Achievements = ({ preview, userId }) => {
               unlocked={achievement.unlocked}
             />
 
-          ))}
-        </>
+          ))} */}
+               <div>
+            <h2>Coming soon</h2>
+          </div>
+        </div>
       )}
     </div>
 
