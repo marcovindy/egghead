@@ -113,9 +113,7 @@ const EndGame = ({
         await updateUserLevel(playerName);
         toast("⬆️ Level up!");
         setLevelUp(true);
-        console.log(currentExperience, " z ", requiredExpForNextLevel);
       }
-      console.log(currentExperience, " >= ", requiredExpForNextLevel);
     } catch (error) {
       toast.error("Failed to check level up");
     }
