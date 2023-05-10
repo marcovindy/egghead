@@ -19,26 +19,30 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
 
   const [id, setId] = useState(0);
   const [user, setUser] = useState({});
-
   const maxExperience = (100 * level) / 2;
   const experiencePercentage = (experience / maxExperience) * 100;
-
   const { authState } = useContext(AuthContext);
+  const [isAuthStateLoaded, setIsAuthStateLoaded] = useState(false);
+
+  useEffect(() => {
+    if (authState && authState.username) {
+      setIsAuthStateLoaded(true);
+    }
+  }, [authState]);
 
   const handleClick = () => {
     history.push(`/profile/${name}`);
   };
 
   const showExperienceInformation = () => {
-    const text = `Do levelu ${level + 1}, vám zbývá ${
-      maxExperience - experience
-    } bodů zkušeností`;
+    const text = `Do levelu ${level + 1}, vám zbývá ${maxExperience - experience
+      } bodů zkušeností`;
     toast.info(text);
   };
 
   useEffect(() => {
     const source = axios.CancelToken.source();
-    if (name) {
+    if (name && isAuthStateLoaded) {
       axios
         .get(`${API_URL}/auth/user/byusername/${name}`, {
           cancelToken: source.token,
@@ -62,7 +66,8 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
         source.cancel("Request canceled by cleanup");
       };
     }
-  }, [name]);
+  }, [name, isAuthStateLoaded]);
+
 
   return (
     <div className="w-100 mb-4 player-box">

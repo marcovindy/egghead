@@ -12,10 +12,12 @@ const useBasicInfo = (username) => {
   useEffect(() => {
     const fetchBasicInfo = async () => {
       try {
-        const response = await axios.get(
-          `${API_URL}/auth/user/byusername/${username}`
-        );
-        setBasicInfo(response.data);
+        if (username) {
+          const response = await axios.get(
+            `${API_URL}/auth/user/byusername/${username}`
+          );
+          setBasicInfo(response.data);
+        }
       } catch (error) {
         console.error(error);
       } finally {
