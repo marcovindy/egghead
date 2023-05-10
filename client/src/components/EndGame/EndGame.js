@@ -87,7 +87,7 @@ const EndGame = ({
 
   const saveEarnings = async () => {
     try {
-      const playerRankPoints = rankPoints[playerName] || 0;
+      const playerRankPoints = gameMode === "RankedGame" ? rankPoints[playerName] || 0 : 0;
       if (!areExpAdded && adjustedEarnings > 0) {
         await updateEarnings(
           playerName,
@@ -122,7 +122,7 @@ const EndGame = ({
   };
 
 
-  
+
 
   useEffect(() => {
     const handleExperienceAndLevel = async () => {
