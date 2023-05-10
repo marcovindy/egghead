@@ -98,8 +98,8 @@ export default {
     'Confirm Password': 'Confirm Password',
     'Create Account': 'Create Account',
     'Filters': 'Filters',
-    'Loading': 'Loading', 
-    'Position': 'Position', 
+    'Loading': 'Loading',
+    'Position': 'Position',
     'Player name': 'Player name',
     'Score': 'Score',
     'No players in the room yet': 'No players in the room yet',
@@ -108,7 +108,7 @@ export default {
     'Correct answer is': 'Correct answer is',
     'Delete Question': 'Delete Question',
     'Are you sure you want to delete this question?': 'Are you sure you want to delete this question?',
-  
+
     'log in': 'log in',
     'Go back': 'Go back',
     'Num of questions': 'Num of questions',
@@ -128,7 +128,7 @@ export default {
     'The game has ended': 'The game has ended',
     'Your score': 'Your score',
     'Game scores': 'Game scores',
-    'For ranked games, you must be logged in':'For ranked games, you must be logged in',
+    'For ranked games, you must be logged in': 'For ranked games, you must be logged in',
     'answer5Label': 'Answer 5:',
     'answer6Label': 'Answer 6:',
     'answer7Label': 'Answer 7:',
@@ -147,7 +147,7 @@ export default {
     'You will be redirect to the game': 'You will be redirect to the game',
     'Your password has been changed!': 'Your password has been changed!',
     'Wrong Password Entered!': 'Wrong Password Entered!',
-    
+
     'Join Queue': 'Join Queue',
     'Username must be between 3 and 20 characters and contain only letters and numbers': 'Username must be between 3 and 20 characters and contain only letters and numbers',
     'Reset Categories': 'Reset Categories',
@@ -159,8 +159,8 @@ export default {
     'verificationButton': 'Verify Quiz',
     'unverificationButton': 'Unverify Quiz',
     'Quiz Description': 'Quiz Description',
-    
-    
+
+
     'timeLimitLabel': 'timeLimitLabel',
     'categoryLabel': 'categoryLabel',
     'Description': 'Description',
@@ -169,7 +169,26 @@ export default {
     'Copy': 'Copy',
     'No players in the room yet...': 'No players in the room yet...',
     'Quiz Title': 'Quiz Title',
-    
-    
- },
+
+    "username-validation-letters-numbers": "Username can only contain letters and numbers",
+    "username-validation-min-length": "Username should be at least 3 characters long",
+    "username-validation-max-length": "Username should not exceed 20 characters",
+    "username-validation-required": "Username is required",
+    "password-validation-min-length": "Password should be at least 8 characters long",
+    "password-validation-complexity": "Password should contain at least one uppercase letter, one lowercase letter, and one number",
+    "password-validation-required": "Password is required",
+    "confirm-password-validation-match": "Passwords must match",
+    "confirm-password-validation-required": "Confirm Password is required",
+    "email-validation-format": "Invalid email format",
+    "email-validation-required": "Email is required",
+    "old-password-validation-required": "Old password is required",
+    "new-password-validation-required": "New password is required",
+    "password-validation-complexity-no-special": "Password should contain at least one uppercase letter, one lowercase letter, and one number",
+    "new-password-validation-special-char": "New password must have at least one special character",
+    "new-password-validation-min-length": "New password must have at least 8 characters",
+    "title-validation-max-length": "Title must be at most 30 characters",
+    "title-validation-required": "You must input a title!",
+    "description-validation-max-length": "Description must be at most 100 characters",
+    "categories-validation-min": "You must select at least one category!",
+  },
 };

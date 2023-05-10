@@ -69,33 +69,40 @@ function Quiz() {
     }
   }, [quizInfo]);
 
+  const yupTranslate = (data) => {
+    return t(data);
+  }
+
+
+
   useEffect(() => {
     if (categories.length > 0) {
       setValidationSchema(
         Yup.object().shape({
           question: Yup.string()
-            .max(200, "Characters limit is 200")
-            .required("Question is required"),
+            .max(200, yupTranslate("question-validation-max-length"))
+            .required(yupTranslate("question-validation-required")),
           category: Yup.string()
             .oneOf(
               categories.map((category) => category.name),
-              "Category must be one of the available options"
+              yupTranslate("category-validation-available-options")
             )
-            .required("Category is required"),
+            .required(yupTranslate("category-validation-required")),
           limit: Yup.number()
-            .required("Time limit is required")
-            .min(10, "Time limit must be at least 10 seconds")
-            .max(60, "Time limit must be no more than 60 seconds"),
+            .required(yupTranslate("time-limit-validation-required"))
+            .min(10, yupTranslate("time-limit-validation-min"))
+            .max(60, yupTranslate("time-limit-validation-max")),
           answer1: Yup.string()
-            .max(100, "Characters limit is 100")
-            .required("Answer1 is required"),
+            .max(100, yupTranslate("answer1-validation-max-length"))
+            .required(yupTranslate("answer1-validation-required")),
           answer2: Yup.string()
-            .max(100, "Characters limit is 100")
-            .required("Answer2 is required"),
+            .max(100, yupTranslate("answer2-validation-max-length"))
+            .required(yupTranslate("answer2-validation-required")),
         })
       );
     }
   }, [categories]);
+  
 
   const handleQuizDelete = () => {
     axios

@@ -332,10 +332,10 @@ const Dashboard = ({ userId }) => {
           });
         }
         const quizzes = response.data.quizzes;
-        // Filtrujte kvízy pouze od uživatele s userId z prop, pokud je userId předán
         const filteredQuizzes = userId
           ? quizzes.filter((quiz) => quiz.User.id === userId)
           : quizzes;
+          console.log(response.data.quizzes);
         setListOfQuizzes(filteredQuizzes);
         setFilteredQuizzes(filteredQuizzes);
       } catch (error) {

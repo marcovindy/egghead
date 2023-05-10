@@ -59,15 +59,21 @@ function CreateQuiz() {
       });
   }, []);
 
+
+  const yupTranslate = (data) => {
+    return t(data);
+  }
+
+
   const validationSchema = Yup.object().shape({
     title: Yup.string()
-      .max(30, "Title must be at most 30 characters")
-      .required("You must input a title!"),
+      .max(30, yupTranslate("title-validation-max-length"))
+      .required(yupTranslate("title-validation-required")),
     description: Yup.string().max(
       200,
-      "Description must be at most 100 characters"
+      yupTranslate("description-validation-max-length")
     ),
-    categories: Yup.array().min(1, "You must select at least one category!"),
+    categories: Yup.array().min(1, yupTranslate("categories-validation-min")),
   });
 
   const onSubmit = (data) => {

@@ -29,29 +29,37 @@ function Signup() {
     description: "No description provided.",
   };
 
+  
+
+  const yupTranslate = (data) => {
+    return t(data);
+  }
+
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .matches(
         /^[A-Za-z0-9]+$/,
-        "Username can only contain letters and numbers"
+        yupTranslate("username-validation-letters-numbers")
       )
-      .min(3, "Username should be at least 3 characters long")
-      .max(20, "Username should not exceed 20 characters")
-      .required("Username is required"),
+      .min(3, yupTranslate("username-validation-min-length"))
+      .max(20, yupTranslate("username-validation-max-length"))
+      .required(yupTranslate("username-validation-required")),
     password: Yup.string()
-      .min(8, "Password should be at least 8 characters long")
+      .min(8, yupTranslate("password-validation-min-length"))
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]+$/,
-        "Password should contain at least one uppercase letter, one lowercase letter, and one number"
+        yupTranslate("password-validation-complexity")
       )
-      .required("Password is required"),
+      .required(yupTranslate("password-validation-required")),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
+      .oneOf([Yup.ref("password"), null], yupTranslate("confirm-password-validation-match"))
+      .required(yupTranslate("confirm-password-validation-required")),
     email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
+      .email(yupTranslate("email-validation-format"))
+      .required(yupTranslate("email-validation-required")),
   });
+
+
 
   const onSubmit = (data) => {
     try {
@@ -80,12 +88,12 @@ function Signup() {
         <Col md={6} xs={12} className="background p-5 col-left">
           <h1>{t("sign-in-text-1")}</h1>
           <p>{t("sign-in-text-2")}</p>
-          <Image src={imgEggL} className="max-width-580px"  alt="SignupImg" rounded />
+          <Image src={imgEggL} alt="SignupImg" rounded />
           <Link to="/login" className="a-button" id="signIn">
             {t("Log in")}
           </Link>
         </Col>
-        <Col md={6} xs={12} className="p-5 col-right">
+        <Col md={6} xs={12} className=" p-lg-5 p-sm-4 col-right">
           <Formik
             initialValues={initialValues}
             onSubmit={onSubmit}

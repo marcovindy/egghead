@@ -12,20 +12,27 @@ function ChangePassword() {
     ? "https://testing-egg.herokuapp.com"
     : "http://localhost:5000";
 
+    
+  const yupTranslate = (data) => {
+    return t(data);
+  }
+
+
   const validationSchema = Yup.object().shape({
-    oldPassword: Yup.string().required("Old password is required"),
+    oldPassword: Yup.string().required(yupTranslate("old-password-validation-required")),
     newPassword: Yup.string()
-      .required("New password is required")
+      .required(yupTranslate("new-password-validation-required"))
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/,
-        "Password should contain at least one uppercase letter, one lowercase letter, and one number"
+        yupTranslate("password-validation-complexity-no-special")
       )
       .matches(
         /[!@#$%^&*(),.?":{}|<>]/,
-        "New password must have at least one special character"
+        yupTranslate("new-password-validation-special-char")
       )
-      .min(8, "New password must have at least 8 characters"),
+      .min(8, yupTranslate("new-password-validation-min-length")),
   });
+  
 
   const formik = useFormik({
     initialValues: {

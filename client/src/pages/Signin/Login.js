@@ -23,12 +23,18 @@ function Login() {
     password: "",
   };
 
+
+  const yupTranslate = (data) => {
+    return t(data);
+  }
+
   const validationSchema = Yup.object().shape({
     username: Yup.string()
-      .required("Username is required"),
+      .required(yupTranslate("username-validation-required")),
     password: Yup.string()
-      .required("Password is required")
+      .required(yupTranslate("password-validation-required"))
   });
+
 
   const login = (data) => {
     const API_URL =
@@ -98,12 +104,11 @@ function Login() {
             )}
           </Formik>
         </Col>
-        <Col md={6} xs={12} className="background p-5 col-right">
+        <Col md={6} xs={12} className="background p-lg-5 p-sm-4 col-right">
           <h1>{t('sign-up-text-1')}</h1>
           <p>{t('sign-up-text-2')}</p>
           <Image
-          className="max-width-580px"  
-          alt="LoginImg"
+            alt="LoginImg"
             src=
             {imgEggR}
             rounded
