@@ -248,6 +248,7 @@ const updateScore = (socket, playerName) => {
   const remainingPercentage = remainingTime / room.questionLimit;
 
   room.players[playerName].score += 1000 + 1000 * remainingPercentage;
+  room.players[playerName].score = Math.round(room.players[playerName].score * 100) / 100;
   res = Object.values(room.players);
   socket.emit("getRoomPlayers", res);
   for (const client of res) {

@@ -113,7 +113,7 @@ function Quiz() {
         `${API_URL}/auth/user/byusername/${username}`
       );
       return response.data.role;
-    } catch (error) {}
+    } catch (error) { }
     return null;
   };
 
@@ -269,9 +269,13 @@ function Quiz() {
       ]);
       setSelectedCategory(values.category);
       setSelectedTimeLimit(values.limit);
+      const currentCategory = values.category;
+      const currentTimeLimit = values.limit;
       actions.resetForm({
         values: {
           ...actions.initialValues,
+          category: currentCategory,
+          limit: currentTimeLimit,
           question: "",
           answer1: "",
           answer2: "",
@@ -425,14 +429,13 @@ function Quiz() {
       .then((response) => {
         setIsVerified(!isVerified);
         toast.success(
-          `Quiz has been ${
-            isVerified ? "unverified" : "verified"
+          `Quiz has been ${isVerified ? "unverified" : "verified"
           } successfully.`
         );
       })
       .catch((error) => console.log(error));
   };
-  
+
 
   return (
     <Container className="quiz-container mb-4">
@@ -473,11 +476,11 @@ function Quiz() {
               {quizInfo.language}
             </h3>
             {showLanguageSelector && (
-               <LanguageSelector
-               quizInfo={quizInfo}
-               setQuizInfo={setQuizInfo}
-               languageOptions={languageOptions}
-             />
+              <LanguageSelector
+                quizInfo={quizInfo}
+                setQuizInfo={setQuizInfo}
+                languageOptions={languageOptions}
+              />
             )}
           </>
         ) : (
