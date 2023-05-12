@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import PlayerBox from "../../components/PlayerBox/PlayerBox";
 import PlayModeChooser from "../../components/PlayModeChooser/PlayModeChooser";
 import LoadingOverlay from "../../components/LoadingOverlay/LoadingOverlay";
-
 import { AuthContext } from "../../helpers/AuthContext";
 import useBasicInfo from "../../hooks/useBasicInfo";
 import t from "../../i18nProvider/translate";

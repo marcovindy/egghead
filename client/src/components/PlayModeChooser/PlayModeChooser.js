@@ -86,10 +86,10 @@ const PlayModeChooser = () => {
     <>
       <Row className="p-0 d-flex play-mode-chooser-row">
         <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
-          {renderButton("Ranked Game", "rankedgame")}
+          {renderButton(t("rankedGameTitle"), "rankedgame")}
         </Col>
         <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
-          {renderButton("Custom Game", "customgame")}
+          {renderButton(t("customGameTitle"), "customgame")}
         </Col>
         <Col xs={12} md={12} lg={4} className="mb-4 d-flex card-col">
           {renderButton("Coming soon", "randomgame")}

@@ -8,6 +8,7 @@ import Achievements from "../Achievements/Achievements";
 import Badge from "../Badge/Badge";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../helpers/AuthContext";
+import t from "../../i18nProvider/translate";
 
 const PlayerBox = ({ name, level, avatar, experience }) => {
   const IS_PROD = process.env.NODE_ENV === "production";
@@ -99,7 +100,7 @@ const PlayerBox = ({ name, level, avatar, experience }) => {
         </div>
         <div>
           <Button variant="primary" onClick={handleClick}>
-            Profile
+            {t('Profile')}
           </Button>
         </div>
       </div>

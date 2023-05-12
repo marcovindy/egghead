@@ -29,7 +29,7 @@ function Signup() {
     description: "No description provided.",
   };
 
-  
+
 
   const yupTranslate = (data) => {
     return t(data);
@@ -46,11 +46,15 @@ function Signup() {
       .required(yupTranslate("username-validation-required")),
     password: Yup.string()
       .min(8, yupTranslate("password-validation-min-length"))
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]+$/,
-        yupTranslate("password-validation-complexity")
-      )
-      .required(yupTranslate("password-validation-required")),
+      .required(yupTranslate("password-validation-required"))
+      .test('password-complexity', yupTranslate("password-validation-complexity"), (value) => {
+        if (!/[a-z]/.test(value)) return false; 
+        if (!/[A-Z]/.test(value)) return false; 
+        if (!/\d+/.test(value)) return false;
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return false;
+        return true;
+      }),
+
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], yupTranslate("confirm-password-validation-match"))
       .required(yupTranslate("confirm-password-validation-required")),

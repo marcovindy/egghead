@@ -177,6 +177,10 @@ export default {
     "password-validation-min-length": "Password should be at least 8 characters long",
     "password-validation-complexity": "Password should contain at least one uppercase letter, one lowercase letter, and one number",
     "password-validation-required": "Password is required",
+    "password-validation-lowercase": "Password must contain at least one lowercase letter",
+    "password-validation-uppercase": "Password must contain at least one uppercase letter",
+    "password-validation-number": "Password must contain at least one number",
+    "password-validation-special-char": "Password must contain at least one special character (!@#$%^&*(),.?\":{}|<>)",
     "confirm-password-validation-match": "Passwords must match",
     "confirm-password-validation-required": "Confirm Password is required",
     "email-validation-format": "Invalid email format",
@@ -201,5 +205,7 @@ export default {
     "answer1-validation-required": "Answer1 is required",
     "answer2-validation-max-length": "Characters limit is 100",
     "answer2-validation-required": "Answer2 is required",
+
+    "rankedGameTitle": "Ranked Game",
   },
 };
