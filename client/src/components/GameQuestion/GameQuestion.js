@@ -29,8 +29,6 @@ const GameQuestion = ({
       const newOptionClasses = currentOptions.map((option) => {
         const isCorrect = correctAnswers.includes(option); 
         const isSelected = playerChoice === option;
-        console.log("Hrac vybral ", playerChoice, "option:", option, "Spravna je ", correctAnswers);
-        console.log("sprane?", isCorrect);
         return `option${isCorrect ? " correct" : ""}${
           isSelected ? " selected" : ""
         }`;

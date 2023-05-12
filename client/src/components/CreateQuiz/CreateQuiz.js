@@ -48,10 +48,6 @@ function CreateQuiz() {
       .get(`${API_URL}/categories/all`)
       .then((response) => {
         setCategories(response.data.categories);
-        console.log(
-          "categories response.data: ",
-          response.data.listOfCategories
-        );
       })
       .catch((error) => {
         setError("Error fetching categories");

@@ -85,17 +85,14 @@ const RankedGame = () => {
 
     socket.on("message", (text) => {
       setServerResMsg(text.text);
-      console.log("message", text.text);
     });
 
     socket.on("gameReady.RankedGame", (roomName, playerName) => {
-      console.log("gameReady.RankedGame", roomName, playerName);
       const url = `/gameplayer?joinRoomName=${roomName}&playerName=${playerName}&gameMode=RankedGame`;
       setServerResMsg("Hra", roomName, " vytvořena, hráči", playerName);
       setNameOfRoom(roomName);
       let countdown = 5;
       timerRef.current = setInterval(() => {
-        console.log(`Přesměrování za ${countdown} sekund.`);
         setTime(countdown);
         countdown--;
         if (countdown === 0) {
@@ -237,13 +234,13 @@ const RankedGame = () => {
             .map(([category, count]) => `${category}: ${count}`)
             .join(", ")}
           {time ? <h2>{t('You will be redirect to the game')}: {time}</h2> : ""}
-      
+
         </Modal.Body>
 
         <Modal.Footer className="d-flex justify-content-between">
-        {!time && (
+          {!time && (
             <>
-            <Spinner animation="border" role="status"/>
+              <Spinner animation="border" role="status" />
             </>
           )}
           <Button variant="secondary" onClick={handleCloseModal}>

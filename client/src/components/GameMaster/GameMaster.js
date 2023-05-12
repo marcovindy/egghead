@@ -98,7 +98,6 @@ const GameMaster = () => {
     socket.on("playerData", (allPlayersInRoom) => {
       setPlayersInRoom(allPlayersInRoom);
       setPlayerCount(allPlayersInRoom.length);
-      console.log(socket);
     });
 
     socket.on("createRoomError", (error) => {
@@ -135,7 +134,6 @@ const GameMaster = () => {
             console.log("Create room error: ", error);
           }
         });
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -143,12 +141,9 @@ const GameMaster = () => {
 
     const fetchQuestions = async () => {
       try {
-        console.log(id);
-        console.log(API_URL);
         const response = await axios.get(`${API_URL}/questions/byquizId/${id}`);
         const quiz = response.data.quiz;
         const questionsLength = response.data.questions.length;
-        console.log(response.data);
         const formattedQuestions = response.data.questions.map((question) => {
           const formattedAnswers = question.Answers.map((answer) => ({
             text: answer.answer,
@@ -185,7 +180,6 @@ const GameMaster = () => {
       fetchQuizInfo();
       fetchQuestions();
     }
-    console.log(id, isRoomCreated);
   }, [API_URL, id, isRoomCreated]);
 
   useEffect(() => {
@@ -215,7 +209,6 @@ const GameMaster = () => {
         correctAnswers,
         totalQuestionsNum
       ) => {
-        console.log("correct answer (current round): ", correctAnswers);
         setCorrectAnswers(correctAnswers);
         setCurrentQuestion(gameQuestion);
         setCurrentOptions(gameOptionsArray);
@@ -243,10 +236,8 @@ const GameMaster = () => {
 
     socket.on("timerTick", (timeLeftTest, duration) => {
       setDuration(duration);
-      console.log(duration);
       const elapsed = duration - timeLeftTest;
       setTimeLeft(duration - elapsed);
-      console.log("elapsed time", duration - elapsed);
       setTimerStarted(true);
     });
 

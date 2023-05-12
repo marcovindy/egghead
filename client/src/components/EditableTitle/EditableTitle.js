@@ -29,7 +29,6 @@ function EditableTitle({ title, onTitleSave, type }) {
 
   const handleTitleChange = (event) => {
     let limitLength = 30;
-    console.log(type);
     if (type === "question") {
       limitLength = 200;
     }

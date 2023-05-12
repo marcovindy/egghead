@@ -335,7 +335,6 @@ const Dashboard = ({ userId }) => {
         const filteredQuizzes = userId
           ? quizzes.filter((quiz) => quiz.User.id === userId)
           : quizzes;
-          console.log(response.data.quizzes);
         setListOfQuizzes(filteredQuizzes);
         setFilteredQuizzes(filteredQuizzes);
       } catch (error) {

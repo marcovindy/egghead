@@ -147,9 +147,7 @@ const GamePlayer = ({ location }) => {
       setTimerStarted(true);
     });
 
-    socket.on("nextQuestion", () => {
-      console.log("nextQuestion has been sent ");
-    });
+    
   }, [duration]);
 
   useEffect(() => {
