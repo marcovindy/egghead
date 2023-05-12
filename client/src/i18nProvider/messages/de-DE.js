@@ -154,5 +154,6 @@ export default {
     "answer2-validation-max-length": "La limite de caractères est de 100",
     "answer2-validation-required": "La réponse 2 est requise",
 
+    "rankedGameTitle": "Ranglistenspiel",
   },
 };

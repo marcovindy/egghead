@@ -188,8 +188,9 @@ export default {
     "answer1-validation-max-length": "Limit znaků je 100",
     "answer1-validation-required": "Odpověď1 je povinná",
     "answer2-validation-max-length": "Limit znaků je 100",
-    "answer2-validation-required": "Odpověď2 je povinná"
+    "answer2-validation-required": "Odpověď2 je povinná",
 
+    "rankedGameTitle": "Hodnocená hra",
 
 
   },

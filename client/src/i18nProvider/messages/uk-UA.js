@@ -180,5 +180,6 @@ export default {
         "question-validation-required": "Питання є обов'язковим",
         "category-validation-available-options": "Категорія повинна бути однією з доступних опцій",
 
+        "rankedGameTitle": "Рейтингова гра",
     },
 };

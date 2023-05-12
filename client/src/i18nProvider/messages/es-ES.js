@@ -191,6 +191,6 @@ export default {
         "answer2-validation-required": "Se requiere Respuesta2",
 
 
-
+        "rankedGameTitle": "Juego clasificado",
     },
 };

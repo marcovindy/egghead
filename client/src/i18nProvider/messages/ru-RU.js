@@ -189,7 +189,7 @@ export default {
         "answer2-validation-max-length": "Максимальное количество символов - 100",
         "answer2-validation-required": "Ответ2 обязателен",
 
-
+        "rankedGameTitle": "Рейтинговая игра",
 
     },
 };

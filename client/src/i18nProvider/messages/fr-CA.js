@@ -189,5 +189,7 @@ export default {
     "answer1-validation-required": "La réponse 1 est requise",
     "answer2-validation-max-length": "La limite de caractères est de 100",
     "answer2-validation-required": "La réponse 2 est requise",
+ 
+    "rankedGameTitle": "Titre du jeu classé",
   },
 };
