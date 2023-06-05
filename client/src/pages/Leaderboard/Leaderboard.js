@@ -101,7 +101,6 @@ const Leaderboard = () => {
                                 <td>{user.rank}</td>
                             </tr>
                         ))}
-                    {/* Zde zobrazte řádek pro aktuálně přihlášeného uživatele */}
                     {!isUserInTop10() && (
                         <tr style={{ backgroundColor: '#a6e4ff' }}>
                             <td>You</td>

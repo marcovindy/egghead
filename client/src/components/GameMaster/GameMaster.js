@@ -159,7 +159,6 @@ const GameMaster = () => {
         setQuestions(formattedQuestions);
         setTotalQuestions(formattedQuestions.length);
         setQuestionsAreLoading(false);
-        console.log(questionsLength, " roundsss ");
         socket.emit(
           "sendQuestionsToServerTest",
           formattedQuestions,
@@ -190,9 +189,9 @@ const GameMaster = () => {
       });
       socket.emit("startTimerTest", 10);
 
-      socket.on("nextQuestion", () => {
-        console.log("nextQuestion has been sent ");
-      });
+      // socket.on("nextQuestion", () => {
+      //   console.log("nextQuestion has been sent ");
+      // });
     };
     if (!gameReady) {
       startGame();
@@ -241,9 +240,9 @@ const GameMaster = () => {
       setTimerStarted(true);
     });
 
-    socket.on("nextQuestion", () => {
-      console.log("nextQuestion has been sent ");
-    });
+    // socket.on("nextQuestion", () => {
+    //   console.log("nextQuestion has been sent ");
+    // });
   }, [duration]);
 
   const handleClickChange = (val) => {

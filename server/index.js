@@ -158,7 +158,6 @@ const createNewRoom = async (
   };
 
   rooms[roomName] = room;
-  console.log("room created:", room);
   joinRoom(socket, room, masterName, gameMode);
 
   sendActiveRoomsToAll();
@@ -345,8 +344,6 @@ io.on("connect", (socket) => {
       room.questionsLength = questionsLength;
       room.round = round;
       room.activated = true;
-      console.log("sendQuizInfo", room);
-      console.log("questions", room.questions);
       sendActiveRoomsToAll();
     } else {
       return socket.emit("createRoomError", {
@@ -454,7 +451,6 @@ io.on("connect", (socket) => {
       }
 
       for (const [category, queue] of Object.entries(queues)) {
-        console.log(category, queue.length);
         if (queue.length >= 2) {
           const players = queue.splice(0, 4);
 
@@ -485,7 +481,6 @@ io.on("connect", (socket) => {
           players.forEach((player) => {
             const playerName = player.username;
             const playerSocket = player;
-            console.log("playerName: ", playerName);
             playerSocket.emit("gameReady.RankedGame", roomName, playerName);
             removePlayerFromAllQueues(player.id);
           });

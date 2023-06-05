@@ -4,7 +4,7 @@ exports.updateLevel = async (req, res) => {
   const { username } = req.body;
 
   try {
-    console.log('Searching for user:', username);
+    // console.log('Searching for user:', username);
     const user = await Users.findOne({ where: { username } });
 
     if (!user) {
@@ -17,9 +17,9 @@ exports.updateLevel = async (req, res) => {
     const newLevel = currentLevel + 1;
     const newExperience = currentExperience - ((100 * currentLevel) / 2);
 
-    console.log('Updating level and experience for user:', username);
+    // console.log('Updating level and experience for user:', username);
     await user.update({ level: newLevel, experience: newExperience });
-    console.log('Level updated successfully for user:', username);
+    // console.log('Level updated successfully for user:', username);
 
     res.status(200).send('Level updated successfully');
   } catch (error) {
