@@ -4,7 +4,7 @@
 
 Představuji vám EggHead Trivia hru, webovou aplikaci založenou na technologiích React, Node.js, Express a Socket.IO. Trivia Battle je real-time hra pro více hráčů, která slouží jako nástroj k motivaci studentů k získávání nových znalostí. Tato aplikace je vaším prvním projektem využívajícím těchto technologií, a tak si vyzkoušíte práci s různými nástroji a frameworky.
 
-Trivia Battle poskytuje uživatelům možnost zlepšit své znalosti prostřednictvím soutěže s ostatními hráči. Při vstupu do aplikace se hráči mohou přihlásit pomocí svých údajů nebo si vytvořit nový účet. Pro autentizaci je využívána technologie JWT (JSON Web Token), která zajišťuje bezpečnost a ochranu dat.
+Trivia hra EggHead poskytuje uživatelům možnost zlepšit své znalosti prostřednictvím soutěže s ostatními hráči. Při vstupu do aplikace se hráči mohou přihlásit pomocí svých údajů nebo si vytvořit nový účet. Pro autentizaci je využívána technologie JWT (JSON Web Token), která zajišťuje bezpečnost a ochranu dat.
 
 Po přihlášení hráči mohou vybrat z různých kategorií otázek, například věda, historie, sport atd. Aplikace obsahuje rozsáhlou knihovnu otázek, které jsou dynamicky načítány z databáze. Pro komunikaci se serverem je používáno REST API postavené na frameworku Express, které zajišťuje plynulý přenos dat mezi klientem a serverem.
 
@@ -20,7 +20,7 @@ Jako databáze je použit MySQL, který uchovává otázky, uživatelská data a
 
 Introducing EggHead Trivia, a web application built on React, Node.js, Express, and Socket.IO. Trivia Battle is a real-time multiplayer game designed to motivate students to acquire new knowledge. This application marks your first project utilizing these technologies, allowing you to explore various tools and frameworks.
 
-Trivia Battle offers users the opportunity to enhance their knowledge through competition with other players. Upon entering the application, players can either log in using their credentials or create a new account. JWT (JSON Web Token) technology is employed for authentication, ensuring data security and protection.
+Trivia hra EggHead offers users the opportunity to enhance their knowledge through competition with other players. Upon entering the application, players can either log in using their credentials or create a new account. JWT (JSON Web Token) technology is employed for authentication, ensuring data security and protection.
 
 After logging in, players can choose from various question categories, such as science, history, sports, and more. The application incorporates an extensive question library, dynamically loaded from a database. REST API, built on Express, facilitates smooth data transmission between the client and server.
 
