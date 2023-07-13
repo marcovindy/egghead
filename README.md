@@ -14,7 +14,7 @@ Pro vytvoření uživatelského rozhraní je použit framework React, který zaj
 
 Komunikace se serverem a získávání dat z databáze je realizováno pomocí knihovny Axios, která zajišťuje jednoduché a efektivní asynchronní volání API. Pro validaci a ověření uživatelských vstupů je použita knihovna Yup.
 
-Jako databáze je použit MySQL, který uchovává otázky, uživatelská data a statistiky her. Databáze je navržena tak, aby umožňovala snadnou správu otázek a rychlé vyhledávání.
+Jako databáze je použit MySQL, který uchovává otázky a uživatelská data. Databáze je navržena tak, aby umožňovala snadnou správu otázek a rychlé vyhledávání.
 
 
 
@@ -30,7 +30,7 @@ The user interface is developed using the React framework, ensuring efficient an
 
 Communication with the server and data retrieval from the database is implemented through the Axios library, offering simple and efficient asynchronous API calls. The Yup library is employed for validation and verification of user inputs.
 
-MySQL serves as the database, storing questions, user data, and game statistics. The database is designed to facilitate easy question management and quick searches.
+MySQL serves as the database, storing questions and user data. The database is designed to facilitate easy question management and quick searches.
 
 
 
